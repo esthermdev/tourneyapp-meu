@@ -11,14 +11,14 @@ export default function App() {
       <View className='h-28 justify-center items-center'>
         <Image 
           source={images.logoW}
-          resizeMethod='contain'
+          resizeMode='contain'
           style={{width: 90, height: 90}}
         />
       </View>
       <View className='flex-1'>
         <Image 
           source={images.frisbeePlayer}
-          resizeMethod='contain'
+          resizeMode='contain'
           style={{ height: 400, width: 400}}
         />
       </View>
@@ -31,7 +31,7 @@ export default function App() {
         <CustomButton 
           title='Continue' 
           buttonStyles='bg-brightRed rounded-full px-[25] py-[22] flex-row' 
-          handlePress={() => router.push('(tabs)')}  
+          handlePress={() => router.push('(tabs)/home')}  
         />
       </View>
     </View>
