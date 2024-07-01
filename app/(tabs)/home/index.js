@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { icons } from '../../../constants';
 import HomeButtons from '../../../components/HomeButtons';
+import { router } from 'expo-router';
 
 const Home = () => {
   return (
@@ -11,11 +12,13 @@ const Home = () => {
         title='My Games'
         icon={icons.frisbee}
         buttonStyle='bg-[#FA7930]'
+        handlePress={() => router.push('/home/mygames')}
       />
       <HomeButtons 
         title='Report Scores'
         icon={icons.scoreboard}
         buttonStyle='bg-[#6D28FF]'
+        handlePress={() => router.push('/home/reportscores')}
       />
       <HomeButtons 
         title='Watch Live'
@@ -31,6 +34,7 @@ const Home = () => {
         title='Field Map'
         icon={icons.map}
         buttonStyle='bg-[#B6C846]'
+        handlePress={() => router.push('/home/fieldmap')}
       />
     </View>
   )
