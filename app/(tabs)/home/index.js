@@ -1,24 +1,37 @@
-import { Image } from '@rneui/base'
-import { StyleSheet, Text, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import { icons } from '../../../constants';
 import HomeButtons from '../../../components/HomeButtons';
 import { router } from 'expo-router';
+import { useAuth } from '../../../context/AuthProvider';
 
 const Home = () => {
+  const { user } = useAuth();
+
+  const handlePress = (screen) => {
+    if (!user) {
+      Alert.alert(
+        "Authentication Required",
+        "You need to log in to access this feature.",
+        [{ text: "OK" }]
+      );
+    } else {
+      router.push(`home/${screen}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <HomeButtons
         title='My Games'
         icon={icons.frisbee}
         buttonStyle='bg-[#FA7930]'
-        handlePress={() => router.push('/home/mygames')}
+        handlePress={() => handlePress('mygames')}
       />
       <HomeButtons 
         title='Report Scores'
         icon={icons.scoreboard}
         buttonStyle='bg-[#6D28FF]'
-        handlePress={() => router.push('/home/reportscores')}
+        handlePress={() => handlePress('reportscores')}
       />
       <HomeButtons 
         title='Watch Live'

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { images } from '../constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
@@ -19,7 +19,7 @@ const Header = () => {
 					source={images.logoW}
 					style={{width: 40, height: 40}}
 				/>
-				<TouchableOpacity style={styles.button}>
+				<TouchableOpacity style={styles.button} onPress={() => router.push('login')}>
 					<Ionicons name='person' 
 						size={30}
 						color='#EA1D25'

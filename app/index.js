@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import CustomButton from '../components/CustomButton';
+import CustomButtonWithIcon from '../components/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
 
@@ -28,10 +28,10 @@ export default function App() {
           <Text className='font-outfitbold text-center py-1' style={{ fontSize: 38 }}>Tournament Name</Text>
           <Text className='font-outfitbold text-center' style={{ fontSize: 16 }}>2024</Text>
         </View>
-        <CustomButton 
+        <CustomButtonWithIcon 
           title='Continue' 
           buttonStyles='bg-brightRed rounded-full px-[25] py-[22] flex-row' 
-          handlePress={() => router.push('(tabs)/home')}  
+          handlePress={() => router.push('(tabs)/home')}
         />
       </View>
     </View>

@@ -5,6 +5,7 @@ import { Drawer } from 'expo-router/drawer';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { AuthProvider } from '../context/AuthProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -63,10 +64,12 @@ const RootLayout = () => {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style='auto' />
-      <DrawerLayout />
-    </GestureHandlerRootView>
+		<AuthProvider>
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<StatusBar style='auto' />
+				<DrawerLayout />
+			</GestureHandlerRootView>
+		</AuthProvider>
   )
 };
 
