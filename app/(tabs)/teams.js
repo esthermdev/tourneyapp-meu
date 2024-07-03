@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { ListItem, Avatar, Button } from '@rneui/base';
+import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../utils/supabase'; // adjust the import path as needed
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -18,12 +18,13 @@ const Teams = () => {
   const fetchTeams = async () => {
     const { data, error } = await supabase
       .from('teams')
-      .select('id, name, division, avatar_uri')
+      .select('id, name, division, avatar_uri, color');
 
     if (error) {
       console.error('Error fetching teams:', error);
     } else {
-      setTeams(data);
+      const sortedTeams = data.sort((a, b) => a.name.localeCompare(b.name))
+      setTeams(sortedTeams);
     }
   };
 
@@ -32,9 +33,7 @@ const Teams = () => {
     filteredTeams = teams;
   } else {
     filteredTeams = teams.filter(team => team.division === selectedDivision);
-  }
-  
-
+  };
 
   const renderItem = ({ item }) => (
     <ListItem bottomDivider>
@@ -46,7 +45,7 @@ const Teams = () => {
       />
       <ListItem.Content>
         <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
-        <View className='bg-warmBlue rounded-full py-0.5 px-[7] mt-2'>
+        <View className={`rounded-full px-1.5 py-0.5`} style={{ backgroundColor: item.color }}>
           <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{item.division}</ListItem.Subtitle>
         </View>
       </ListItem.Content>
