@@ -2,15 +2,33 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Round1 from './games/Round1';
 import Round2 from './games/Round2';
 import Round3 from './games/Round3';
+import Round4 from './games/Round4';
+import Quarters from './games/Quarters';
+import SemiFinals from './games/SemiFinals';
+import Finals from './games/Finals';
 
 const ScheduleScreen = () => {
   const Tab = createMaterialTopTabNavigator();
 
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="1" component={Round1} />
-      <Tab.Screen name="2" component={Round2} />
-      <Tab.Screen name="3" component={Round3} />
+    <Tab.Navigator 
+      screenOptions={{ 
+        tabBarActiveTintColor: '#EA1D25', 
+        tabBarInactiveTintColor: '#8F8DAA',
+        tabBarIndicatorStyle: {
+          borderBottomColor: '#EA1D25', // Customize your border color
+          borderBottomWidth: 2,         // Customize your border width
+        },
+        tabBarLabelStyle: { fontFamily: 'Outfit-SemiBold' }
+       }}
+    >
+      <Tab.Screen name="R1" component={Round1} />
+      <Tab.Screen name="R2" component={Round2} />
+      <Tab.Screen name="R3" component={Round3} />
+      <Tab.Screen name="R4" component={Round4} />
+      <Tab.Screen name="Q" component={Quarters} />
+      <Tab.Screen name="SF" component={SemiFinals} />
+      <Tab.Screen name="F" component={Finals} />
       {/* Add more screens for additional rounds */}
     </Tab.Navigator>
   );
