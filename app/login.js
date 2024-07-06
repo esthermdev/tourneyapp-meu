@@ -1,16 +1,32 @@
 import { useState, useEffect } from 'react';
-import { Image, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View, Platform, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { 
+	Image, 
+	ImageBackground, 
+	KeyboardAvoidingView, 
+	StyleSheet, 
+	Text, 
+	View, 
+	Platform, 
+	TouchableWithoutFeedback, 
+	TouchableOpacity, 
+	Keyboard, 
+	Alert } 
+from 'react-native';
 import { images } from '../constants';
 import { Button, Input } from '@rneui/base';
+import { router, useNavigation } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
 import { supabase } from '../utils/supabase';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import CustomButtonWithoutIcon from '../components/CustomButtonWithoutIcon';
-import { router } from 'expo-router';
 
 const LoginScreen = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [session, setSession] = useState(null);
+
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
@@ -50,26 +66,28 @@ const LoginScreen = () => {
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View className='flex-1'>
 				<ImageBackground className='h-full justify-end' source={images.loginBg}>
-					<View style={styles.logoContainer}>
-						<Image 
-							source={images.logoB}
-							resizeMode='contain'
-							style={{ width: 90, height: 90, alignSelf: 'flex-start'}}
-						/>
-						<Button title='logout' onPress={() => handleSignOut()} />
-					</View>
+					<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+						<FontAwesome name='bars' color='white' size={20}/>
+						<Button title='Test Logout' onPress={() => handleSignOut()} />
+					</TouchableOpacity>	
 					<KeyboardAvoidingView
 						behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 					>
-						<View className='bg-white w-full h-[500]' style={styles.loginContainer}>
-							<Text className='font-outfitextrabold text-6xl text-brightRed mb-5'>Maine Ultimate</Text>
+						<View className='bg-white w-full h-[600]' style={styles.loginContainer}>
+							<Image 
+								source={images.logoW}
+								resizeMode='contain'
+								style={{ width: 70, height: 70 }}
+							/>
+							<Text className='font-outfitextrabold text-6xl text-brightRed pt-5'>Maine Ultimate</Text>
 							<Input 
 								placeholder='Email' 
 								onChangeText={(text) => setEmail(text)}
 								value={email}
+								label='Log in with your email and password'
+								labelStyle={{ paddingVertical: 20, fontFamily: 'Outfit-Regular', color: 'black' }}
 								autoCapitalize={'none'}
 								inputStyle={styles.inputText} 
-								labelStyle={styles.labelContainer} 
 								inputContainerStyle={styles.inputContainer}
 								containerStyle={{ paddingHorizontal: 0 }}
 							/>
@@ -79,13 +97,12 @@ const LoginScreen = () => {
 								value={password}
 								autoCapitalize={'none'}
 								inputStyle={styles.inputText} 
-								labelStyle={styles.labelContainer} 
 								inputContainerStyle={styles.inputContainer}
 								containerStyle={{ paddingHorizontal: 0 }}
 							/>
 							<CustomButtonWithoutIcon 
 								title='Login'
-								buttonStyles={`bg-brightRed rounded-full py-[20] ${loading ? 'bg-gray-400' : ''}`}
+								buttonStyles={`bg-brightRed rounded-full py-[22] ${loading ? 'bg-gray-400' : ''}`}
 								handlePress={() => signInWithEmail()}
 								disabled={loading}
 							/>
@@ -100,31 +117,27 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-	logoContainer: {
-		position: 'absolute',
-	top: 70,
-	left: 30,
-	},	
 	loginContainer: {
 		borderTopLeftRadius: 46,
 		borderTopRightRadius: 46,
-		paddingVertical: 40,
+		paddingVertical: 50,
 		paddingHorizontal: 35
-	},
-	labelContainer: {
-		color: '#333243',
-		fontFamily: 'Outfit-Regular'
 	},
 	inputContainer: {
 		fontFamily: 'Outfit-Regular',
 		backgroundColor: '#EBEBF0',
-		height: 50,
 		borderRadius: 60,
-		padding: 30,
 		borderBottomWidth: 0,
 	},
 	inputText: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 18
-	}
+		fontSize: 18,
+		paddingVertical: 22,
+		paddingHorizontal: 25
+	},
+	button: {
+		position: 'absolute',
+		top: 60,
+		left: 31,
+	},
 });

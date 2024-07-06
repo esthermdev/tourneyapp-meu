@@ -57,6 +57,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem, Avatar } from '@rneui/base';
-import { supabase } from '../../utils/supabase'; // adjust the import path as needed
+import { supabase } from '../../utils/supabase';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Teams = () => {
@@ -36,7 +36,7 @@ const Teams = () => {
   };
 
   const renderItem = ({ item }) => (
-    <ListItem bottomDivider>
+    <ListItem style={{paddingHorizontal: 20}} bottomDivider>
       <Avatar
         size={60}
         rounded
@@ -54,10 +54,12 @@ const Teams = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Teams</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Teams</Text>
+      </View>
       <View className='d-flex flex-row items-center px-5 h-12'>
         <Text className='font-outfitlight text-gray-500'>Filters: </Text>
-        <TouchableOpacity className='bg-brightRed rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
+        <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
         </TouchableOpacity>
         <TouchableOpacity className='bg-warmBlue rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Open')}>
@@ -85,13 +87,18 @@ export default Teams;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: 'white'
   },
+  headerContainer: {
+    borderBottomColor: '#D9D9D9',
+    borderBottomWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  }, 
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontFamily: 'Outfit-Bold',
+    fontSize: 35,
+    color: '#EA1D25'
   },
   teamName: {
     fontSize: 18,

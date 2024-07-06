@@ -4,13 +4,14 @@ import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { images } from '../constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import Constants from 'expo-constants';
 
 const Header = () => {
 	const navigation = useNavigation();
 
 	return (
+		<>
 		<View style={styles.container}>
-			<View style={styles.spacer}></View>
 			<View style={styles.content}>
 				<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
 					<FontAwesome name='bars' size={20}/>
@@ -27,6 +28,7 @@ const Header = () => {
 				</TouchableOpacity>	
 			</View>
 		</View>
+		</>
 	);
 };
 
@@ -34,20 +36,17 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
 		flexDirection: 'column',
-		height: 100,
-		borderBottomWidth: 0.2
-	},
-	spacer: {
-		flex: 1,
+		paddingTop: Constants.statusBarHeight,
+		height: 107
 	},
 	content: {
-		flex: 2,
+		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 	button: {
-		marginHorizontal: 20,
+		marginHorizontal: 31,
 	},
 });
 
