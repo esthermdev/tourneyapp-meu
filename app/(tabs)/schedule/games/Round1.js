@@ -78,6 +78,9 @@ const Round1 = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.timeContainer}>
+        <Text style={styles.time}>9:00AM</Text>
+      </View>
       <FlashList 
         data={games}
         keyExtractor={(item) => item.id.toString()}
@@ -96,6 +99,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#D9D9D9',
+  },
+  timeContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  }, 
+  time: {
+    textAlign: 'center',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 20,
+    color: '#EA1D25'
   },
   cardContainer: {
     borderRadius: 20,
@@ -150,6 +163,7 @@ const styles = StyleSheet.create({
   colon: {
     fontSize: 40,
     marginHorizontal: 10,
+    marginBottom: 8,
     fontFamily: 'Outfit-Medium',
   },
 });
