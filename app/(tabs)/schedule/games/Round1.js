@@ -79,13 +79,14 @@ const Round1 = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
+        <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
         <Text style={styles.time}>9:00AM</Text>
       </View>
       <FlashList 
         data={games}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        estimatedItemSize={20}
+        estimatedItemSize={10}
       />
     </View>
   );
@@ -103,6 +104,10 @@ const styles = StyleSheet.create({
   timeContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5
   }, 
   time: {
     textAlign: 'center',

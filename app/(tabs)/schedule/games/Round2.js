@@ -4,7 +4,7 @@ import { supabase } from '../../../../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
 
-const Round1 = () => {
+const Round2 = () => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -79,19 +79,20 @@ const Round1 = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.time}>9:00AM</Text>
+        <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
+        <Text style={styles.time}>11:00AM</Text>
       </View>
       <FlashList 
         data={games}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        estimatedItemSize={20}
+        estimatedItemSize={10}
       />
     </View>
   );
 };
 
-export default Round1;
+export default Round2;
 
 const styles = StyleSheet.create({
   container: {
@@ -103,6 +104,10 @@ const styles = StyleSheet.create({
   timeContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5
   }, 
   time: {
     textAlign: 'center',
