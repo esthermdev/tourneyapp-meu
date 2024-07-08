@@ -106,6 +106,7 @@ const LoginScreen = () => {
 								handlePress={() => signInWithEmail()}
 								disabled={loading}
 							/>
+							<Text>{email}</Text>
 						</View>
 					</KeyboardAvoidingView>
 				</ImageBackground>
