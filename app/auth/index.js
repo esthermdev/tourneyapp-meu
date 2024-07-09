@@ -16,7 +16,7 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export default function Auth() {
+export default function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -28,7 +28,24 @@ export default function Auth() {
       password: password,
     })
 
-    if (error) Alert.alert(error.message)
+    if (error) {
+      Alert.alert('Insert email and password to sign in.', error.message)
+    }
+
+    setLoading(false)
+  }
+
+  async function signUpWithEmail() {
+    setLoading(true)
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    })
+
+    if (error) Alert.alert('Insert email and password to sign up.', error.message)
     setLoading(false)
   }
 
@@ -59,7 +76,7 @@ export default function Auth() {
         <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
       </View>
       <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={() => router.push('auth/signup')} />
+        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
       </View>
     </View>
   )
