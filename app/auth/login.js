@@ -12,13 +12,13 @@ import {
 	Keyboard, 
 	Alert } 
 from 'react-native';
-import { images } from '../constants';
+import { images } from '../../constants';
 import { Button, Input } from '@rneui/base';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
-import { supabase } from '../utils/supabase';
+import { supabase } from '../../utils/supabase';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-import CustomButtonWithoutIcon from '../components/CustomButtonWithoutIcon';
+import CustomButtonWithoutIcon from '../../components/CustomButtonWithoutIcon';
 
 const LoginScreen = () => {
 	const [email, setEmail] = useState('')
@@ -32,6 +32,10 @@ const LoginScreen = () => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setSession(session)
 		});
+
+		supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    });
 	}, []);
 
 	async function signInWithEmail() {

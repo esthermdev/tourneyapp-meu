@@ -54,9 +54,9 @@ const RootLayout = () => {
 				}}
 			/>
 			<Drawer.Screen 
-				name='login'
+				name='auth'
 				options={{
-					drawerLabel: 'Login',
+					drawerLabel: 'Login'
 				}}
 			/>
 		</Drawer>
