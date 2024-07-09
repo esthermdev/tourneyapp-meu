@@ -7,25 +7,27 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
-  const handleSignUp = async () => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
+  async function signUpWithEmail() {
+    setLoading(true)
+    const {
+      error,
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
       options: {
         data: {
-          full_name: fullName,
+          full_name: fullName
         }
       }
-    });
+    })
 
-    if (error) {
-      Alert.alert('Error', error.message);
-    } else {
-      router.push('/'); // Navigate to the home screen after successful sign up
-    }
-  };
+    if (error) Alert.alert(error.message)
+    setLoading(false)
+  }
 
   return (
     <View style={{ padding: 20 }}>
@@ -50,7 +52,7 @@ const SignUpScreen = () => {
         style={{ borderWidth: 1, marginBottom: 10 }}
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignUp} />
+      <Button title="Sign Up" onPress={() => signUpWithEmail()} />
     </View>
   );
 };

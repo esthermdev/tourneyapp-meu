@@ -20,7 +20,7 @@ import { supabase } from '../../utils/supabase';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import CustomButtonWithoutIcon from '../../components/CustomButtonWithoutIcon';
 
-const LoginScreen = () => {
+const LoginComponent = () => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
@@ -119,7 +119,7 @@ const LoginScreen = () => {
 	)
 }
 
-export default LoginScreen;
+export default LoginComponent;
 
 const styles = StyleSheet.create({
 	loginContainer: {
