@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, StyleSheet, View, AppState } from 'react-native'
+import { Alert, StyleSheet, View, AppState, TouchableOpacity, Text } from 'react-native'
 import { supabase } from '../../utils/supabase'
 import { Button, Input } from '@rneui/themed'
 import { router } from 'expo-router'
@@ -30,6 +30,8 @@ export default function LoginScreen() {
 
     if (error) {
       Alert.alert('Insert email and password to sign in.', error.message)
+    } else {
+      router.push('(tabs)/home');
     }
 
     setLoading(false)
@@ -76,7 +78,8 @@ export default function LoginScreen() {
         <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
       </View>
       <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
+        <Text>Not existing user?</Text>
+        <Button title='Sign up' disabled={loading} onPress={() => signUpWithEmail()} />
       </View>
     </View>
   )
@@ -91,6 +94,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+    alignItems: 'center'
   },
   mt20: {
     marginTop: 20,

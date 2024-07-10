@@ -3,11 +3,13 @@ import { supabase } from '../../utils/supabase'
 import { StyleSheet, View, Text, Alert } from 'react-native'
 import { Button, Input } from '@rneui/themed'
 import { router } from 'expo-router'
+import { Dropdown } from 'react-native-element-dropdown'
 
 export default function Account({ session }) {
 	const [profile, setProfile] = useState([])
   const [loading, setLoading] = useState(true)
   const [fullName, setFullName] = useState('')
+	const [teamName, setTeamName] = useState('')
   const [teamId, setTeamId] = useState(null)
 	const [isTeamIdSet, setIsTeamIdSet] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('')
@@ -73,6 +75,7 @@ export default function Account({ session }) {
       }
     } finally {
       setLoading(false)
+			Alert.alert('Profile successfully saved.')
     }
   }
 
@@ -83,9 +86,12 @@ export default function Account({ session }) {
         <Input label="Email" value={session?.user?.email} disabled />
       </View>
       <View style={styles.verticallySpaced}>
-        <Input label="Full name" value={fullName || ''} onChangeText={(text) => setFullName(text)} />
+        <Input label="Full name" value={fullName || ''} onChangeText={(text) => setFullName(text)} autoCapitalize='words' />
       </View>
       <View style={styles.verticallySpaced}>
+				<Dropdown 
+
+				/>
         <Input label="Team ID" value={teamId !== null ? teamId.toString() : ''} onChangeText={(text) => setTeamId(parseInt(text))} disabled={isTeamIdSet} />
       </View>
 
