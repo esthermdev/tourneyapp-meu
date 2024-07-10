@@ -7,34 +7,35 @@ import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
 
 const MyGamesScreen = () => {
-  const [games, setGames] = useState([]);
-  const { user } = useAuth();
+  const { profile } = useAuth();
 
-  console.log(user.email);
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
-    getGamesByEmailandDate('shadeulti@gmail.com', '2024-07-04');
+    if (profile && profile.team_id) {
+      getGamesByTeamIdandDate(profile.team_id, '2024-07-04');
+    }
   }, []);
 
-
-
-  const getGamesByEmailandDate = async (email, date) => {
+  const getGamesByTeamIdandDate = async (teamId, date) => {
     const { data, error } = await supabase
       .from('full_game_set')
       .select(`
         id,
         date,
         time,
+        team1_id,
         team1_name,
         team1_email,
         team1_score,
         team1_avatar,
+        team2_id,
         team2_name,
         team2_email,
         team2_score,
         team2_avatar
       `)
-      .or(`team1_email.eq.${email}, team2_email.eq.${email}`)
+      .or(`team1_id.eq.${teamId}, team2_id.eq.${teamId}`)
       .eq('date', date)
      
     if (error) {
@@ -43,8 +44,6 @@ const MyGamesScreen = () => {
       setGames(data);
     }
   }
-
-  console.log(JSON.stringify(games, null, 2));
 
   const renderItem = ({ item }) => (
     <Card style={styles.cardContainer}>

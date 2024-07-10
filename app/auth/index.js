@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, View, AppState, TouchableOpacity, Text } from 'react-native'
-import { supabase } from '../../utils/supabase'
-import { Button, Input } from '@rneui/themed'
-import { router } from 'expo-router'
+import React, { useState } from 'react';
+import { Alert, StyleSheet, View, AppState, Text } from 'react-native';
+import { supabase } from '../../utils/supabase';
+import { Button, Input } from '@rneui/themed';
+import { router } from 'expo-router';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -14,28 +14,28 @@ AppState.addEventListener('change', (state) => {
   } else {
     supabase.auth.stopAutoRefresh()
   }
-})
+});
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function signInWithEmail() {
     setLoading(true)
     const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
-    })
+    });
 
     if (error) {
       Alert.alert('Insert email and password to sign in.', error.message)
     } else {
       router.push('(tabs)/home');
-    }
+    };
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   async function signUpWithEmail() {
     setLoading(true)
@@ -45,11 +45,11 @@ export default function LoginScreen() {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
-    })
+    });
 
-    if (error) Alert.alert('Insert email and password to sign up.', error.message)
-    setLoading(false)
-  }
+    if (error) Alert.alert('Insert email and password to sign up.', error.message);
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -82,8 +82,8 @@ export default function LoginScreen() {
         <Button title='Sign up' disabled={loading} onPress={() => signUpWithEmail()} />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
-})
+});
