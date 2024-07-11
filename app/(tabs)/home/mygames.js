@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { supabase } from '../../../utils/supabase';
-import { Card, Avatar, Icon } from '@rneui/base';
+import { Card, Avatar, Icon, ListItem } from '@rneui/base';
 import { FlashList } from '@shopify/flash-list';
 import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
 
   const [games, setGames] = useState([]);
+  const [selectedDate, setSelectedDate] = useState('2024-07-04');
 
   useEffect(() => {
     if (profile && profile.team_id) {
-      getGamesByTeamIdandDate(profile.team_id, '2024-07-04');
+      getGamesByTeamIdandDate(profile.team_id, selectedDate);
     }
-  }, []);
+  }, [profile, selectedDate]);
 
   const getGamesByTeamIdandDate = async (teamId, date) => {
     const { data, error } = await supabase
@@ -73,6 +75,21 @@ const MyGamesScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Dropdown
+        style={styles.dropdown}
+        itemTextStyle={{ color: 'black' }}
+        activeColor='purple'
+        itemContainerStyle={{ backgroundColor: 'lightgray' }}
+        data={[
+          { label: 'Saturday, July 4, 2024', value: '2024-07-04' },
+          { label: 'Sunday, July 5, 2024', value: '2024-07-05' }
+        ]}
+        labelField='label'
+        valueField='value'
+        placeholder='Select a date'
+        value={selectedDate}
+        onChange={item => setSelectedDate(item.value)}
+      />
       <FlashList 
         data={games}
         keyExtractor={(item) => item.id.toString()}
@@ -92,6 +109,12 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     padding: 24,
+  },
+  dropdown: {
+    marginTop: 20,
+    marginHorizontal: 10,
+    padding: 10,
+    backgroundColor: 'white',
   },
   timeFieldContainer: {
     flexDirection: 'row',
