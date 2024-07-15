@@ -21,7 +21,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Image 
               source={icons.home}
-              style={{ width: 25, height: 25, tintColor: color, marginTop: 15 }}
+              style={{ width: 25, height: 25, tintColor: color }}
             />
           )
         }}
@@ -33,7 +33,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Image 
               source={icons.calender}
-              style={{ width: 25, height: 25, tintColor: color, marginTop: 15 }}
+              style={{ width: 25, height: 25, tintColor: color }}
             />
           )
         }}
@@ -45,7 +45,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Image 
               source={icons.team}
-              style={{ width: 32, height: 32, tintColor: color, marginTop: 15 }}
+              style={{ width: 32, height: 32, tintColor: color }}
               resizeMode='contain'
             />
           )
@@ -58,7 +58,6 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: '#333243',
-    height: 100
   },
   tabBarLabel: {
     fontSize: 12,
