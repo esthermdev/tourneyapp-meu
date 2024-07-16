@@ -75,6 +75,8 @@ const MyGamesScreen = () => {
 
   const openModal = (game) => {
     setCurrentGame(game);
+    setTeam1Scores({ ...team1Scores, [game.id]: game.team1_score });
+    setTeam2Scores({ ...team2Scores, [game.id]: game.team2_score });
     setModalVisible(true);
   }
 
@@ -115,12 +117,6 @@ const MyGamesScreen = () => {
       <View className='mt-4' style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team1_avatar }}/>
         <Text className='flex-1 font-outfitbold'>{item.team1_name}</Text>
-        <TextInput 
-          style={styles.scoreInput}
-          value={team1Scores[item.id]}
-          onChangeText={(text) => setTeam1Scores({...team1Scores, [item.id]: parseInt(text)})}
-          keyboardType='numeric'
-        />
         <Text>Game ID:{item.id}, Score:{item.team1_score}</Text>
       </View>
       <View style={styles.vsContainer}>
@@ -130,12 +126,6 @@ const MyGamesScreen = () => {
       <View style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team2_avatar }}/>
         <Text className='flex-1 font-outfitbold'>{item.team2_name}</Text>
-        <TextInput 
-          style={styles.scoreInput}
-          value={team2Scores[item.id]}
-          onChangeText={(text) => setTeam2Scores({...team2Scores, [item.id]: parseInt(text) })}
-          keyboardType='numeric'
-        />
         <Text>Game ID:{item.id}, Score:{item.team2_score}</Text>
       </View>
       <TouchableOpacity
@@ -170,33 +160,58 @@ const MyGamesScreen = () => {
         renderItem={renderItem}
         estimatedItemSize={10}
       />
-      <Modal visible={isModalVisible}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Update Scores</Text>
-          {currentGame && (
-            <>
-              <View style={styles.teamContainer}>
-                <Avatar className='flex-none' rounded source={{ uri: currentGame.team1_avatar }} />
-                <Text className='flex-1 font-outfitbold'>{currentGame.team1_name}</Text>
-                <TextInput 
-                  style={styles.scoreInput}
-                  value={team1Scores[currentGame.id]?.toString()}
-                  onChangeText={(text) => setTeam1Scores({ ...team1Scores, [currentGame.id]: parseInt(text) })}
-                  keyboardType='numeric'
-                />
-              </View>
-              <View style={styles.teamContainer}>
-                <Avatar className='flex-none' rounded source={{ uri: currentGame.team2_avatar }} />
-                <Text className='flex-1 font-outfitbold'>{currentGame.team2_name}</Text>
-                <TextInput 
-                  style={styles.scoreInput}
-                  value={team2Scores[currentGame.id]?.toString()}
-                  onChangeText={(text) => setTeam2Scores({ ...team2Scores, [currentGame.id]: parseInt(text) })}
-                  keyboardType='numeric'
-                />
-              </View>
-            </>
-          )}
+      <Modal 
+        visible={isModalVisible}
+        animationType='fade'
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Update Scores</Text>
+            {currentGame && (
+              <>
+                <View style={styles.teamContainer}>
+                  <Avatar className='flex-none' rounded source={{ uri: currentGame.team1_avatar }} />
+                  <Text className='flex-1 font-outfitbold'>{currentGame.team1_name}</Text>
+                  <TextInput 
+                    style={styles.scoreInput}
+                    value={team1Scores[currentGame.id]?.toString()}
+                    onChangeText={(text) => {
+                      const value = text === '' ? '' : parseInt(text);
+                      setTeam1Scores({...team1Scores, [currentGame.id]: value })
+                    }}
+                    keyboardType='numeric'
+                  />
+                </View>
+                <View style={styles.teamContainer}>
+                  <Avatar className='flex-none' rounded source={{ uri: currentGame.team2_avatar }} />
+                  <Text className='flex-1 font-outfitbold'>{currentGame.team2_name}</Text>
+                  <TextInput 
+                    style={styles.scoreInput}
+                    value={team2Scores[currentGame.id]?.toString()}
+                    onChangeText={(text) => {
+                      const value = text === '' ? '' : parseInt(text);
+                      setTeam2Scores({...team2Scores, [currentGame.id]: value })
+                    }}
+                    keyboardType='numeric'
+                  />
+                </View>
+              </>
+            )}
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleUpdateScore}
+            >
+              <Text style={styles.submitButtonText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -206,12 +221,6 @@ const MyGamesScreen = () => {
 export default MyGamesScreen;
 
 const styles = StyleSheet.create({
-  scoreInput: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    flex: 0.3,
-    textAlign: 'right',
-  },
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -266,15 +275,51 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
   modalContent: {
     backgroundColor: 'white',
     padding: 22,
     borderRadius: 4,
     borderColor: 'rgba(0, 0, 0, 0.1)',
+    width: '70%',
+    alignSelf: 'center',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 12,
+  },
+  closeButton: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  scoreInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    flex: 0.3,
+    textAlign: 'center',
+  },
+  submitButton: {
+    backgroundColor: 'purple',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });

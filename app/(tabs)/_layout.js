@@ -8,10 +8,11 @@ export default function TabLayout() {
     <Tabs 
       screenOptions={{ 
         header: () => (<Header />),
+        headerShown: true,
         tabBarInactiveTintColor: '#8F8DAA',
         tabBarActiveTintColor: '#EA1D25',
         tabBarStyle: styles.tabBar,
-        tabBarLabelStyle: styles.tabBarLabel 
+        tabBarLabelStyle: styles.tabBarLabel,
       }}
     >
       <Tabs.Screen
@@ -21,7 +22,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Image 
               source={icons.home}
-              style={{ width: 25, height: 25, tintColor: color }}
+              style={{ width: 25, height: 25, marginVertical: 10, tintColor: color }}
             />
           )
         }}
@@ -58,6 +59,7 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: '#333243',
+    flex: 0.08
   },
   tabBarLabel: {
     fontSize: 12,
