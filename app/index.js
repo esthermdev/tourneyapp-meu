@@ -8,7 +8,7 @@ export default function App() {
   return (
     <View className='bg-white h-full'>
       <View className='h-11'></View>
-      <View className='h-28 justify-center items-center'>
+      <View className='flex-3 py-3 justify-center items-center'>
         <Image 
           source={images.logoW}
           resizeMode='contain'
@@ -22,7 +22,7 @@ export default function App() {
           style={{ height: 400, width: 400}}
         />
       </View>
-      <View className='h-[320] px-[35] pt-5 pb-12'>
+      <View className='flex-2 px-[35] pt-5 pb-12'>
         <View className='mb-12'>
           <Text className='font-outfitregular text-center' style={{ fontSize: 18 }}>Welcome to</Text>
           <Text className='font-outfitbold text-center py-1' style={{ fontSize: 38 }}>Tournament Name</Text>
