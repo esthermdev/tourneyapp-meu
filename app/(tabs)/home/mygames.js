@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal } from 'react-native';
 import { supabase } from '../../../utils/supabase';
-import { Card, Avatar, Icon, ListItem } from '@rneui/base';
+import { Card, Avatar, Icon } from '@rneui/base';
 import { FlashList } from '@shopify/flash-list';
 import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
@@ -11,13 +11,17 @@ const MyGamesScreen = () => {
   const { profile } = useAuth();
 
   const [games, setGames] = useState([]);
+  const [team1Scores, setTeam1Scores] = useState({});
+  const [team2Scores, setTeam2Scores] = useState({});
   const [selectedDate, setSelectedDate] = useState('2024-07-04');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentGame, setCurrentGame] = useState(null);
 
   useEffect(() => {
     if (profile && profile.team_id) {
       getGamesByTeamIdandDate(profile.team_id, selectedDate);
     }
-  }, [profile, selectedDate]);
+  }, [profile, selectedDate, team1Scores, team2Scores]);
 
   const getGamesByTeamIdandDate = async (teamId, date) => {
     const { data, error } = await supabase
@@ -47,6 +51,58 @@ const MyGamesScreen = () => {
     }
   }
 
+  const handleUpdateScore = async (gameId) => {
+    if (currentGame) {
+      const { error } = await supabase
+      .from('full_game_set')
+      .update({
+        team1_score: team1Scores[currentGame.id],
+        team2_score: team2Scores[currentGame.id]
+      })
+      .eq('id', currentGame.id)
+      .select()
+
+      if (error) {
+        console.error('Error updating score:', error);
+      } else {
+        alert('Scores updated successfully');
+        setModalVisible(false);
+        getGamesByTeamIdandDate(profile.team_id, selectedDate);
+        setupRealtimeListeners();
+      }
+    }
+  }
+
+  const openModal = (game) => {
+    setCurrentGame(game);
+    setModalVisible(true);
+  }
+
+  const setupRealtimeListeners = () => {
+    const subscription = supabase.channel('update-scores-channel')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'scores' },
+        (payload) => {
+          console.log('Change received!', payload);
+          const updatedGameId = payload.new.game_id;
+          setTeam1Scores(prevScores => ({
+            ...prevScores,
+            [updatedGameId]: payload.new.team1_score
+          }));
+          setTeam2Scores(prevScores => ({
+            ...prevScores,
+            [updatedGameId]: payload.new.team2_score
+          }));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    }
+  }
+
   const renderItem = ({ item }) => (
     <Card style={styles.cardContainer}>
       <View style={styles.timeFieldContainer}>
@@ -59,7 +115,13 @@ const MyGamesScreen = () => {
       <View className='mt-4' style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team1_avatar }}/>
         <Text className='flex-1 font-outfitbold'>{item.team1_name}</Text>
-        <Text className='flex-1 text-right '>{item.team1_score}</Text>
+        <TextInput 
+          style={styles.scoreInput}
+          value={team1Scores[item.id]}
+          onChangeText={(text) => setTeam1Scores({...team1Scores, [item.id]: parseInt(text)})}
+          keyboardType='numeric'
+        />
+        <Text>Game ID:{item.id}, Score:{item.team1_score}</Text>
       </View>
       <View style={styles.vsContainer}>
         <Text className='font-outfitregular text-base text-[#BAB8CB] mb-1'>vs</Text>
@@ -68,8 +130,20 @@ const MyGamesScreen = () => {
       <View style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team2_avatar }}/>
         <Text className='flex-1 font-outfitbold'>{item.team2_name}</Text>
-        <Text className='flex-1 text-right'>{item.team2_score}</Text>
+        <TextInput 
+          style={styles.scoreInput}
+          value={team2Scores[item.id]}
+          onChangeText={(text) => setTeam2Scores({...team2Scores, [item.id]: parseInt(text) })}
+          keyboardType='numeric'
+        />
+        <Text>Game ID:{item.id}, Score:{item.team2_score}</Text>
       </View>
+      <TouchableOpacity
+        style={styles.updateButton}
+        onPress={() => openModal(item)}
+      >
+        <Text style={styles.updateButtonText}>Update Score</Text>
+      </TouchableOpacity>
     </Card> 
   );
 
@@ -96,6 +170,35 @@ const MyGamesScreen = () => {
         renderItem={renderItem}
         estimatedItemSize={10}
       />
+      <Modal visible={isModalVisible}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Update Scores</Text>
+          {currentGame && (
+            <>
+              <View style={styles.teamContainer}>
+                <Avatar className='flex-none' rounded source={{ uri: currentGame.team1_avatar }} />
+                <Text className='flex-1 font-outfitbold'>{currentGame.team1_name}</Text>
+                <TextInput 
+                  style={styles.scoreInput}
+                  value={team1Scores[currentGame.id]?.toString()}
+                  onChangeText={(text) => setTeam1Scores({ ...team1Scores, [currentGame.id]: parseInt(text) })}
+                  keyboardType='numeric'
+                />
+              </View>
+              <View style={styles.teamContainer}>
+                <Avatar className='flex-none' rounded source={{ uri: currentGame.team2_avatar }} />
+                <Text className='flex-1 font-outfitbold'>{currentGame.team2_name}</Text>
+                <TextInput 
+                  style={styles.scoreInput}
+                  value={team2Scores[currentGame.id]?.toString()}
+                  onChangeText={(text) => setTeam2Scores({ ...team2Scores, [currentGame.id]: parseInt(text) })}
+                  keyboardType='numeric'
+                />
+              </View>
+            </>
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -103,6 +206,12 @@ const MyGamesScreen = () => {
 export default MyGamesScreen;
 
 const styles = StyleSheet.create({
+  scoreInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    flex: 0.3,
+    textAlign: 'right',
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -146,5 +255,26 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
     backgroundColor: '#BAB8CB',
-  }
+  },
+  updateButton: {
+    backgroundColor: 'purple',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  updateButtonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
 });

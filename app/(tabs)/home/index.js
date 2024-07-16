@@ -28,15 +28,10 @@ const Home = () => {
         handlePress={() => handlePress('mygames')}
       />
       <HomeButtons 
-        title='Report Scores'
-        icon={icons.scoreboard}
-        buttonStyle='bg-[#6D28FF]'
-        handlePress={() => handlePress('reportscores')}
-      />
-      <HomeButtons 
         title='Watch Live'
         icon={icons.video}
         buttonStyle='bg-[#FF026C]'
+        handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
       />
       <HomeButtons 
         title='Medic'
@@ -57,6 +52,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',

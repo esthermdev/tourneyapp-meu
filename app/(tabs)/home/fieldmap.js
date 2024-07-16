@@ -1,13 +1,34 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet } from 'react-native'
+import { images } from '../../../constants';
 
-const FieldMapScreen = () => {
+const FieldMap = () => {
   return (
-    <View>
-      <Text>FieldMapScreen</Text>
-    </View>
+    <>
+      <ScrollView 
+          contentContainerStyle={styles.container}
+          maximumZoomScale={2}
+          minimumZoomScale={1}
+      >
+          <Image 
+              source={images.fieldMap}
+              className='w-full rotate-90 h-full'
+              resizeMode='contain'
+              style={styles.image}
+          />
+      </ScrollView>
+    </>
   )
 };
 
-export default FieldMapScreen;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    image: {
+        aspectRatio: 1
+    }
+})
 
-const styles = StyleSheet.create({});
+export default FieldMap
