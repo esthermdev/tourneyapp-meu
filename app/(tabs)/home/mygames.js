@@ -21,7 +21,7 @@ const MyGamesScreen = () => {
     if (profile && profile.team_id) {
       getGamesByTeamIdandDate(profile.team_id, selectedDate);
     }
-  }, [profile, selectedDate, team1Scores, team2Scores]);
+  }, [profile, selectedDate]);
 
   const getGamesByTeamIdandDate = async (teamId, date) => {
     const { data, error } = await supabase
@@ -43,6 +43,7 @@ const MyGamesScreen = () => {
       `)
       .or(`team1_id.eq.${teamId}, team2_id.eq.${teamId}`)
       .eq('date', date)
+      .order('time', { ascending: true })
      
     if (error) {
       console.error('Error fetching games:', error);
@@ -51,7 +52,8 @@ const MyGamesScreen = () => {
     }
   }
 
-  const handleUpdateScore = async (gameId) => {
+  const handleUpdateScore = async () => {
+
     if (currentGame) {
       const { error } = await supabase
       .from('full_game_set')
@@ -90,11 +92,11 @@ const MyGamesScreen = () => {
           const updatedGameId = payload.new.game_id;
           setTeam1Scores(prevScores => ({
             ...prevScores,
-            [updatedGameId]: payload.new.team1_score
+            [updatedGameId]: payload.new.team1_score,
           }));
           setTeam2Scores(prevScores => ({
             ...prevScores,
-            [updatedGameId]: payload.new.team2_score
+            [updatedGameId]: payload.new.team2_score,
           }));
         }
       )

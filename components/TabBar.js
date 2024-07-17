@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { icons } from '../constants';
 import React from 'react'
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicon from '@expo/vector-icons/Ionicons';
 
 const TabBar = ({ state, descriptors, navigation }) => {
 
@@ -24,7 +24,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         iconName = 'house';
     }
     return (
-      <Ionicons
+      <Ionicon
         name={iconName}
 				size={21}
 				color={ isFocused ? primaryColor : secondaryColor }
