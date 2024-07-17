@@ -6,6 +6,8 @@ import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '../context/AuthProvider';
+import CustomDrawerContent from '../components/CustomDrawerContent';
+import Ionicon from '@expo/vector-icons/Ionicons';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,8 +40,12 @@ const RootLayout = () => {
 	return (
 		<Drawer
 			screenOptions={{
-				headerShown: false
+				headerShown: false,
+				drawerItemStyle: {marginHorizontal: 30},
+				drawerLabelStyle: {fontFamily: 'Outfit-Regular', fontSize: 18, color: '#333243'},
+				drawerActiveTintColor: '#EA1D25',
 			}}
+			drawerContent={(props) => <CustomDrawerContent {...props} />}
 		>
 			<Drawer.Screen 
 				name='index'
@@ -51,12 +57,14 @@ const RootLayout = () => {
 				name='(tabs)'
 				options={{
 					drawerLabel: 'Home',
+					drawerIcon: () => <Ionicon name='home' size={25} color={'#333243'}/>
 				}}
 			/>
 			<Drawer.Screen 
 				name='auth'
 				options={{
-					drawerLabel: 'My Account'
+					drawerLabel: 'My Account',
+					drawerIcon: () => <Ionicon name='person' size={25} color={'#333243'}/>
 				}}
 			/>
 		</Drawer>

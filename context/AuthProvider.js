@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
 		const session = supabase.auth.getSession().then(() => {
 			setSession(session)
 			setUser(session ? session.user : null);
-    	console.log('Initial session:', session);
 		});
 
 		const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -47,8 +46,6 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
     if (session) getProfile()
   }, [session]);
-
-	console.log(profile)
 
 	return (
 		<AuthContext.Provider value={{ user, session, profile, setProfile }}>

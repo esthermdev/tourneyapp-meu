@@ -9,8 +9,6 @@ const Teams = () => {
   const [teams, setTeams] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState('All');
 
-  console.log(teams.map(team => team.name));
-
   useEffect(() => {
     fetchTeams();
   }, []);
