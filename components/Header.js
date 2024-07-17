@@ -14,15 +14,15 @@ const Header = () => {
 		<View style={styles.container}>
 			<View style={styles.content}>
 				<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-					<FontAwesome name='bars' size={20}/>
+					<Ionicons name='menu' size={25}/>
 				</TouchableOpacity>		
 				<Image 
 					source={images.logoW}
-					style={{width: 40, height: 40}}
+					style={styles.logo}
 				/>
 				<TouchableOpacity style={styles.button} onPress={() => router.push('auth/account')}>
 					<Ionicons name='person' 
-						size={30}
+						size={25}
 						color='#EA1D25'
 					/>
 				</TouchableOpacity>	
@@ -35,9 +35,8 @@ const Header = () => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
-		flexDirection: 'column',
-		paddingTop: Constants.statusBarHeight,
-		height: 107
+		height: 56,
+		width: '100%'
 	},
 	content: {
 		flex: 1,
@@ -46,8 +45,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	button: {
-		marginHorizontal: 31,
+		paddingHorizontal: 20
 	},
+	logo: {
+		width: 40,
+		height: 40
+	}
 });
 
 export default Header;

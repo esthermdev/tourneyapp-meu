@@ -5,14 +5,14 @@ const GamesSchedule = () => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.headerContainer}>
+      <View style={styles.headerContainer}>
         <Text style={styles.header}>Schedule</Text>
-      </View> */}
+      </View>
       <Stack>
-        <Stack.Screen name='index' options={{ title: 'Schedule' }}/>
-        <Stack.Screen name='open' options={{ title: 'Open' }}/>
-        <Stack.Screen name='women' options={{ title: 'Women' }}/>
-        <Stack.Screen name='mixed' options={{ title: 'Mixed' }}/>
+        <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }}/>
+        <Stack.Screen name='open' options={{ title: 'Open', headerShown: false }}/>
+        <Stack.Screen name='women' options={{ title: 'Women', headerShown: false }}/>
+        <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: false }}/>
       </Stack>
     </View>
   );

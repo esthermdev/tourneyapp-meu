@@ -2,67 +2,54 @@ import { Tabs } from 'expo-router';
 import { Image, StyleSheet } from 'react-native';
 import Header from '../../components/Header';
 import { icons } from '../../constants';
+import TabBar from '../../components/TabBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function TabLayout() {
   return (
-    <Tabs 
-      screenOptions={{ 
-        header: () => (<Header />),
-        headerShown: true,
-        tabBarInactiveTintColor: '#8F8DAA',
-        tabBarActiveTintColor: '#EA1D25',
-        tabBarStyle: styles.tabBar,
-        tabBarLabelStyle: styles.tabBarLabel,
-      }}
-    >
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <Image 
-              source={icons.home}
-              style={{ width: 25, height: 25, marginVertical: 10, tintColor: color }}
-            />
-          )
+    <SafeAreaView style={styles.safeArea}>
+      <Tabs 
+        tabBar={(props) => <TabBar {...props} />}
+        screenOptions={{
+          header: () => <Header />
         }}
-      />
-      <Tabs.Screen
-        name="schedule"
-        options={{
-          title: 'Schedule',
-          tabBarIcon: ({ color }) => (
-            <Image 
-              source={icons.calender}
-              style={{ width: 25, height: 25, tintColor: color }}
-            />
-          )
-        }}
-      />
-      <Tabs.Screen
-        name="teams"
-        options={{
-          title: 'Teams',
-          tabBarIcon: ({ color }) => (
-            <Image 
-              source={icons.team}
-              style={{ width: 32, height: 32, tintColor: color }}
-              resizeMode='contain'
-            />
-          )
-        }}
-      />     
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: 'Home',
+          }}
+        />
+        <Tabs.Screen
+          name="schedule"
+          options={{
+            title: 'Schedule',
+          }}
+        />
+        <Tabs.Screen
+          name="teams"
+          options={{
+            title: 'Teams',
+          }}
+        />     
+      </Tabs>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   tabBar: {
-    backgroundColor: '#333243',
-    flex: 0.08
+    backgroundColor: '#fff',
+    height: 56
   },
   tabBarLabel: {
     fontSize: 12,
     fontFamily: 'Outfit-Light',
+    paddingBottom: 5
   }
 });
