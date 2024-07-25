@@ -4,12 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        darkBlack: '#020202',
-        brightRed: '#EA1D25',
-        lightCream: '#F0E6C1',
-        vibrantOrange: '#FA7930',
-        darkGray: '#8F8DAA',
-        warmBlue: '#2871FF'
+        primary: '#EA1D25',
+        secondary: '#020202',
       },
       fontFamily: {
         outfitthin: ["Outfit-Thin", "sans-serif"],

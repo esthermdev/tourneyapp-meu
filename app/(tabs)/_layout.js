@@ -28,11 +28,17 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
+          name="standings"
+          options={{
+            title: 'Standings',
+          }}
+        />   
+        <Tabs.Screen
           name="teams"
           options={{
             title: 'Teams',
           }}
-        />     
+        />   
       </Tabs>
     </SafeAreaView>
   );

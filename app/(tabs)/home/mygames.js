@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal, LayoutAnimation } from 'react-native';
 import { supabase } from '../../../utils/supabase';
-import { Card, Avatar, Icon } from '@rneui/base';
+import { Card, Avatar, Icon, Button } from '@rneui/base';
 import { FlashList } from '@shopify/flash-list';
 import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
@@ -108,7 +108,7 @@ const MyGamesScreen = () => {
   }
 
   const renderItem = ({ item }) => (
-    <Card style={styles.cardContainer}>
+    <Card containerStyle={styles.cardContainer}>
       <View style={styles.timeFieldContainer}>
         <Text className='flex-1 font-outfitregular text-[#8F8DAA]'>{formatTime(item.time)}</Text>
         <View style={styles.fieldContainer}>
@@ -118,8 +118,8 @@ const MyGamesScreen = () => {
       </View>
       <View className='mt-4' style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team1_avatar }}/>
-        <Text className='flex-1 font-outfitbold'>{item.team1_name}</Text>
-        <Text>Game ID:{item.id}, Score:{item.team1_score}</Text>
+        <Text className='flex-1 font-outfitbold text-lg'>{item.team1_name}</Text>
+        <Text className='font-outfitregular text-lg'>{item.team1_score}</Text>
       </View>
       <View style={styles.vsContainer}>
         <Text className='font-outfitregular text-base text-[#BAB8CB] mb-1'>vs</Text>
@@ -127,8 +127,8 @@ const MyGamesScreen = () => {
       </View>
       <View style={styles.teamContainer}>
         <Avatar className='flex-none' rounded source={{ uri: item.team2_avatar }}/>
-        <Text className='flex-1 font-outfitbold'>{item.team2_name}</Text>
-        <Text>Game ID:{item.id}, Score:{item.team2_score}</Text>
+        <Text className='flex-1 font-outfitbold text-lg'>{item.team2_name}</Text>
+        <Text className='font-outfitregular text-lg'>{item.team2_score}</Text>
       </View>
       <TouchableOpacity
         style={styles.updateButton}
@@ -139,22 +139,28 @@ const MyGamesScreen = () => {
     </Card> 
   );
 
+  const renderDropdownItem = (item) => (
+    <View style={styles.dropdownItem}>
+      <Text style={styles.dropdownItemText}>{item.label}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <Dropdown
         style={styles.dropdown}
-        itemTextStyle={{ color: 'black' }}
-        activeColor='purple'
-        itemContainerStyle={{ backgroundColor: 'lightgray' }}
         data={[
-          { label: 'Saturday, July 4, 2024', value: '2024-07-04' },
-          { label: 'Sunday, July 5, 2024', value: '2024-07-05' }
+          { label: 'Saturday, August 3, 2024', value: '2024-07-04' },
+          { label: 'Sunday, August 4, 2024', value: '2024-07-05' }
         ]}
         labelField='label'
         valueField='value'
-        placeholder='Select a date'
         value={selectedDate}
-        onChange={item => setSelectedDate(item.value)}
+        onChange={item => {
+          setSelectedDate(item.value);
+        }}
+        selectedTextStyle={{ fontFamily: 'Outfit-SemiBold', fontSize: 20 }}
+        renderItem={renderDropdownItem}
       />
       <FlashList 
         data={games}
@@ -207,6 +213,10 @@ const MyGamesScreen = () => {
             >
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
+            <Button 
+              title='Submit final score'
+              
+            />
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
@@ -229,12 +239,24 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     padding: 24,
+    borderRadius: 20,
+    shadowRadius: 5
   },
   dropdown: {
-    marginTop: 20,
-    marginHorizontal: 10,
     padding: 10,
-    backgroundColor: 'white',
+    margin: 16,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.8,
+  },
+  dropdownItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 10
+  },
+  dropdownItemText: {
+    color: 'black',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 20,
   },
   timeFieldContainer: {
     flexDirection: 'row',
@@ -254,6 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    marginVertical: 5
   },
   vsContainer: {
     flexDirection: 'row',
@@ -267,15 +290,12 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#BAB8CB',
   },
-  updateButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
   updateButtonText: {
-    color: 'white',
+    marginTop: 14,
+    color: '#2871FF',
     textAlign: 'center',
+    fontFamily: 'Outfit-Regular',
+    textDecorationLine: 'underline'
   },
   modalOverlay: {
     flex: 1,
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Outfit-Bold',
     marginBottom: 12,
   },
   closeButton: {
@@ -308,13 +328,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   scoreInput: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 5,
+    borderColor: '#EA1D25',
     flex: 0.3,
     textAlign: 'center',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 20
   },
   submitButton: {
-    backgroundColor: 'purple',
+    backgroundColor: '#EA1D25',
     padding: 10,
     borderRadius: 5,
     marginTop: 20,

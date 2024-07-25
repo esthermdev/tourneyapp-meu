@@ -20,8 +20,11 @@ const TabBar = ({ state, descriptors, navigation }) => {
       case 'teams':
         iconName = 'people';
         break;
+      case 'standings':
+        iconName = 'medal';
+        break;
       default:
-        iconName = 'house';
+        iconName = 'home';
     }
     return (
       <Ionicon
