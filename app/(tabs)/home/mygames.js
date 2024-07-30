@@ -13,7 +13,7 @@ const MyGamesScreen = () => {
   const [games, setGames] = useState([]);
   const [team1Scores, setTeam1Scores] = useState({});
   const [team2Scores, setTeam2Scores] = useState({});
-  const [selectedDate, setSelectedDate] = useState('2024-07-04');
+  const [selectedDate, setSelectedDate] = useState('2024-08-03');
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
 
@@ -32,12 +32,10 @@ const MyGamesScreen = () => {
         time,
         team1_id,
         team1_name,
-        team1_email,
         team1_score,
         team1_avatar,
         team2_id,
         team2_name,
-        team2_email,
         team2_score,
         team2_avatar
       `)
@@ -150,8 +148,8 @@ const MyGamesScreen = () => {
       <Dropdown
         style={styles.dropdown}
         data={[
-          { label: 'Saturday, August 3, 2024', value: '2024-07-04' },
-          { label: 'Sunday, August 4, 2024', value: '2024-07-05' }
+          { label: 'Saturday, August 3, 2024', value: '2024-08-03' },
+          { label: 'Sunday, August 4, 2024', value: '2024-08-04' }
         ]}
         labelField='label'
         valueField='value'
@@ -166,7 +164,8 @@ const MyGamesScreen = () => {
         data={games}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        estimatedItemSize={10}
+        estimatedItemSize={50}
+        contentContainerStyle={{ paddingBottom: 24 }}
       />
       <Modal 
         visible={isModalVisible}
@@ -181,7 +180,7 @@ const MyGamesScreen = () => {
               <>
                 <View style={styles.teamContainer}>
                   <Avatar className='flex-none' rounded source={{ uri: currentGame.team1_avatar }} />
-                  <Text className='flex-1 font-outfitbold'>{currentGame.team1_name}</Text>
+                  <Text className='flex-1 font-outfitbold text-base'>{currentGame.team1_name}</Text>
                   <TextInput 
                     style={styles.scoreInput}
                     value={team1Scores[currentGame.id]?.toString()}
@@ -194,7 +193,7 @@ const MyGamesScreen = () => {
                 </View>
                 <View style={styles.teamContainer}>
                   <Avatar className='flex-none' rounded source={{ uri: currentGame.team2_avatar }} />
-                  <Text className='flex-1 font-outfitbold'>{currentGame.team2_name}</Text>
+                  <Text className='flex-1 font-outfitbold text-base'>{currentGame.team2_name}</Text>
                   <TextInput 
                     style={styles.scoreInput}
                     value={team2Scores[currentGame.id]?.toString()}
@@ -213,10 +212,12 @@ const MyGamesScreen = () => {
             >
               <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
-            <Button 
-              title='Submit final score'
-              
-            />
+            <TouchableOpacity
+              style={styles.submitFinal}
+              // Add onPress function to update is_finished = true
+            >
+              <Text style={styles.submitButtonText}>Submit Final Score</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginVertical: 5
+    marginVertical: 10
   },
   vsContainer: {
     flexDirection: 'row',
@@ -315,6 +316,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Outfit-Bold',
     marginBottom: 12,
+    textDecorationLine: 'underline'
   },
   closeButton: {
     backgroundColor: 'gray',
@@ -324,6 +326,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeButtonText: {
+    fontFamily: 'Outfit-Regular',
     color: 'white',
     fontSize: 16,
   },
@@ -341,10 +344,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#EA1D25',
     padding: 10,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 5,
+    alignItems: 'center',
+  },
+  submitFinal: {
+    backgroundColor: 'darkblue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 5,
     alignItems: 'center',
   },
   submitButtonText: {
+    fontFamily: 'Outfit-Regular',
     color: 'white',
     fontSize: 16,
   },

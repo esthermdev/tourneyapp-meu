@@ -1,10 +1,8 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from '../context/AuthProvider';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Ionicon from '@expo/vector-icons/Ionicons';

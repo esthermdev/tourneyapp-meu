@@ -3,10 +3,11 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Round1 from './Round1';
 import Round2 from './Round2';
 import Round3 from './Round3';
-import Round4 from './Round4';
+import Crossovers from './Crossovers';
 import Quarters from './Quarters';
 import SemiFinals from './SemiFinals';
 import Finals from './Finals';
+
 
 const MixedSchedule = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -27,7 +28,7 @@ const MixedSchedule = () => {
         <Tab.Screen name="R1" component={Round1} />
         <Tab.Screen name="R2" component={Round2} />
         <Tab.Screen name="R3" component={Round3} />
-        <Tab.Screen name="R4" component={Round4} />
+        <Tab.Screen name="CP" component={Crossovers} />
         <Tab.Screen name="Q" component={Quarters} />
         <Tab.Screen name="SF" component={SemiFinals} />
         <Tab.Screen name="F" component={Finals} />

@@ -4,11 +4,11 @@ import { supabase } from '../../../../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
 
-const Quarters = () => {
+const Crossovers = () => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
-    getGamesByRoundId(5);
+    getGamesByRoundId(4);
   }, []);
 
   const getGamesByRoundId = async (roundId) => {
@@ -78,9 +78,9 @@ const Quarters = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.time}>8/3</Text>
+        <Text style={styles.time}>8/2</Text>
         <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
-        <Text style={styles.time}>9:00AM</Text>
+        <Text style={styles.time}>15:00PM</Text>
       </View>
       <FlashList 
         data={games}
@@ -92,7 +92,7 @@ const Quarters = () => {
   );
 };
 
-export default Quarters;
+export default Crossovers;
 
 const styles = StyleSheet.create({
   container: {

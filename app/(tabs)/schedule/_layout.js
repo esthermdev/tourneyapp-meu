@@ -12,7 +12,6 @@ const GamesSchedule = () => {
       <Stack>
         <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }}/>
         <Stack.Screen name='open' options={{ title: 'Open', headerShown: false }}/>
-        <Stack.Screen name='women' options={{ title: 'Women', headerShown: false }}/>
         <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: false }}/>
       </Stack>
     </View>

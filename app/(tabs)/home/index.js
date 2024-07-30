@@ -1,11 +1,16 @@
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { useState, useEffect } from 'react';
+import { Alert, StyleSheet, View } from 'react-native'
 import { icons } from '../../../constants';
 import HomeButtons from '../../../components/HomeButtons';
+import FieldSelectionModal from '../../../components/FieldSelectionModal';
 import { router } from 'expo-router';
 import { useAuth } from '../../../context/AuthProvider';
 
 const Home = () => {
   const { user } = useAuth();
+
+  const [isFieldModalVisible, setFieldModalVisible] = useState(false);
+  const [isFieldSelectionVisible, setIsFieldSelectionVisible] = useState(false);
 
   const handlePress = (screen) => {
     if (!user) {
@@ -17,6 +22,23 @@ const Home = () => {
     } else {
       router.push(`home/${screen}`);
     }
+  };
+
+  const handleMedicPress = () => {
+    Alert.alert(
+      "Call for medical assistance?",
+      "",
+      [
+        { text: "No", style: "cancel" },
+        { text: "Yes", onPress: () => setIsFieldSelectionVisible(true) }
+      ]
+    );
+  };
+
+  const handleFieldSelection = async (fieldNumber) => {
+    setFieldModalVisible(false);
+    
+    console.log(`Medical assistance requested at Field ${fieldNumber}`);
   };
 
   return (
@@ -37,12 +59,18 @@ const Home = () => {
         title='Medic'
         icon={icons.medic}
         buttonStyle='bg-[#2871FF]'
+        handlePress={handleMedicPress}
       />
       <HomeButtons 
         title='Field Map'
         icon={icons.map}
         buttonStyle='bg-[#B6C846]'
         handlePress={() => router.push('/home/fieldmap')}
+      />
+      <FieldSelectionModal 
+        visible={isFieldSelectionVisible}
+        onClose={() => setIsFieldSelectionVisible(false)}
+        onSelectField={handleFieldSelection}
       />
     </View>
   )

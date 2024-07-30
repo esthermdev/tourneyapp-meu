@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { ListItem, Avatar } from '@rneui/base';
+import { ListItem } from '@rneui/base';
 import { supabase } from '../../utils/supabase';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ListItemContent } from '@rneui/base/dist/ListItem/ListItem.Content';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Standings = () => {
   const [standings, setStandings] = useState([]);
@@ -19,16 +18,15 @@ const Standings = () => {
 
   const fetchStandings = async () => {
     const { data, error } = await supabase
-      .from('pool_standings')
+      .from('rankings')
       .select(`
         wins,
         losses,
-        pool_id,
         team_id,
-        pools (pool_name),
-        teams (name)
+        pool_rank,
+        teams (name, pool_id)
       `)
-      .order('pool_id')
+      .order('pool_rank')
 
     if (error) {
       console.error('Error fetching teams:', error);
@@ -39,28 +37,30 @@ const Standings = () => {
   };
 
   const separateStandingsByPool = (data) => {
-    setPoolAStandings(data.filter(team => team.pool_id === 1));
-    setPoolBStandings(data.filter(team => team.pool_id === 2));
-    setPoolCStandings(data.filter(team => team.pool_id === 3));
-    setPoolDStandings(data.filter(team => team.pool_id === 4));
+    setPoolAStandings(data.filter(team => team.teams.pool_id === 7));
+    setPoolBStandings(data.filter(team => team.teams.pool_id === 8));
+    setPoolCStandings(data.filter(team => team.teams.pool_id === 9));
+    setPoolDStandings(data.filter(team => team.teams.pool_id === 10));
   };
 
   const renderStandings = (standings, poolName) => (
     <View style={styles.poolContainer}>
       <Text style={styles.poolHeader}>Pool {poolName}</Text>
-      <FlashList
-        data={standings}
-        renderItem={({ item }) => (
-          <ListItem bottomDivider>
+      {
+        standings.map((team, i) => (
+          <ListItem key={i} bottomDivider>
             <ListItem.Content>
-              <ListItem.Title>{item.teams.name}</ListItem.Title>
-              <Text>{item.wins} - {item.losses}</Text>
+              <View style={styles.rowContainer}>
+                <Text style={styles.rankNumber}>{i + 1}</Text>
+                <View style={styles.teamInfo}>
+                  <ListItem.Title>{team.teams.name}</ListItem.Title>
+                  <Text>{team.wins} - {team.losses}</Text>
+                </View>
+              </View>
             </ListItem.Content>
           </ListItem>
-        )}
-        estimatedItemSize={100}
-        keyExtractor={(item) => item.team_id.toString()}
-      />
+        ))
+      }
     </View>
   );
 
@@ -69,12 +69,12 @@ const Standings = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Standings</Text>
       </View>
-      <View style={styles.standingsContainer}>
+      <ScrollView style={styles.standingsContainer}>
         {renderStandings(poolAStandings, 'A')}
         {renderStandings(poolBStandings, 'B')}
         {renderStandings(poolCStandings, 'C')}
         {renderStandings(poolDStandings, 'D')}
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -110,8 +110,23 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: '#EA1D25',
     marginBottom: 5,
+    textAlign: 'center'
   },
   listContentContainer: {
     flexGrow: 1,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rankNumber: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 10,
+    width: 20,
+    textAlign: 'center',
+  },
+  teamInfo: {
+    flex: 1,
   },
 });
