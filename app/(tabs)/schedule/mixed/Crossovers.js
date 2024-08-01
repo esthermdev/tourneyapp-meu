@@ -33,7 +33,8 @@ const Crossovers = () => {
     if (error) {
       console.error('Error fetching games:', error);
     } else {
-      setGames(data);
+      const filteredGames = data.filter(game => game.team1_id !== null || game.team2_id !== null);
+      setGames(filteredGames);
     }
   };
 
@@ -52,24 +53,24 @@ const Crossovers = () => {
           <Avatar 
             size={75}
             rounded
-            source={{ uri: item.team1.avatar_uri }}
+            source={{ uri: item.team1?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team1.name}</Text>
+          <Text style={styles.teamName}>{item.team1?.name || 'TBD'}</Text>
         </View>
         <View style={styles.scoreContainer}>
-          <Text style={styles.score}>{item.scores[0].team1_score}</Text>
+          <Text style={styles.score}>{item.scores[0]?.team1_score || '-'}</Text>
           <Text style={styles.colon}>:</Text>
-          <Text style={styles.score}>{item.scores[0].team2_score}</Text>
+          <Text style={styles.score}>{item.scores[0]?.team2_score || '-'}</Text>
         </View>
         <View style={styles.teamContainer}>
           <Avatar 
             size={75}
             rounded
-            source={{ uri: item.team2.avatar_uri }}
+            source={{ uri: item.team2?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />  
-          <Text style={styles.teamName}>{item.team2.name}</Text>
+          <Text style={styles.teamName}>{item.team2?.name || 'TBD'}</Text>
         </View>
       </View>
     </Card>

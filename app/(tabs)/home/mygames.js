@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal, LayoutAnimation } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal } from 'react-native';
 import { supabase } from '../../../utils/supabase';
 import { Card, Avatar, Icon, Button } from '@rneui/base';
 import { FlashList } from '@shopify/flash-list';
@@ -11,21 +11,50 @@ const MyGamesScreen = () => {
   const { profile } = useAuth();
 
   const [games, setGames] = useState([]);
+  const [currentGame, setCurrentGame] = useState(null);
   const [team1Scores, setTeam1Scores] = useState({});
   const [team2Scores, setTeam2Scores] = useState({});
+  const [dateOptions, setDateOptions] = useState([]);
   const [selectedDate, setSelectedDate] = useState('2024-08-03');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [currentGame, setCurrentGame] = useState(null);
 
   useEffect(() => {
     if (profile && profile.team_id) {
+      fetchDateOptions(profile.team_id);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    if (profile && profile.team_id && selectedDate) {
       getGamesByTeamIdandDate(profile.team_id, selectedDate);
     }
   }, [profile, selectedDate]);
 
+  const fetchDateOptions = async (teamId) => {
+    const { data, error } = await supabase
+      .from('full_gameview')
+      .select('date')
+      .or(`team1_id.eq.${teamId},team2_id.eq.${teamId}`)
+      .order('date');
+
+    if (error) {
+      console.error('Error fetching date options:', error);
+    } else {
+      const uniqueDates = [...new Set(data.map(item => item.date))];
+      const options = uniqueDates.map(date => ({
+        label: new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+        value: date
+      }));
+      setDateOptions(options);
+      if (options.length > 0) {
+        setSelectedDate(options[0].value);
+      }
+    }
+  };
+
   const getGamesByTeamIdandDate = async (teamId, date) => {
     const { data, error } = await supabase
-      .from('full_game_set')
+      .from('full_gameview')
       .select(`
         id,
         date,
@@ -37,7 +66,8 @@ const MyGamesScreen = () => {
         team2_id,
         team2_name,
         team2_score,
-        team2_avatar
+        team2_avatar,
+        is_finished
       `)
       .or(`team1_id.eq.${teamId}, team2_id.eq.${teamId}`)
       .eq('date', date)
@@ -51,21 +81,60 @@ const MyGamesScreen = () => {
   }
 
   const handleUpdateScore = async () => {
-
     if (currentGame) {
       const { error } = await supabase
-      .from('full_game_set')
+      .from('scores')
       .update({
         team1_score: team1Scores[currentGame.id],
-        team2_score: team2Scores[currentGame.id]
+        team2_score: team2Scores[currentGame.id],
       })
-      .eq('id', currentGame.id)
+      .eq('game_id', currentGame.id)
       .select()
 
       if (error) {
         console.error('Error updating score:', error);
       } else {
         alert('Scores updated successfully');
+        setModalVisible(false);
+        getGamesByTeamIdandDate(profile.team_id, selectedDate);
+        setupRealtimeListeners();
+      }
+    }
+  }
+
+  const handleSubmitFinalScore = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+  
+    if (!user) {
+      console.log('No authenticated user found');
+      alert('You must be logged in to update scores');
+      return;
+    }
+  
+    console.log('Current user ID:', user.id);
+    
+    if (currentGame) {
+      console.log('Current game:', currentGame);
+
+      const { error } = await supabase
+        .from('scores')
+        .update({
+          is_finished: true
+        })
+        .eq('game_id', currentGame.id)
+        .select()
+  
+      if (error) {
+        console.error('Error updating final score:', error);
+        console.log('Update payload:', {
+          team1_score: team1Scores[currentGame.id],
+          team2_score: team2Scores[currentGame.id],
+          is_finished: true,
+          game_id: currentGame.id
+        });
+        alert(`Failed to submit final score. Error: ${error.message}`);
+      } else {
+        alert('Final score submitted successfully');
         setModalVisible(false);
         getGamesByTeamIdandDate(profile.team_id, selectedDate);
         setupRealtimeListeners();
@@ -86,7 +155,6 @@ const MyGamesScreen = () => {
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'scores' },
         (payload) => {
-          console.log('Change received!', payload);
           const updatedGameId = payload.new.game_id;
           setTeam1Scores(prevScores => ({
             ...prevScores,
@@ -99,7 +167,7 @@ const MyGamesScreen = () => {
         }
       )
       .subscribe();
-
+  
     return () => {
       supabase.removeChannel(subscription);
     }
@@ -129,36 +197,30 @@ const MyGamesScreen = () => {
         <Text className='font-outfitregular text-lg'>{item.team2_score}</Text>
       </View>
       <TouchableOpacity
-        style={styles.updateButton}
+        style={[styles.updateButton, item.is_finished && styles.disabledButton]}
         onPress={() => openModal(item)}
+        disabled={item.is_finished}
       >
-        <Text style={styles.updateButtonText}>Update Score</Text>
+        <Text style={[styles.updateButtonText, item.is_finished && styles.disabledButtonText]}>
+          {item.is_finished ? 'Game Finished' : 'Update Score'}
+        </Text>
       </TouchableOpacity>
     </Card> 
-  );
-
-  const renderDropdownItem = (item) => (
-    <View style={styles.dropdownItem}>
-      <Text style={styles.dropdownItemText}>{item.label}</Text>
-    </View>
   );
 
   return (
     <View style={styles.container}>
       <Dropdown
         style={styles.dropdown}
-        data={[
-          { label: 'Saturday, August 3, 2024', value: '2024-08-03' },
-          { label: 'Sunday, August 4, 2024', value: '2024-08-04' }
-        ]}
+        itemTextStyle={styles.dropdownItemText}
+        data={dateOptions}
         labelField='label'
         valueField='value'
         value={selectedDate}
         onChange={item => {
           setSelectedDate(item.value);
         }}
-        selectedTextStyle={{ fontFamily: 'Outfit-SemiBold', fontSize: 20 }}
-        renderItem={renderDropdownItem}
+        selectedTextStyle={styles.dropdownSelectedText}
       />
       <FlashList 
         data={games}
@@ -214,7 +276,7 @@ const MyGamesScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.submitFinal}
-              // Add onPress function to update is_finished = true
+              onPress={handleSubmitFinalScore}
             >
               <Text style={styles.submitButtonText}>Submit Final Score</Text>
             </TouchableOpacity>
@@ -244,20 +306,21 @@ const styles = StyleSheet.create({
     shadowRadius: 5
   },
   dropdown: {
-    padding: 10,
-    margin: 16,
     height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.8,
-  },
-  dropdownItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+    marginTop: 10,
+    marginHorizontal: 24
   },
   dropdownItemText: {
-    color: 'black',
+    fontSize: 18,
     fontFamily: 'Outfit-Regular',
-    fontSize: 20,
+    color: '#333243',
+  },
+  dropdownSelectedText: {
+    color: '#EA1D25',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18,
   },
   timeFieldContainer: {
     flexDirection: 'row',
@@ -293,6 +356,7 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     marginTop: 14,
+    fontSize: 16,
     color: '#2871FF',
     textAlign: 'center',
     fontFamily: 'Outfit-Regular',
@@ -358,5 +422,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Regular',
     color: 'white',
     fontSize: 16,
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  disabledButtonText: {
+    color: 'gray',
   },
 });

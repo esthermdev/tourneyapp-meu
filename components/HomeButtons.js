@@ -2,9 +2,14 @@ import { Image } from '@rneui/base'
 import { StyleSheet, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const HomeButtons = ({ title, icon, buttonStyle, handlePress }) => {
+const HomeButtons = ({ title, icon, buttonStyle, handlePress, disabled }) => {
   return (
-    <TouchableOpacity style={styles.buttonStyle} className={buttonStyle} onPress={handlePress}>
+    <TouchableOpacity 
+      style={styles.buttonStyle} 
+      className={buttonStyle} 
+      onPress={handlePress}
+      disabled={disabled}
+    >
       <Image 
         source={icon}
         resizeMode='contain'

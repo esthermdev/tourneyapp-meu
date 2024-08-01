@@ -58,8 +58,9 @@ const Home = () => {
       <HomeButtons 
         title='Medic'
         icon={icons.medic}
-        buttonStyle='bg-[#2871FF]'
+        buttonStyle='bg-gray-300'
         handlePress={handleMedicPress}
+        disabled={true}
       />
       <HomeButtons 
         title='Field Map'

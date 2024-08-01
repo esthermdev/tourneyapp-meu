@@ -5,9 +5,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 const ScheduleByDivision = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Schedule by Division</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Schedule</Text>
+      </View>
+      <Text style={styles.title}>Division</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
+          disabled={true}
           style={[styles.button, styles.openButton]} 
           onPress={() => router.push('schedule/open')}
         >
@@ -29,8 +33,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     padding: 20,
+  },
+  headerContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  }, 
+  header: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 35,
+    color: '#EA1D25'
   },
   title: {
     fontSize: 28,
@@ -40,6 +54,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   buttonContainer: {
+    flex: 2,
     width: '100%',
   },
   button: {
@@ -48,13 +63,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
   },
   openButton: {
-    backgroundColor: '#2871ff',
+    backgroundColor: 'lightgray',
   },
   mixedButton: {
     backgroundColor: '#6D28FF',

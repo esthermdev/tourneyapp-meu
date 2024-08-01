@@ -1,10 +1,23 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  Alert, 
+  TouchableOpacity, 
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import { supabase } from '../../utils/supabase';
-import { StyleSheet, View, Text, Alert } from 'react-native';
 import { Button, Input } from '@rneui/themed';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAuth } from '../../context/AuthProvider';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Account({ session }) {
   const { profile, setProfile } = useAuth();
@@ -14,6 +27,8 @@ export default function Account({ session }) {
   const [teamId, setTeamId] = useState('');
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchTeams();
@@ -85,68 +100,178 @@ export default function Account({ session }) {
       );
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text>Welcome {fullName}!</Text>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input label="Email" value={session?.user?.email} disabled />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input label="Full Name" value={fullName || ''} onChangeText={(text) => setFullName(text)} autoCapitalize='words' />
-      </View>
-      <View style={{ marginHorizontal: 10 }}>
-        <Text className='text-base text-gray-500 font-bold'>Your Team</Text>
-        <Dropdown
-          style={styles.dropdown}
-          itemTextStyle={{color: 'white'}} 
-          activeColor='purple'
-          itemContainerStyle={{backgroundColor: 'lightgray'}}
-          data={teams}
-          labelField='name'
-          valueField='id'
-          placeholder='Select a team..'
-          value={teamId}
-          search
-          searchPlaceholder="Search..."
-          onChange={item => {
-            setTeamId(item.id)
-          }}
-        />
-        {teamId && <Text h5>Selected Team ID: {teamId}</Text>}
-      </View>
-      
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? 'Loading ...' : 'Update'}
-          onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
-          disabled={loading}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
-      </View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity 
+        style={styles.menuButton} 
+        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+      >
+        <Ionicons name="menu" size={30} color="#EA1D25" />
+      </TouchableOpacity>
+
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.content}>
+            <Text style={styles.header}>Welcome</Text>
+            <Input
+              label="Email"
+              value={session?.user?.email}
+              disabled
+              inputStyle={styles.inputText}
+              labelStyle={styles.inputLabel}
+              containerStyle={styles.input}
+              leftIcon={{ type: 'ionicon', name: 'mail', color: '#EA1D25' }}
+            />
+            
+            <Input
+              label="Full Name"
+              value={fullName || ''}
+              onChangeText={(text) => setFullName(text)}
+              autoCapitalize='words'
+              inputStyle={styles.inputText}
+              labelStyle={styles.inputLabel}
+              containerStyle={styles.input}
+              leftIcon={{ type: 'ionicon', name: 'person', color: '#EA1D25' }}
+            />
+
+            <View style={styles.dropdownContainer}>
+              <Text style={styles.dropdownLabel}>Your Team</Text>
+              <Dropdown
+                style={styles.dropdown}
+                itemTextStyle={styles.dropdownItemText}
+                closeModalWhenSelectedItem={true}
+                inputSearchStyle={styles.inputSearch}
+                activeColor='#EA1D25'
+                containerStyle={styles.dropdownList}
+                data={teams}
+                labelField='name'
+                valueField='id'
+                placeholder='Select a team...'
+                value={teamId}
+                search
+                searchPlaceholder="Search..."
+                onChange={item => {
+                  setTeamId(item.id)
+                }}
+                placeholderStyle={styles.dropdownPlaceholder}
+                selectedTextStyle={styles.dropdownSelectedText}
+              />
+            </View>
+
+            <Button
+              title={loading ? 'Updating ...' : 'Update Profile'}
+              onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
+              disabled={loading}
+              buttonStyle={styles.primaryButton}
+              titleStyle={styles.buttonText}
+            />
+            
+            <Button 
+              title="Sign Out" 
+              onPress={() => supabase.auth.signOut()} 
+              buttonStyle={styles.secondaryButton}
+              titleStyle={[styles.buttonText, styles.secondaryButtonText]}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
+  menuButton: {
+    marginTop: 20,
+    marginLeft: 20
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
+  content: {
+    padding: 20
+  },
+  header: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 28,
+    color: '#EA1D25',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  input: {
+    paddingHorizontal: 0,
+    marginBottom: 15,
+  },
+  inputLabel: {
+    fontFamily: 'Outfit-Medium',
+    color: '#333243',
+  },
+  inputText: {
+    fontFamily: 'Outfit-Regular',
+  },
+  dropdownContainer: {
+    marginBottom: 20,
+  },
+  dropdownLabel: {
+    fontSize: 16,
+    fontFamily: 'Outfit-Medium',
+    color: '#333243',
+    marginBottom: 5,
   },
   dropdown: {
-    marginTop: 10, 
-    backgroundColor: 'pink', 
-    padding: 10
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
   },
-  mt20: {
-    marginTop: 20,
+  inputSearch: {
+    borderColor: '#ccc',
+    borderRadius: 4,
+    fontFamily: 'Outfit-Regular',
+    color: '#999',
   },
-})
+  dropdownList: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    marginTop: 4,
+  },
+  dropdownItemText: {
+    fontSize: 16,
+    fontFamily: 'Outfit-Regular',
+    color: '#333243',
+  },
+  dropdownPlaceholder: {
+    color: '#999',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+  },
+  dropdownSelectedText: {
+    color: '#333243',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+  },
+  primaryButton: {
+    backgroundColor: '#EA1D25',
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginBottom: 10,
+  },
+  secondaryButton: {
+    backgroundColor: '#fff',
+    borderColor: '#EA1D25',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  buttonText: {
+    fontFamily: 'Outfit-SemiBold',
+    fontSize: 16,
+  },
+  secondaryButtonText: {
+    color: '#EA1D25',
+  },
+});

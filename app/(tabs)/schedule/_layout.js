@@ -6,13 +6,10 @@ const GamesSchedule = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Schedule</Text>
-      </View>
       <Stack>
         <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }}/>
         <Stack.Screen name='open' options={{ title: 'Open', headerShown: false }}/>
-        <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: false }}/>
+        <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: true }}/>
       </Stack>
     </View>
   );
