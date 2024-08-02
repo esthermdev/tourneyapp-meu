@@ -9,7 +9,7 @@ const CustomButtonWithoutIcon = ({ title, handlePress, buttonStyles, disabled })
 			className={`justify-center items-center ${buttonStyles}`}
 			disabled={disabled}
 		>
-			<Text className={`text-primary font-outfitsemibold text-lg text-white`}>{title}{' '}
+			<Text className={`bg-primary font-outfitsemibold text-lg text-white`}>{title}{' '}
 			</Text>
 		</TouchableOpacity>
 	)

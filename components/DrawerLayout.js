@@ -17,28 +17,31 @@ const DrawerLayout = () => {
 			<Drawer.Screen 
 				name='index'
 				options={{
+					headerShown: false,
 					drawerLabel: 'Welcome',
 				}}
 			/>
 			<Drawer.Screen 
 				name='(tabs)'
 				options={{
+					headerShown: false,
 					drawerLabel: 'Home',
-					drawerIcon: () => <Ionicon name='home' size={25} color={'#333243'}/>
+					drawerIcon: () => <Ionicon name='home' />
 				}}
 			/>
 			<Drawer.Screen 
 				name='auth'
 				options={{
+					headerShown: false,
 					drawerLabel: 'My Account',
-					drawerIcon: () => <Ionicon name='person' size={25} color={'#333243'}/>
+					drawerIcon: () => <Ionicon name='person' />
 				}}
 			/>
 			<Drawer.Screen 
-				name="admin"
+				name="settings"
 				options={{
-					drawerLabel: 'Admin',
-					drawerIcon: () => <Ionicon name='settings' size={25} color={'#333243'}/>
+					drawerLabel: () => null,
+					drawerItemStyle: { display: 'none' }
 				}}
 			/>
 		</Drawer>
