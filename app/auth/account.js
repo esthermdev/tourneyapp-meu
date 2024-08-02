@@ -116,7 +116,7 @@ export default function Account({ session }) {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>
-            <Text style={styles.header}>Welcome</Text>
+            <Text style={styles.header}>My Account</Text>
             <Input
               label="Email"
               value={session?.user?.email}

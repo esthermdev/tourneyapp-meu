@@ -2,16 +2,22 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { images } from '../constants';
+import { useAuth } from '../context/AuthProvider';
 
 const CustomDrawerContent = (props) => {
+
+  const filteredProps = {
+    ...props,
+  };
+
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView {...filteredProps}>
       <View style={styles.logoContainer}>
         <Image source={images.logoW} style={styles.logo} />
         <Text style={styles.tournamentName}>Tournament Name</Text>
       </View>
       <View style={styles.divider}></View>
-      <DrawerItemList {...props} />
+      <DrawerItemList {...filteredProps} />
     </DrawerContentScrollView>
   );
 };
