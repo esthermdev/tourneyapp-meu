@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   StyleSheet, 
   View, 
@@ -102,6 +102,32 @@ export default function Account({ session }) {
     }
   };
 
+  const DropdownComponent = useMemo(() => {
+    return (
+      <Dropdown
+        style={styles.dropdown}
+        itemTextStyle={styles.dropdownItemText}
+        selectedTextStyle={styles.dropdownSelectedText}
+        placeholderStyle={styles.dropdownPlaceholder}
+        containerStyle={styles.dropdownList}
+        activeColor='#EA1D25'
+        data={teams}
+        labelField='name'
+        valueField='id'
+        placeholder='Select a team...'
+        value={teamId}
+        onChange={item => setTeamId(item.id)}
+        search
+        searchPlaceholder="Search..."
+        renderItem={item => (
+          <View style={styles.dropdownItem}>
+            <Text style={styles.dropdownItemText}>{item.name}</Text>
+          </View>
+        )}
+      />
+    );
+  }, [teams, teamId]);
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity 
@@ -140,26 +166,7 @@ export default function Account({ session }) {
 
             <View style={styles.dropdownContainer}>
               <Text style={styles.dropdownLabel}>Your Team</Text>
-              <Dropdown
-                style={styles.dropdown}
-                itemTextStyle={styles.dropdownItemText}
-                closeModalWhenSelectedItem={true}
-                inputSearchStyle={styles.inputSearch}
-                activeColor='#EA1D25'
-                containerStyle={styles.dropdownList}
-                data={teams}
-                labelField='name'
-                valueField='id'
-                placeholder='Select a team...'
-                value={teamId}
-                search
-                searchPlaceholder="Search..."
-                onChange={item => {
-                  setTeamId(item.id)
-                }}
-                placeholderStyle={styles.dropdownPlaceholder}
-                selectedTextStyle={styles.dropdownSelectedText}
-              />
+              {DropdownComponent}
             </View>
 
             <Button
@@ -226,12 +233,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: 'white',
   },
-  inputSearch: {
-    borderColor: '#ccc',
-    borderRadius: 4,
-    fontFamily: 'Outfit-Regular',
-    color: '#999',
-  },
   dropdownList: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -273,5 +274,10 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     color: '#EA1D25',
+  },
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
 });

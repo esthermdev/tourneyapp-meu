@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, SafeAreaView } from 'react-native';
-import { supabase } from '../../../../utils/supabase';
+import { supabase } from '../../../../../utils/supabase';
 import { Card, Avatar} from '@rneui/base';
-import { formatTime } from '../../../../utils/formatTime';
+import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const PoolCGamesScreen = () => {
+const PoolAGamesScreen = () => {
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
@@ -14,7 +14,7 @@ const PoolCGamesScreen = () => {
   const [team2Score, setTeam2Score] = useState('');
 
   useEffect(() => {
-    getGamesByPoolId(9);
+    getGamesByPoolId(7);
     setupRealtimeListeners();
   }, []);
 
@@ -80,7 +80,7 @@ const PoolCGamesScreen = () => {
       } else {
         Alert.alert('Success', 'Score updated successfully');
         setModalVisible(false);
-        getGamesByPoolId(9);
+        getGamesByPoolId(7);
       }
     }
   }
@@ -99,7 +99,7 @@ const PoolCGamesScreen = () => {
       } else {
         Alert.alert('Success', 'Game marked as finished');
         setModalVisible(false);
-        getGamesByPoolId(9);
+        getGamesByPoolId(7);
       }
     }
   }
@@ -107,7 +107,7 @@ const PoolCGamesScreen = () => {
   const handleResetAllGames = async () => {
     Alert.alert(
       "Reset All Games",
-      "Are you sure you want to reset all scores and standings to 0 and mark all games as unfinished for Pool C?",
+      "Are you sure you want to reset all scores and standings to 0 and mark all games as unfinished for Pool B?",
       [
         {
           text: "Cancel",
@@ -117,14 +117,14 @@ const PoolCGamesScreen = () => {
           text: "Yes, Reset All",
           onPress: async () => {
             const { error } = await supabase
-              .rpc('reset_pool_scores', { pool_id_param: 9 });
+              .rpc('reset_pool_scores', { pool_id_param: 7 });
   
             if (error) {
               console.error('Error resetting games:', error);
               Alert.alert('Error', 'Failed to reset games');
             } else {
-              Alert.alert('Success', 'All games in Pool C have been reset');
-              getGamesByPoolId(9);
+              Alert.alert('Success', 'All games in Pool A have been reset');
+              getGamesByPoolId(7);
             }
           }
         }
@@ -158,7 +158,7 @@ const PoolCGamesScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text className='font-outfitbold text-2xl text-center m-3'>Pool C Games</Text>
+        <Text className='font-outfitbold text-2xl text-center m-3'>Pool A Games</Text>
         <FlatList 
           data={games}
           keyExtractor={(item) => item.id.toString()}
@@ -393,4 +393,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PoolCGamesScreen;
+export default PoolAGamesScreen;

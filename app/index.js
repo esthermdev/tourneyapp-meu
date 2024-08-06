@@ -25,7 +25,7 @@ export default function App() {
       <View className='flex-2 px-[35] pt-5 pb-12'>
         <View className='mb-12'>
           <Text className='font-outfitregular text-center' style={{ fontSize: 18 }}>Welcome to</Text>
-          <Text className='font-outfitbold text-center py-1' style={{ fontSize: 38 }}>Tournament Name</Text>
+          <Text className='font-outfitbold text-center py-1' style={{ fontSize: 38 }}>Vacationland</Text>
           <Text className='font-outfitbold text-center' style={{ fontSize: 16 }}>2024</Text>
         </View>
         <CustomButtonWithIcon 

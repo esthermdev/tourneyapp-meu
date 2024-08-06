@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, SafeAreaView } from 'react-native';
-import { supabase } from '../../../../utils/supabase';
+import { supabase } from '../../../../../utils/supabase';
 import { Card, Avatar} from '@rneui/base';
-import { formatTime } from '../../../../utils/formatTime';
+import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const PoolBGamesScreen = () => {
+const PoolDGamesScreen = () => {
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
@@ -14,7 +14,7 @@ const PoolBGamesScreen = () => {
   const [team2Score, setTeam2Score] = useState('');
 
   useEffect(() => {
-    getGamesByPoolId(8);
+    getGamesByPoolId(10);
     setupRealtimeListeners();
   }, []);
 
@@ -63,14 +63,13 @@ const PoolBGamesScreen = () => {
     setModalVisible(true);
   }
 
-
   const handleUpdateScore = async () => {
     if (currentGame) {
       const { error } = await supabase
         .from('scores')
         .update({
-          team1_score: team1Score,
-          team2_score: team2Score,
+          team1_score: parseInt(team1Score),
+          team2_score: parseInt(team2Score),
         })
         .eq('game_id', currentGame.id);
 
@@ -80,18 +79,19 @@ const PoolBGamesScreen = () => {
       } else {
         Alert.alert('Success', 'Score updated successfully');
         setModalVisible(false);
-        getGamesByPoolId(8);
+        getGamesByPoolId(10);
       }
     }
   }
 
   const handleMarkAsFinished = async () => {
     if (currentGame) {
-      const { data, error } = await supabase
-      .from('scores')
-      .update({ is_finished: true })
-      .match({ game_id: currentGame.id })
-      .select();
+      const { error } = await supabase
+        .from('scores')
+        .update({
+          is_finished: true
+        })
+        .eq('game_id', currentGame.id);
 
       if (error) {
         console.error('Error marking game as finished:', error);
@@ -99,7 +99,7 @@ const PoolBGamesScreen = () => {
       } else {
         Alert.alert('Success', 'Game marked as finished');
         setModalVisible(false);
-        getGamesByPoolId(8);
+        getGamesByPoolId(10);
       }
     }
   }
@@ -107,7 +107,7 @@ const PoolBGamesScreen = () => {
   const handleResetAllGames = async () => {
     Alert.alert(
       "Reset All Games",
-      "Are you sure you want to reset all scores and standings to 0 and mark all games as unfinished for Pool B?",
+      "Are you sure you want to reset all scores and standings to 0 and mark all games as unfinished for Pool D?",
       [
         {
           text: "Cancel",
@@ -117,14 +117,14 @@ const PoolBGamesScreen = () => {
           text: "Yes, Reset All",
           onPress: async () => {
             const { error } = await supabase
-              .rpc('reset_pool_scores', { pool_id_param: 8 });
+              .rpc('reset_pool_scores', { pool_id_param: 10 });
   
             if (error) {
               console.error('Error resetting games:', error);
               Alert.alert('Error', 'Failed to reset games');
             } else {
-              Alert.alert('Success', 'All games in Pool B have been reset');
-              getGamesByPoolId(8);
+              Alert.alert('Success', 'All games in Pool D have been reset');
+              getGamesByPoolId(10);
             }
           }
         }
@@ -158,7 +158,7 @@ const PoolBGamesScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text className='font-outfitbold text-2xl text-center m-3'>Pool B Games</Text>
+        <Text className='font-outfitbold text-2xl text-center m-3'>Pool D Games</Text>
         <FlatList 
           data={games}
           keyExtractor={(item) => item.id.toString()}
@@ -393,4 +393,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PoolBGamesScreen;
+export default PoolDGamesScreen;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
-import { supabase } from '../../../../utils/supabase';
+import { supabase } from '../../../../../utils/supabase';
 import { Card, Avatar} from '@rneui/base';
-import { formatTime } from '../../../../utils/formatTime';
+import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const Crossover = () => {
+const Quarters = () => {
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
@@ -15,53 +15,43 @@ const Crossover = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getGamesByRoundId(4);
+    getGamesByRoundId(5);
     setupRealtimeListeners();
   }, []);
 
   const getGamesByRoundId = async (roundId) => {
     setIsLoading(true);
     const { data, error } = await supabase
-      .from('games')
-      .select(`
-        id,
-        rounds!inner (
-          date, time
-        ),
-        team1:team1_id (
-          name, avatar_uri
-        ),
-        team2:team2_id (
-          name, avatar_uri
-        ),
-        scores!inner (
-          team1_score,
-          team2_score
-        ),
-        field: field_id (
-          name
-        )
-      `)
-      .eq('round_id', roundId)
+    .from('games')
+    .select(`
+      id,
+      rounds!inner (
+        date, time
+      ),
+      team1:team1_id (
+        name, avatar_uri
+      ),
+      team2:team2_id (
+        name, avatar_uri
+      ),
+      scores!inner (
+        team1_score,
+        team2_score,
+        is_finished
+      ),
+      field: field_id (
+        name
+      )
+    `)
+    .eq('round_id', roundId)
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
+      console.log('Fetched games data:', JSON.stringify(data, null, 2));
       setGames(data);
     }
     setIsLoading(false);
-  };
-
-  const generateCrossovers = async () => {
-    try {
-      const { data, error } = await supabase.rpc('admin_generate_crossovers');
-      if (error) throw error;
-      Alert.alert('Success', 'Crossover games generated successfully');
-      getGamesByRoundId(4); // Refresh the games list
-    } catch (error) {
-      console.error('Error generating crossover games:', error);
-      Alert.alert('Error', 'Failed to generate crossover games: ' + error.message);
-    }
   };
 
   const setupRealtimeListeners = () => {
@@ -90,8 +80,8 @@ const Crossover = () => {
   
   const openModal = (game) => {
     setCurrentGame(game);
-    setTeam1Score(game.team1_score?.toString() || '0');
-    setTeam2Score(game.team2_score?.toString() || '0');
+    setTeam1Score(game.scores?.team1_score?.toString() || '0');
+    setTeam2Score(game.scores?.team2_score?.toString() || '0');
     setModalVisible(true);
   }
 
@@ -104,14 +94,14 @@ const Crossover = () => {
           team2_score: parseInt(team2Score),
         })
         .eq('game_id', currentGame.id);
-
+  
       if (error) {
         console.error('Error updating score:', error);
         Alert.alert('Error', 'Failed to update score');
       } else {
         Alert.alert('Success', 'Score updated successfully');
         setModalVisible(false);
-        getGamesByRoundId(4);
+        getGamesByRoundId(5); // Refresh the games data
       }
     }
   }
@@ -131,7 +121,6 @@ const Crossover = () => {
       } else {
         Alert.alert('Success', 'Game marked as finished');
         setModalVisible(false);
-        getGamesByPoolId(4);
       }
     }
   }
@@ -139,7 +128,7 @@ const Crossover = () => {
   const handleResetAllGames = async () => {
     Alert.alert(
       "Reset All Games",
-      "Are you sure you want to reset all scores to 0 and mark all games as unfinished for Pool A?",
+      "Are you sure you want to reset all scores to 0 and mark all games as unfinished for Quarters?",
       [
         {
           text: "Cancel",
@@ -149,14 +138,14 @@ const Crossover = () => {
           text: "Yes, Reset All",
           onPress: async () => {
             const { error } = await supabase
-              .rpc('reset_bracket_scores', { round_id_param: 4 });
+              .rpc('reset_bracket_scores', { round_id_param: 5 });
   
             if (error) {
               console.error('Error resetting games:', error);
               Alert.alert('Error', 'Failed to reset games');
             } else {
-              Alert.alert('Success', 'All Crossover games have been reset');
-              getGamesByRoundId(4);
+              Alert.alert('Success', 'All Quarter Finals have been reset');
+              getGamesByRoundId(5);
             }
           }
         }
@@ -169,16 +158,16 @@ const Crossover = () => {
       <View style={styles.cardHeader}>
         <View style={styles.teamsContainer}>
           <Text style={styles.teamName}>{item.team1?.name}</Text>
-          <Text style={styles.scoreText}>{item.scores?.team1_score || 0}</Text>
+          <Text style={styles.scoreText}>{item.scores[0]?.team1_score || '0'}</Text>
         </View>
         <View style={styles.teamsContainer}>
           <Text style={styles.teamName}>{item.team2?.name}</Text>
-          <Text style={styles.scoreText}>{item.scores?.team2_score || 0}</Text>
+          <Text style={styles.scoreText}>{item.scores[0]?.team2_score || '0'}</Text>
         </View>
       </View>
       <View style={styles.cardFooter}>
         <Text style={styles.fieldText}>Wainright {item.field?.name || 'Number'} - {formatTime(item.rounds?.time)}</Text>
-        <Text style={styles.statusText}>{item.is_finished ? 'Final' : 'In Progress'}</Text>
+        <Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
         <TouchableOpacity onPress={() => openModal(item)}>
           <Ionicons name="pencil" size={20} color="#EA1D25" />
         </TouchableOpacity>
@@ -189,20 +178,17 @@ const Crossover = () => {
   const renderPlaceholder = () => (
     <View style={styles.placeholderContainer}>
       <Text style={styles.placeholderText}>
-        Crossover games will be available after pool play games are completed.
+        Quarter Finals will be available after Quarter Finals are completed.
       </Text>
       <Text style={styles.placeholderSubText}>
-        Please check back later when all pool games are finished.
+        Please check back later when all Quarter Finals are finished.
       </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text className='font-outfitbold text-2xl text-center m-5'>Crossover Games</Text>
-      <TouchableOpacity style={styles.generateButton} onPress={generateCrossovers}>
-        <Text style={styles.generateButtonText}>Generate Crossover Games</Text>
-      </TouchableOpacity>
+      <Text className='font-outfitbold text-2xl text-center m-5'>Quarter Finals</Text>
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : games.length > 0 ? (
@@ -228,7 +214,7 @@ const Crossover = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Crossover Play</Text>
+            <Text style={styles.modalTitle}>Quarter Finals</Text>
             {currentGame && (
               <>
                 <View style={styles.modalTeamContainer}>
@@ -479,4 +465,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default Crossover;
+
+export default Quarters;

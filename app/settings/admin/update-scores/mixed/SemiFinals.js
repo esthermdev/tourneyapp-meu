@@ -1,35 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert, SafeAreaView } from 'react-native';
-import { supabase } from '../../../../utils/supabase';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { supabase } from '../../../../../utils/supabase';
 import { Card, Avatar} from '@rneui/base';
-import { formatTime } from '../../../../utils/formatTime';
+import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const PoolAGamesScreen = () => {
+const SemiFinals = () => {
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
   const [team1Score, setTeam1Score] = useState('');
   const [team2Score, setTeam2Score] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getGamesByPoolId(7);
+    getGamesByRoundId(6);
     setupRealtimeListeners();
   }, []);
 
-  const getGamesByPoolId = async (poolId) => {
+  const getGamesByRoundId = async (roundId) => {
+    setIsLoading(true);
     const { data, error } = await supabase
-      .from('full_gameview')
-      .select('*')
-      .eq('pool_id', poolId)
-      .order('time');
+    .from('games')
+    .select(`
+      id,
+      rounds!inner (
+        date, time
+      ),
+      team1:team1_id (
+        name, avatar_uri
+      ),
+      team2:team2_id (
+        name, avatar_uri
+      ),
+      scores!inner (
+        team1_score,
+        team2_score,
+        is_finished
+      ),
+      field: field_id (
+        name
+      )
+    `)
+    .eq('round_id', roundId)
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
+      console.log('Fetched games data:', JSON.stringify(data, null, 2));
       setGames(data);
     }
+    setIsLoading(false);
   };
 
   const setupRealtimeListeners = () => {
@@ -58,40 +80,40 @@ const PoolAGamesScreen = () => {
   
   const openModal = (game) => {
     setCurrentGame(game);
-    setTeam1Score(game.team1_score?.toString() || '0');
-    setTeam2Score(game.team2_score?.toString() || '0');
+    setTeam1Score(game.scores?.team1_score?.toString() || '0');
+    setTeam2Score(game.scores?.team2_score?.toString() || '0');
     setModalVisible(true);
   }
-
 
   const handleUpdateScore = async () => {
     if (currentGame) {
       const { error } = await supabase
         .from('scores')
         .update({
-          team1_score: team1Score,
-          team2_score: team2Score,
+          team1_score: parseInt(team1Score),
+          team2_score: parseInt(team2Score),
         })
         .eq('game_id', currentGame.id);
-
+  
       if (error) {
         console.error('Error updating score:', error);
         Alert.alert('Error', 'Failed to update score');
       } else {
         Alert.alert('Success', 'Score updated successfully');
         setModalVisible(false);
-        getGamesByPoolId(7);
+        getGamesByRoundId(6); // Refresh the games data
       }
     }
   }
 
   const handleMarkAsFinished = async () => {
     if (currentGame) {
-      const { data, error } = await supabase
-      .from('scores')
-      .update({ is_finished: true })
-      .match({ game_id: currentGame.id })
-      .select();
+      const { error } = await supabase
+        .from('scores')
+        .update({
+          is_finished: true
+        })
+        .eq('game_id', currentGame.id);
 
       if (error) {
         console.error('Error marking game as finished:', error);
@@ -99,7 +121,6 @@ const PoolAGamesScreen = () => {
       } else {
         Alert.alert('Success', 'Game marked as finished');
         setModalVisible(false);
-        getGamesByPoolId(7);
       }
     }
   }
@@ -107,7 +128,7 @@ const PoolAGamesScreen = () => {
   const handleResetAllGames = async () => {
     Alert.alert(
       "Reset All Games",
-      "Are you sure you want to reset all scores and standings to 0 and mark all games as unfinished for Pool B?",
+      "Are you sure you want to reset all scores to 0 and mark all games as unfinished for Semi Finals?",
       [
         {
           text: "Cancel",
@@ -117,14 +138,14 @@ const PoolAGamesScreen = () => {
           text: "Yes, Reset All",
           onPress: async () => {
             const { error } = await supabase
-              .rpc('reset_pool_scores', { pool_id_param: 7 });
+              .rpc('reset_bracket_scores', { round_id_param: 6 });
   
             if (error) {
               console.error('Error resetting games:', error);
               Alert.alert('Error', 'Failed to reset games');
             } else {
-              Alert.alert('Success', 'All games in Pool A have been reset');
-              getGamesByPoolId(7);
+              Alert.alert('Success', 'All Semi Finals have been reset');
+              getGamesByRoundId(6);
             }
           }
         }
@@ -135,19 +156,18 @@ const PoolAGamesScreen = () => {
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.cardHeader}>
-        <Text style={styles.timeText}>{formatTime(item.time)}</Text>
         <View style={styles.teamsContainer}>
-          <Text style={styles.teamName}>{item.team1_name}</Text>
-          <Text style={styles.scoreText}>{item.team1_score}</Text>
+          <Text style={styles.teamName}>{item.team1?.name}</Text>
+          <Text style={styles.scoreText}>{item.scores[0]?.team1_score || '0'}</Text>
         </View>
         <View style={styles.teamsContainer}>
-          <Text style={styles.teamName}>{item.team2_name}</Text>
-          <Text style={styles.scoreText}>{item.team2_score}</Text>
+          <Text style={styles.teamName}>{item.team2?.name}</Text>
+          <Text style={styles.scoreText}>{item.scores[0]?.team2_score || '0'}</Text>
         </View>
       </View>
       <View style={styles.cardFooter}>
-        <Text style={styles.fieldText}>Wainright {item.field_id || 'Number'}</Text>
-        <Text style={styles.statusText}>{item.is_finished ? 'Final' : 'In Progress'}</Text>
+        <Text style={styles.fieldText}>Wainright {item.field?.name || 'Number'} - {formatTime(item.rounds?.time)}</Text>
+        <Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
         <TouchableOpacity onPress={() => openModal(item)}>
           <Ionicons name="pencil" size={20} color="#EA1D25" />
         </TouchableOpacity>
@@ -155,23 +175,37 @@ const PoolAGamesScreen = () => {
     </Card>
   );
 
+  const renderPlaceholder = () => (
+    <View style={styles.placeholderContainer}>
+      <Text style={styles.placeholderText}>
+        Semi Finals will be available after Semi Finals are completed.
+      </Text>
+      <Text style={styles.placeholderSubText}>
+        Please check back later when all Semi Finals are finished.
+      </Text>
+    </View>
+  );
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text className='font-outfitbold text-2xl text-center m-3'>Pool A Games</Text>
-        <FlatList 
-          data={games}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          contentContainerStyle={styles.listContentContainer}
-        />
-        <View style={styles.buttonContainer}>
+    <View style={styles.container}>
+      <Text className='font-outfitbold text-2xl text-center m-5'>Semi Finals</Text>
+      {isLoading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : games.length > 0 ? (
+        <>
+          <FlatList 
+            data={games}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            estimatedItemSize={200}
+          />
           <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
-            <Text style={styles.buttonText}>Reset All Games</Text>
+            <Text style={styles.resetButtonText}>Reset All Games</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </>
+      ) : (
+        renderPlaceholder()
+      )}
       <Modal 
         visible={isModalVisible}
         animationType='fade'
@@ -180,12 +214,11 @@ const PoolAGamesScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Update Game</Text>
+            <Text style={styles.modalTitle}>Semi Finals</Text>
             {currentGame && (
               <>
                 <View style={styles.modalTeamContainer}>
-                  <Avatar rounded source={{ uri: currentGame.team1_avatar }} size={40} />
-                  <Text style={styles.modalTeamName}>{currentGame.team1_name}</Text>
+                  <Text style={styles.modalTeamName}>{currentGame.team1.name}</Text>
                   <TextInput 
                     style={styles.scoreInput}
                     value={team1Score}
@@ -194,8 +227,7 @@ const PoolAGamesScreen = () => {
                   />
                 </View>
                 <View style={styles.modalTeamContainer}>
-                  <Avatar rounded source={{ uri: currentGame.team2_avatar }} size={40} />
-                  <Text style={styles.modalTeamName}>{currentGame.team2_name}</Text>
+                  <Text style={styles.modalTeamName}>{currentGame.team2.name}</Text>
                   <TextInput 
                     style={styles.scoreInput}
                     value={team2Score}
@@ -226,46 +258,75 @@ const PoolAGamesScreen = () => {
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  listContentContainer: {
     padding: 10,
-    paddingBottom: 120,
   },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#CBCAD8',
+  generateButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 15,
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  generateButtonText: {
+    color: 'white',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16,
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  placeholderText: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#333',
+  },
+  placeholderSubText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#666',
+  },
+  loadingText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#666',
   },
   resetButton: {
     backgroundColor: '#FF6347',
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
+    marginHorizontal: 15,
+    marginBottom: 15,
     alignItems: 'center',
   },
-  buttonText: {
+  resetButtonText: {
     color: 'white',
     fontFamily: 'Outfit-Bold',
     fontSize: 16,
+  },
+  finishButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
   },
   cardContainer: {
     borderRadius: 10,
@@ -306,12 +367,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
-  timeText: {
-    fontFamily: 'Outfit-Regular',
-    fontSize: 14,
-    color: '#8F8DAA',
-    marginBottom: 5,
-  },
   fieldText: {
     fontFamily: 'Outfit-Regular',
     fontSize: 14,
@@ -321,6 +376,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Medium',
     fontSize: 14,
     color: '#4CAF50',
+  },
+  updateButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#2871FF',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  updateButtonText: {
+    color: 'white',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  disabledButtonText: {
+    color: '#666',
   },
   modalOverlay: {
     flex: 1,
@@ -367,8 +440,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
-  finishButton: {
-    backgroundColor: '#4CAF50',
+  submitFinalButton: {
+    backgroundColor: '#EA1D25',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -393,4 +466,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PoolAGamesScreen;
+export default SemiFinals;

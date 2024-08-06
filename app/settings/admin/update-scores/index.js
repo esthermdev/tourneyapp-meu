@@ -1,26 +1,27 @@
+// settings/admin/update-scores/index.js
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 
 const UpdateScoresScreen = () => {
-  const sections = [
-    { title: 'Pool A Games', route: 'settings/admin/update-scores/poolAGames' },
-    { title: 'Pool B Games', route: 'settings/admin/update-scores/poolBGames' },
-    { title: 'Pool C Games', route: 'settings/admin/update-scores/poolCGames' },
-    { title: 'Pool D Games', route: 'settings/admin/update-scores/poolDGames' },
-    { title: 'Crossover Games', route: 'settings/admin/update-scores/Crossovers' },
+  const divisions = [
+    { title: 'Mixed Division', route: 'settings/admin/update-scores/mixed' },
+    // { title: 'Open Division', route: 'settings/admin/update-scores/open' },
+    // Add more divisions as needed
   ];
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Update Scores</Text>
-      {sections.map((section, index) => (
+      <Text style={styles.subHeader}>Select a Division</Text>
+      {divisions.map((division, index) => (
         <TouchableOpacity 
           key={index} 
-          style={styles.sectionButton}
-          onPress={() => router.push(section.route)}
+          style={styles.divisionButton}
+          onPress={() => router.push(division.route)}
         >
-          <Text style={styles.sectionText}>{section.title}</Text>
+          <Text style={styles.divisionText}>{division.title}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -34,20 +35,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontFamily: 'Outfit-Bold',
     marginBottom: 20,
+    color: '#EA1D25',
+  },
+  subHeader: {
+    fontSize: 20,
+    fontFamily: 'Outfit-Medium',
+    marginBottom: 15,
     color: '#333',
   },
-  sectionButton: {
+  divisionButton: {
     backgroundColor: '#EA1D25',
     padding: 15,
     borderRadius: 5,
     marginBottom: 10,
   },
-  sectionText: {
+  divisionText: {
     color: '#fff',
-    fontFamily: 'Outfit-Semibold',
+    fontFamily: 'Outfit-SemiBold',
     fontSize: 18,
     textAlign: 'center',
   },

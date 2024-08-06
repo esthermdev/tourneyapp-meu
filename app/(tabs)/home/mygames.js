@@ -36,13 +36,15 @@ const MyGamesScreen = () => {
         ),
         scores!inner (
           team1_score,
-          team2_score
+          team2_score,
+          is_finished
         ),
         field: field_id (
           name
         )
       `)
       .or(`team1_id.eq.${teamId},team2_id.eq.${teamId}`)
+      .order('round_id')
 
     if (error) {
       console.error('Error fetching games:', error);
@@ -66,10 +68,12 @@ const MyGamesScreen = () => {
   };
 
   const openModal = (game) => {
-    setCurrentGame(game);
-    setTeam1Score(game.scores[0].team1_score.toString());
-    setTeam2Score(game.scores[0].team2_score.toString());
-    setModalVisible(true);
+    if (!game.is_finished) {
+      setCurrentGame(game);
+      setTeam1Score(game.scores[0].team1_score.toString());
+      setTeam2Score(game.scores[0].team2_score.toString());
+      setModalVisible(true);
+    }
   };
 
   const handleUpdateScore = async () => {
@@ -115,10 +119,13 @@ const MyGamesScreen = () => {
         <Text style={styles.scoreText}>{game.scores[0].team2_score}</Text>
       </View>
       <TouchableOpacity
-        style={styles.updateButton}
+        style={[styles.updateButton, game.is_finished && styles.disabledButton]}
         onPress={() => openModal(game)}
+        disabled={game.scores[0].is_finished}
       >
-        <Text style={styles.updateButtonText}>Update Score</Text>
+        <Text style={[styles.updateButtonText, game.scores[0].is_finished && styles.disabledButtonText]}>
+          {game.scores[0].is_finished ? 'Game Finished' : 'Update Score'}
+        </Text>
       </TouchableOpacity>
     </Card>
   );
@@ -185,6 +192,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  disabledButtonText: {
+    color: '#888',
+    textDecorationLine: 'none',
+  },
   sectionHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -207,7 +221,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    marginBottom: 5
   },
   timeFieldContainer: {
     flexDirection: 'row',
