@@ -25,7 +25,7 @@ export default function AdminLayout() {
         options={{
           title: 'Update Schedule',
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back('')}>
+            <TouchableOpacity onPress={() => router.back()}>
               <Ionicons name="backspace-outline" size={24} color="#000" />
             </TouchableOpacity>
           ),

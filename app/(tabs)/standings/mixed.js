@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
-import { ListItem } from '@rneui/base';
-import { supabase } from '../../utils/supabase';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Card } from '@rneui/base';
+import { supabase } from '../../../utils/supabase';
 
-const Standings = () => {
-  const [standings, setStandings] = useState([]);
+const MixedStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
   const [poolBStandings, setPoolBStandings] = useState([]);
   const [poolCStandings, setPoolCStandings] = useState([]);
@@ -24,14 +21,13 @@ const Standings = () => {
         losses,
         team_id,
         pool_rank,
-        teams (name, pool_id)
+        teams (name, pool_id, seed)
       `)
       .order('pool_rank')
 
     if (error) {
       console.error('Error fetching teams:', error);
     } else {
-      setStandings(data);
       separateStandingsByPool(data);
     }
   };
@@ -44,30 +40,25 @@ const Standings = () => {
   };
 
   const renderStandings = (standings, poolName) => (
-    <View style={styles.poolContainer}>
-      <Text style={styles.poolHeader}>Pool {poolName}</Text>
-      {
-        standings.map((team, i) => (
-          <ListItem key={i} bottomDivider>
-            <ListItem.Content>
-              <View style={styles.rowContainer}>
-                <Text style={styles.rankNumber}>{i + 1}</Text>
-                <View style={styles.teamInfo}>
-                  <ListItem.Title>{team.teams.name}</ListItem.Title>
-                  <Text>{team.wins} - {team.losses}</Text>
-                </View>
-              </View>
-            </ListItem.Content>
-          </ListItem>
-        ))
-      }
-    </View>
+    <Card containerStyle={styles.poolCard}>
+      <View style={styles.poolHeaderContainer}>
+        <Text style={styles.poolHeader}>Pool {poolName}</Text>
+        <Text style={styles.wlHeader}>W–L</Text>
+      </View>
+      <Card.Divider />
+      {standings.map((team, i) => (
+        <View key={i} style={styles.teamRow}>
+          <Text style={styles.teamName}>{team.teams.name} ({team.teams.seed})</Text>
+          <Text style={styles.recordText}>{team.wins}–{team.losses}</Text>
+        </View>
+      ))}
+    </Card>
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Standings</Text>
+        <Text style={styles.header}>Mixed</Text>
       </View>
       <ScrollView style={styles.standingsContainer}>
         {renderStandings(poolAStandings, 'A')}
@@ -78,8 +69,6 @@ const Standings = () => {
     </View>
   );
 };
-
-export default Standings;
 
 const styles = StyleSheet.create({
   container: {
@@ -99,34 +88,55 @@ const styles = StyleSheet.create({
   },
   standingsContainer: {
     flex: 1,
+    padding: 10,
   },
-  poolContainer: {
-    flex: 1,
-    marginVertical: 10,
-    paddingHorizontal: 15,
+  poolCard: {
+    borderRadius: 10,
+    marginBottom: 20,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  poolHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   poolHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 25,
+    fontSize: 24,
     color: '#EA1D25',
-    marginBottom: 5,
-    textAlign: 'center'
   },
-  listContentContainer: {
-    flexGrow: 1,
+  wlHeader: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 18,
+    color: '#EA1D25',
   },
-  rowContainer: {
+  teamRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEEEE',
   },
-  rankNumber: {
+  teamName: {
+    fontFamily: 'Outfit-Medium',
     fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 10,
-    width: 20,
-    textAlign: 'center',
-  },
-  teamInfo: {
+    color: '#333243',
     flex: 1,
   },
+  recordText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+    color: '#333243',
+    width: 50,
+    textAlign: 'right',
+  },
 });
+
+export default MixedStandings;

@@ -26,6 +26,9 @@ const Quarters = () => {
         scores!inner (
           team1_score,
           team2_score
+        ),
+        field: field_id (
+          name
         )
       `)
       .eq('round_id', roundId)
@@ -45,7 +48,7 @@ const Quarters = () => {
       <View style={styles.header}>
         <Icon type='ionicon' name='location-outline' size={12} color='#8F8DAA' containerStyle={styles.locationIcon} />
         <Text className='font-outfitregular text-[#8F8DAA]'>{}
-          Field Number
+          Field {item.field?.name || 'Number'}
         </Text>
       </View>
       <View style={styles.content}>
@@ -79,7 +82,7 @@ const Quarters = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.time}>8/3</Text>
+        <Text style={styles.time}>8/4</Text>
         <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
         <Text style={styles.time}>9:00AM</Text>
       </View>

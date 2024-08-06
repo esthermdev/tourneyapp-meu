@@ -4,8 +4,8 @@ import { View, Text } from 'react-native';
 const UpdateScheduleScreen = () => {
   return (
     <View>
-      <Text>Update Schedule Screen</Text>
-      {/* Add your schedule updating logic here */}
+      <Text>Update Scores Screen</Text>
+      {/* Add your score updating logic here */}
     </View>
   );
 };

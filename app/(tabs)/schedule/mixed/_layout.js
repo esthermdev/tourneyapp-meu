@@ -7,6 +7,7 @@ import Crossovers from './Crossovers';
 import Quarters from './Quarters';
 import SemiFinals from './SemiFinals';
 import Finals from './Finals';
+import ThirdPlace from './ThirdPlace';
 
 
 const MixedSchedule = () => {
@@ -32,6 +33,7 @@ const MixedSchedule = () => {
         <Tab.Screen name="Q" component={Quarters} />
         <Tab.Screen name="SF" component={SemiFinals} />
         <Tab.Screen name="F" component={Finals} />
+        <Tab.Screen name="3" component={ThirdPlace} />
         {/* Add more screens for additional rounds */}
       </Tab.Navigator>
     </View>

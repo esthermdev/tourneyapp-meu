@@ -4,20 +4,19 @@ import { supabase } from '../../../../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
 
-const Round1 = () => {
+const ThirdPlace = () => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
-    getGamesByRoundId(1, [7, 8, 9, 10]);
+    getGamesByRoundId(8);
   }, []);
 
-  const getGamesByRoundId = async (roundId, poolId) => {
+  const getGamesByRoundId = async (roundId) => {
     const { data, error } = await supabase
       .from('games')
       .select(`
         id,
         round_id,
-        pool_id,
         team1:team1_id (
           name, avatar_uri
         ),
@@ -33,12 +32,12 @@ const Round1 = () => {
         )
       `)
       .eq('round_id', roundId)
-      .in('pool_id', poolId)
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
-      setGames(data);
+      const filteredGames = data.filter(game => game.team1_id !== null || game.team2_id !== null);
+      setGames(filteredGames);
     }
   };
 
@@ -57,24 +56,24 @@ const Round1 = () => {
           <Avatar 
             size={75}
             rounded
-            source={{ uri: item.team1.avatar_uri }}
+            source={{ uri: item.team1?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team1.name}</Text>
+          <Text style={styles.teamName}>{item.team1?.name || 'TBD'}</Text>
         </View>
         <View style={styles.scoreContainer}>
-          <Text style={styles.score}>{item.scores[0].team1_score}</Text>
+          <Text style={styles.score}>{item.scores[0]?.team1_score || '-'}</Text>
           <Text style={styles.colon}>:</Text>
-          <Text style={styles.score}>{item.scores[0].team2_score}</Text>
+          <Text style={styles.score}>{item.scores[0]?.team2_score || '-'}</Text>
         </View>
         <View style={styles.teamContainer}>
           <Avatar 
             size={75}
             rounded
-            source={{ uri: item.team2.avatar_uri }}
+            source={{ uri: item.team2?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />  
-          <Text style={styles.teamName}>{item.team2.name}</Text>
+          <Text style={styles.teamName}>{item.team2?.name || 'TBD'}</Text>
         </View>
       </View>
     </Card>
@@ -83,9 +82,9 @@ const Round1 = () => {
   return (
     <View style={styles.container}>
       <View style={styles.timeContainer}>
-        <Text style={styles.time}>8/3</Text>
+        <Text style={styles.time}>8/4</Text>
         <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
-        <Text style={styles.time}>9:00AM</Text>
+        <Text style={styles.time}>1:00PM</Text>
       </View>
       <FlashList 
         data={games}
@@ -97,7 +96,7 @@ const Round1 = () => {
   );
 };
 
-export default Round1;
+export default ThirdPlace;
 
 const styles = StyleSheet.create({
   container: {

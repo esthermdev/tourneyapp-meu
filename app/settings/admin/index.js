@@ -8,7 +8,6 @@ const AdminScreen = () => {
 
   const adminOptions = [
     { title: 'Update Scores', route: 'settings/admin/update-scores', icon: 'bar-chart' },
-    { title: 'Update Schedule', route: 'settings/admin/update-schedule', icon: 'calendar' },
   ];
 
   return (
