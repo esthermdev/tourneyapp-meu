@@ -30,7 +30,7 @@ export default function App() {
         </View>
         <CustomButtonWithIcon 
           title='Continue' 
-          buttonStyles='bg-brightRed rounded-full px-[25] py-[22] flex-row' 
+          buttonStyles='bg-primary rounded-full px-[25] py-[22] flex-row' 
           handlePress={() => router.push('(tabs)/home')}
         />
       </View>

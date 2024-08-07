@@ -8,10 +8,11 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 import { supabase } from '../../utils/supabase';
-import { Button, Input } from '@rneui/themed';
+import { Button } from '@rneui/base';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -143,25 +144,20 @@ export default function Account({ session }) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>
             <Text style={styles.header}>My Account</Text>
-            <Input
+            <Text style={styles.inputLabel}>Your Email</Text>
+            <TextInput
               label="Email"
               value={session?.user?.email}
-              disabled
-              inputStyle={styles.inputText}
-              labelStyle={styles.inputLabel}
-              containerStyle={styles.input}
-              leftIcon={{ type: 'ionicon', name: 'mail', color: '#EA1D25' }}
+              editable={false}
+              style={styles.input}
+              className='text-gray-400'
             />
-            
-            <Input
-              label="Full Name"
+            <Text style={styles.inputLabel}>Your Name</Text>
+            <TextInput
               value={fullName || ''}
               onChangeText={(text) => setFullName(text)}
               autoCapitalize='words'
-              inputStyle={styles.inputText}
-              labelStyle={styles.inputLabel}
-              containerStyle={styles.input}
-              leftIcon={{ type: 'ionicon', name: 'person', color: '#EA1D25' }}
+              style={styles.input}
             />
 
             <View style={styles.dropdownContainer}>
@@ -205,16 +201,27 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: 'center',
   },
+  inputLabel: {
+    fontSize: 16,
+    fontFamily: 'Outfit-Medium',
+    color: '#333243',
+    marginBottom: 5,
+  },
   input: {
-    paddingHorizontal: 0,
-    marginBottom: 15,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18
   },
   inputLabel: {
     fontFamily: 'Outfit-Medium',
     color: '#333243',
-  },
-  inputText: {
-    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+    marginBottom: 5
   },
   dropdownContainer: {
     marginBottom: 20,

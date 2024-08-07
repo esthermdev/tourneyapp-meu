@@ -20,8 +20,10 @@ const SettingsScreen = () => {
   const navigation = useNavigation();
   const { user, profile } = useAuth();
 
+  console.log(profile)
+
   const navigateToAdmin = () => {
-    if (user && profile.role === 'admin') {
+    if (user && profile.is_admin) {
       router.push('settings/admin');
     } else {
       alert('You do not have permission to access the admin dashboard.');
@@ -52,7 +54,7 @@ const SettingsScreen = () => {
         <SettingsOption key={index} {...option} />
       ))}
 
-      {profile && profile.role === 'admin' ? (
+      {profile && profile.is_admin ? (
         <TouchableOpacity style={styles.adminButton} onPress={navigateToAdmin}>
           <Ionicons name="settings-outline" size={24} color="white" />
           <Text style={styles.adminButtonText}>Admin Dashboard</Text>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { supabase } from '../../../../../utils/supabase';
-import { Card, Avatar} from '@rneui/base';
+import { Card } from '@rneui/base';
 import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -166,7 +166,7 @@ const Quarters = () => {
         </View>
       </View>
       <View style={styles.cardFooter}>
-        <Text style={styles.fieldText}>Wainright {item.field?.name || 'Number'} - {formatTime(item.rounds?.time)}</Text>
+        <Text style={styles.fieldText}>{formatTime(item.rounds?.time)} - Wainright {item.field?.name || 'Number'}</Text>
         <Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
         <TouchableOpacity onPress={() => openModal(item)}>
           <Ionicons name="pencil" size={20} color="#EA1D25" />

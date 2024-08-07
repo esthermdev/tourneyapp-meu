@@ -60,7 +60,7 @@ const Teams = () => {
         <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-warmBlue rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Open')}>
+        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Open')}>
           <Text style={styles.filterByText}>Open</Text>
         </TouchableOpacity>
         <TouchableOpacity className='bg-[#FF285C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Womens')}>

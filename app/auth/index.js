@@ -9,10 +9,11 @@ import {
   TouchableWithoutFeedback, 
   Keyboard,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 import { supabase } from '../../utils/supabase';
-import { Button, Input } from '@rneui/themed';
+import { Button } from '@rneui/themed';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -81,30 +82,23 @@ export default function LoginScreen() {
           <View style={styles.content}>
             <Text style={styles.header}>Welcome</Text>
             <View style={styles.inputContainer}>
-              <Input
-                label="Email"
-                leftIcon={{ type: 'ionicon', name: 'mail', color: '#EA1D25' }}
-                onChangeText={(text) => setEmail(text)}
+              <TextInput
+                style={styles.input}
+                onChangeText={setEmail}
                 value={email}
                 placeholder="email@address.com"
-                autoCapitalize={'none'}
-                inputStyle={styles.inputText}
-                labelStyle={styles.inputLabel}
-                containerStyle={styles.input}
+                autoCapitalize='none'
+                keyboardType="email-address"
               />
             </View>
             <View style={styles.inputContainer}>
-              <Input
-                label="Password"
-                leftIcon={{ type: 'ionicon', name: 'lock-closed', color: '#EA1D25' }}
-                onChangeText={(text) => setPassword(text)}
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
                 value={password}
-                secureTextEntry={true}
                 placeholder="Password"
-                autoCapitalize={'none'}
-                inputStyle={styles.inputText}
-                labelStyle={styles.inputLabel}
-                containerStyle={styles.input}
+                secureTextEntry
+                autoCapitalize='none'
               />
             </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -152,14 +146,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    paddingHorizontal: 0,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18
   },
   inputLabel: {
     fontFamily: 'Outfit-Medium',
     color: '#333243',
-  },
-  inputText: {
-    fontFamily: 'Outfit-Regular',
   },
   primaryButton: {
     backgroundColor: '#EA1D25',

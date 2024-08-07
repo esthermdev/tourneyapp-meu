@@ -135,7 +135,6 @@ const PoolDGamesScreen = () => {
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.cardHeader}>
-        <Text style={styles.timeText}>{formatTime(item.time)}</Text>
         <View style={styles.teamsContainer}>
           <Text style={styles.teamName}>{item.team1_name}</Text>
           <Text style={styles.scoreText}>{item.team1_score}</Text>
@@ -146,7 +145,7 @@ const PoolDGamesScreen = () => {
         </View>
       </View>
       <View style={styles.cardFooter}>
-        <Text style={styles.fieldText}>Wainright {item.field_id || 'Number'}</Text>
+        <Text style={styles.fieldText}>{formatTime(item.time)} - Wainright {item.field_id || 'Number'}</Text>
         <Text style={styles.statusText}>{item.is_finished ? 'Final' : 'In Progress'}</Text>
         <TouchableOpacity onPress={() => openModal(item)}>
           <Ionicons name="pencil" size={20} color="#EA1D25" />
