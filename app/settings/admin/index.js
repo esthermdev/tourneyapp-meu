@@ -22,7 +22,7 @@ const AdminScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.navigate('/settings')}>
           <Ionicons name="arrow-back-circle" size={30} color="#FFA000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Admin Dashboard</Text>

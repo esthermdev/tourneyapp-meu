@@ -24,6 +24,12 @@ const MixedUpdateScoresScreen = () => {
           <Ionicons name="arrow-back-circle" size={25} color="#EA1D25" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Mixed Division</Text>
+        <TouchableOpacity 
+          style={styles.homeButton} 
+          onPress={() => router.navigate('/settings/admin')}
+        >
+          <Ionicons name="home-outline" size={25} color="#EA1D25" />
+        </TouchableOpacity>
       </View>
       <View style={styles.content}>
         <Text style={styles.subHeader}>Select Games to update</Text>
@@ -61,6 +67,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Bold',
     fontSize: 28,
     color: '#EA1D25',
+    flex: 1,
+    textAlign: 'center'
+  },
+  homeButton: {
+    padding: 5
   },
   content: {
     padding: 20,

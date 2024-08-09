@@ -1,22 +1,28 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { supabase } from '../../../../utils/supabase';
+import { supabase } from '../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
+import { formatDate } from '../utils/formatDate';
+import { formatTime } from '../utils/formatTime';
 
-const Round1 = () => {
+const GameComponent = ({ roundId, poolIds, title }) => {
   const [games, setGames] = useState([]);
+  const [roundInfo, setRoundInfo] = useState({ date: '', time: '' });
+	const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getGamesByRoundId(1, [7, 8, 9, 10]);
-  }, []);
+    getGames(roundId, poolIds);
+  }, [roundId, poolIds]);
 
-  const getGamesByRoundId = async (roundId, poolId) => {
-    const { data, error } = await supabase
+  const getGames = async (roundId, poolIds) => {
+    let query = supabase
       .from('games')
       .select(`
         id,
-        round_id,
+        round:round_id (
+          id, date, time
+        ),
         pool_id,
         team1:team1_id (
           name, avatar_uri
@@ -32,17 +38,28 @@ const Round1 = () => {
           name
         )
       `)
-      .eq('round_id', roundId)
-      .in('pool_id', poolId)
+      .eq('round_id', roundId);
+
+    if (poolIds) {
+      query = query.in('pool_id', poolIds);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
-      setGames(data);
+      const filteredGames = data.filter(game => game.team1 !== null || game.team2 !== null);
+      setGames(filteredGames);
+      if (filteredGames.length > 0) {
+        setRoundInfo({
+          date: formatDate(filteredGames[0].round.date),
+          time: formatTime(filteredGames[0].round.time)
+        });
+      }
     }
+		setIsLoading(false);
   };
-
-  console.log(JSON.stringify(games, null, 2));
 
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
@@ -80,24 +97,54 @@ const Round1 = () => {
     </Card>
   );
 
+	const renderPlaceholder = () => (
+    <View style={styles.placeholderContainer}>
+      <Icon
+        type='ionicon'
+        name='time-outline'
+        size={60}
+        color='#EA1D25'
+      />
+      <Text style={styles.placeholderTitle}>{title} Coming Soon!</Text>
+      <Text style={styles.placeholderText}>
+        {title} matchups will be available here once previous games are completed.
+      </Text>
+      <Text style={styles.placeholderText}>
+        Stay tuned for exciting knockout stage action!
+      </Text>
+    </View>
+  );
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.timeContainer}>
-        <Text style={styles.time}>8/3</Text>
-        <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
-        <Text style={styles.time}>9:00AM</Text>
-      </View>
-      <FlashList 
-        data={games}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        estimatedItemSize={10}
-      />
+      {games.length > 0 ? (
+        <>
+          <View style={styles.timeContainer}>
+            <Text style={styles.time}>{roundInfo.date}</Text>
+            <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
+            <Text style={styles.time}>{roundInfo.time}</Text>
+          </View>
+          <FlashList 
+            data={games}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            estimatedItemSize={10}
+          />
+        </>
+      ) : renderPlaceholder()}
     </View>
   );
 };
 
-export default Round1;
+export default GameComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -106,6 +153,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#D9D9D9',
   },
+  title: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 24,
+    color: '#EA1D25',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
   timeContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
@@ -113,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5
-  }, 
+  },
   time: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
@@ -175,5 +229,33 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 8,
     fontFamily: 'Outfit-Medium',
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  placeholderTitle: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 24,
+    color: '#EA1D25',
+    marginTop: 20,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  placeholderText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16,
+    color: '#8F8DAA',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  loadingText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18,
+    color: '#8F8DAA',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
