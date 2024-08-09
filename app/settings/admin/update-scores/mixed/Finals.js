@@ -5,6 +5,8 @@ import { Card} from '@rneui/base';
 import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Finals = () => {
   const [games, setGames] = useState([]);
@@ -166,7 +168,7 @@ const Finals = () => {
         </View>
       </View>
       <View style={styles.cardFooter}>
-        <Text style={styles.fieldText}>{formatTime(item.time)} - Wainright {item.field_id || 'Number'}</Text>
+        <Text style={styles.fieldText}>{formatTime(item.rounds?.time)} - Wainright {item.field?.name || 'Number'}</Text>
         <Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
         <TouchableOpacity onPress={() => openModal(item)}>
           <Ionicons name="pencil" size={20} color="#EA1D25" />
@@ -187,8 +189,8 @@ const Finals = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text className='font-outfitbold text-2xl text-center m-5'>Finals</Text>
+    <SafeAreaView style={styles.container}>
+      <CustomAdminHeader title='Finals' />
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : games.length > 0 ? (
@@ -198,6 +200,7 @@ const Finals = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             estimatedItemSize={200}
+            contentContainerStyle={styles.listContentContainer}
           />
           <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
             <Text style={styles.resetButtonText}>Reset All Games</Text>
@@ -258,7 +261,7 @@ const Finals = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -269,18 +272,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
   },
-  generateButton: {
-    backgroundColor: '#4CAF50',
+  listContentContainer: {
     padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 15,
-    marginBottom: 15,
-    alignItems: 'center',
-  },
-  generateButtonText: {
-    color: 'white',
-    fontFamily: 'Outfit-Bold',
-    fontSize: 16,
+    paddingBottom: 120,
   },
   placeholderContainer: {
     flex: 1,

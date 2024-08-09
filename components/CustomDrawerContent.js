@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 24
   },
   drawerItemLabelStyle: {
-    fontFamily: 'Outfit-Semibold', 
+    fontFamily: 'Outfit-Regular', 
     fontSize: 18, 
     color: '#EA1D25'
   },

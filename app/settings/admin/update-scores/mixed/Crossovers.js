@@ -5,6 +5,8 @@ import { Card, Avatar} from '@rneui/base';
 import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Crossover = () => {
   const [games, setGames] = useState([]);
@@ -199,8 +201,8 @@ const Crossover = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text className='font-outfitbold text-2xl text-center m-5'>Crossover Games</Text>
+    <SafeAreaView style={styles.container}>
+      <CustomAdminHeader title='Crossover Games' />
       <TouchableOpacity style={styles.generateButton} onPress={generateCrossovers}>
         <Text style={styles.generateButtonText}>Generate Crossover Games</Text>
       </TouchableOpacity>
@@ -213,6 +215,7 @@ const Crossover = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             estimatedItemSize={200}
+            contentContainerStyle={styles.listContentContainer}
           />
           <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
             <Text style={styles.resetButtonText}>Reset All Games</Text>
@@ -273,7 +276,7 @@ const Crossover = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -282,14 +285,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  listContentContainer: {
     padding: 10,
+    paddingBottom: 120,
   },
   generateButton: {
     backgroundColor: '#4CAF50',
     padding: 10,
     borderRadius: 5,
-    marginHorizontal: 15,
-    marginBottom: 15,
+    margin: 15,
     alignItems: 'center',
   },
   generateButtonText: {

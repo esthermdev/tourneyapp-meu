@@ -5,6 +5,8 @@ import { Card } from '@rneui/base';
 import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Quarters = () => {
   const [games, setGames] = useState([]);
@@ -187,8 +189,8 @@ const Quarters = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text className='font-outfitbold text-2xl text-center m-5'>Quarter Finals</Text>
+    <SafeAreaView style={styles.container}>
+      <CustomAdminHeader title='Quarter Finals' />
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : games.length > 0 ? (
@@ -198,6 +200,7 @@ const Quarters = () => {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             estimatedItemSize={200}
+            contentContainerStyle={styles.listContentContainer}
           />
           <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
             <Text style={styles.resetButtonText}>Reset All Games</Text>
@@ -258,7 +261,7 @@ const Quarters = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -267,20 +270,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 10,
   },
-  generateButton: {
-    backgroundColor: '#4CAF50',
+  listContentContainer: {
     padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 15,
-    marginBottom: 15,
-    alignItems: 'center',
-  },
-  generateButtonText: {
-    color: 'white',
-    fontFamily: 'Outfit-Bold',
-    fontSize: 16,
+    paddingBottom: 120,
   },
   placeholderContainer: {
     flex: 1,

@@ -1,26 +1,32 @@
-import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-const StandingsByDivision = () => {
+const StandingsScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Standings</Text>
       </View>
-      <Text style={styles.title}>Division</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           disabled={true}
           style={[styles.button, styles.openButton]} 
           onPress={() => router.push('standings/open')}
         >
-          <Text style={styles.buttonText}>Open</Text>
+          <View style={styles.iconContainer}>
+            <Ionicons name="people" size={40} color="#333" />
+          </View>
+          <Text style={[styles.buttonText, { color: '#333' }]}>Open</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.button, styles.mixedButton]} 
           onPress={() => router.push('standings/mixed')}
         >
+          <View style={styles.iconContainer}>
+            <Ionicons name="people" size={40} color="white" />
+          </View>
           <Text style={styles.buttonText}>Mixed</Text>
         </TouchableOpacity>
       </View>
@@ -31,13 +37,11 @@ const StandingsByDivision = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 20,
   },
   headerContainer: {
-    flex: 1,
+    borderBottomColor: '#D9D9D9',
+    borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
   }, 
@@ -48,38 +52,48 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
     fontFamily: 'Outfit-Bold',
     marginBottom: 30,
-    color: '#333',
+    color: '#FFFFFF',
   },
   buttonContainer: {
-    flex: 2,
-    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   button: {
-    paddingVertical: 15,
+    width: '40%',
+    aspectRatio: 0.8,
     borderRadius: 10,
-    marginBottom: 15,
+    justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
+    shadowRadius: 4,
     elevation: 5,
   },
   openButton: {
-    backgroundColor: 'lightgray',
+    backgroundColor: '#FFFFFF',
   },
   mixedButton: {
     backgroundColor: '#6D28FF',
   },
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
   buttonText: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    fontFamily: 'Outfit-Bold'
+    fontSize: 20,
+    fontFamily: 'Outfit-SemiBold'
   },
 });
 
-export default StandingsByDivision;
+export default StandingsScreen;

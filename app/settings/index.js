@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'Outfit-Bold',
     color: '#333243',
   },
   optionButton: {
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   optionText: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Outfit-Regular',
     marginLeft: 15,
     color: '#333243',
   },
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
   },
   adminButtonText: {
     color: '#fff',
+    fontFamily: 'Outfit-Regular',
     fontSize: 18,
     marginLeft: 10,
   },

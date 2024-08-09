@@ -5,6 +5,7 @@ import { Card, Avatar} from '@rneui/base';
 import { formatTime } from '../../../../../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
 
 const PoolBGamesScreen = () => {
   const [games, setGames] = useState([]);
@@ -155,21 +156,19 @@ const PoolBGamesScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text className='font-outfitbold text-2xl text-center m-3'>Pool B Games</Text>
-        <FlatList 
-          data={games}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          estimatedItemSize={200}
-          contentContainerStyle={styles.listContentContainer}
-        />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
-            <Text style={styles.buttonText}>Reset All Games</Text>
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <CustomAdminHeader title='Pool B Games' />
+      <FlatList 
+        data={games}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        estimatedItemSize={200}
+        contentContainerStyle={styles.listContentContainer}
+      />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
+          <Text style={styles.buttonText}>Reset All Games</Text>
+        </TouchableOpacity>
       </View>
       <Modal 
         visible={isModalVisible}
@@ -231,10 +230,6 @@ const PoolBGamesScreen = () => {
 
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   container: {
     flex: 1,
     backgroundColor: 'white',

@@ -1,8 +1,8 @@
-// settings/admin/update-scores/mixed/index.js
-
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MixedUpdateScoresScreen = () => {
   const sections = [
@@ -18,33 +18,52 @@ const MixedUpdateScoresScreen = () => {
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Mixed Division</Text>
-      <Text style={styles.subHeader}>Select Games to update</Text>
-      {sections.map((section, index) => (
-        <TouchableOpacity 
-          key={index} 
-          style={styles.sectionButton}
-          onPress={() => router.push(section.route)}
-        >
-          <Text style={styles.sectionText}>{section.title}</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back-circle" size={25} color="#EA1D25" />
         </TouchableOpacity>
-      ))}
-    </ScrollView>
+        <Text style={styles.headerTitle}>Mixed Division</Text>
+      </View>
+      <View style={styles.content}>
+        <Text style={styles.subHeader}>Select Games to update</Text>
+        {sections.map((section, index) => (
+          <TouchableOpacity 
+            key={index} 
+            style={styles.sectionButton}
+            onPress={() => router.push(section.route)}
+          >
+            <Text style={styles.sectionText}>{section.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#fff',
   },
   header: {
-    fontSize: 28,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D9D9D9',
+  },
+  backButton: {
+    marginRight: 15,
+  },
+  headerTitle: {
     fontFamily: 'Outfit-Bold',
-    marginBottom: 20,
+    fontSize: 28,
     color: '#EA1D25',
+  },
+  content: {
+    padding: 20,
   },
   subHeader: {
     fontSize: 20,
