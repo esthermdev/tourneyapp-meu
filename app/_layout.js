@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
-import { AuthProvider, useAuth } from '../context/AuthProvider';
+import { AuthProvider } from '../context/AuthProvider';
 
 SplashScreen.preventAutoHideAsync();
 

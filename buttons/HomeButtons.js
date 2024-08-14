@@ -6,7 +6,7 @@ const HomeButtons = ({ title, icon, buttonStyle, handlePress, disabled }) => {
   return (
     <TouchableOpacity 
       style={styles.buttonStyle} 
-      className={buttonStyle} 
+      className={`${buttonStyle} ${disabled ? 'opacity-50' : ''}`} 
       onPress={handlePress}
       disabled={disabled}
     >

@@ -18,7 +18,7 @@ import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { supabase } from '../../utils/supabase';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-import CustomButtonWithoutIcon from '../../components/CustomButtonWithoutIcon';
+import CustomButtonWithoutIcon from '../buttons/CustomButtonWithoutIcon';
 
 const LoginComponent = () => {
 	const [email, setEmail] = useState('')

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import CustomButtonWithIcon from '../components/CustomButtonWithIcon';
+import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
 

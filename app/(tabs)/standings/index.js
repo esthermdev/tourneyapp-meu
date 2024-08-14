@@ -13,7 +13,6 @@ const StandingsScreen = () => {
         <TouchableOpacity 
           disabled={true}
           style={[styles.button, styles.openButton]} 
-          onPress={() => router.push('standings/open')}
         >
           <View style={styles.iconContainer}>
             <Ionicons name="people" size={40} color="#333" />

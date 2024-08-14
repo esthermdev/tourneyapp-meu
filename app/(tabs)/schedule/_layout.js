@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
-import a from '@expo/vector-icons/'
 
 const GamesSchedule = () => {
 
@@ -8,7 +7,6 @@ const GamesSchedule = () => {
     <View style={styles.container}>
       <Stack>
         <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }}/>
-        <Stack.Screen name='open' options={{ title: 'Open', headerShown: false }}/>
         <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: false }}/>
       </Stack>
     </View>
