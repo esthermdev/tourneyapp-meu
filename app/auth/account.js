@@ -103,6 +103,25 @@ export default function Account({ session }) {
     }
   };
 
+  // When user signs out
+  const signOut = async () => {
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ is_logged_in: false })
+      .eq('id', session.user.id);
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    // Then, sign out
+    const { error: signOutError } = await supabase.auth.signOut();
+
+    if (signOutError) {
+      throw signOutError;
+    }
+  };
+
   const DropdownComponent = useMemo(() => {
     return (
       <Dropdown
@@ -175,7 +194,7 @@ export default function Account({ session }) {
             
             <Button 
               title="Sign Out" 
-              onPress={() => supabase.auth.signOut()} 
+              onPress={signOut} 
               buttonStyle={styles.secondaryButton}
               titleStyle={[styles.buttonText, styles.secondaryButtonText]}
             />

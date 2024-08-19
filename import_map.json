@@ -1,0 +1,5 @@
+{
+    "imports": {
+      "jsr:@supabase/functions-js/edge-runtime.d.ts": "https://deno.land/x/supabase_edge_runtime/mod.ts"
+    }
+  }

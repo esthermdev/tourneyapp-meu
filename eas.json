@@ -3,25 +3,14 @@
     "version": ">= 10.2.2"
   },
   "build": {
-    "meu-app": {
-      "android": {
-        "buildType": "apk"
-      },
-      "channel": "meu-app"
-    },
-    "meu-app2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      },
-      "channel": "meu-app2"
-    },
-    "meu-app3": {
+    "development": {
       "developmentClient": true,
-      "channel": "meu-app3"
-    },
-    "meu-app4": {
       "distribution": "internal",
-      "channel": "meu-app4"
+      "channel": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview"
     },
     "production": {
       "channel": "production"

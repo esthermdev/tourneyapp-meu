@@ -1,12 +1,12 @@
 import { Tabs } from 'expo-router';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Header from '../../components/Header';
-import { icons } from '../../constants';
 import TabBar from '../../components/TabBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function TabLayout() {
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Tabs 

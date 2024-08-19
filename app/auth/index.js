@@ -39,15 +39,23 @@ export default function LoginScreen() {
 
   async function signInWithEmail() {
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
+
+    if (!error && data.user) {
+      await supabase
+        .from('profiles')
+        .update({ is_logged_in: true })
+        .eq('id', data.user.id);
+    }
 
     if (error) {
       Alert.alert('Insert email and password to sign in.', error.message)
     } else {
       router.push('(tabs)/home');
+      console.log('This is user data: ', data)
     };
 
     setLoading(false);
@@ -56,7 +64,7 @@ export default function LoginScreen() {
   async function signUpWithEmail() {
     setLoading(true)
     const {
-      data: { session },
+      data,
       error,
     } = await supabase.auth.signUp({
       email: email,
