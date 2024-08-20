@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import { 
-  Alert, 
-  StyleSheet, 
-  View, 
-  AppState, 
-  Text, 
-  TouchableOpacity, 
-  TouchableWithoutFeedback, 
+import {
+  Alert,
+  StyleSheet,
+  View,
+  AppState,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   TextInput
 } from 'react-native';
-import { supabase } from '../../utils/supabase';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@rneui/themed';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { supabase } from '../../utils/supabase';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { usePushNotifications } from '../../hooks/usePushNotifications';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -36,6 +40,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const { expoPushToken } = usePushNotifications();
 
   async function signInWithEmail() {
     setLoading(true)
@@ -45,10 +50,16 @@ export default function LoginScreen() {
     });
 
     if (!error && data.user) {
-      await supabase
+      const { error: updateError } = await supabase
         .from('profiles')
-        .update({ is_logged_in: true })
+        .update({
+          is_logged_in: true,
+          expo_push_token: expoPushToken ? expoPushToken.data : null
+        })
         .eq('id', data.user.id);
+      if (updateError) {
+        console.error('Error updating push token: ', updateError)
+      }
     }
 
     if (error) {
@@ -77,13 +88,13 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity 
-        style={styles.menuButton} 
+      <TouchableOpacity
+        style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       >
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -110,20 +121,20 @@ export default function LoginScreen() {
               />
             </View>
             <View style={[styles.verticallySpaced, styles.mt20]}>
-              <Button 
-                title="Sign in" 
-                disabled={loading} 
-                onPress={() => signInWithEmail()} 
+              <Button
+                title="Sign in"
+                disabled={loading}
+                onPress={() => signInWithEmail()}
                 buttonStyle={styles.primaryButton}
                 titleStyle={styles.buttonText}
               />
             </View>
             <View style={styles.signupContainer}>
               <Text style={styles.signupText}>Not an existing user?</Text>
-              <Button 
-                title='Sign up' 
-                disabled={loading} 
-                onPress={() => signUpWithEmail()} 
+              <Button
+                title='Sign up'
+                disabled={loading}
+                onPress={() => signUpWithEmail()}
                 buttonStyle={styles.secondaryButton}
                 titleStyle={[styles.buttonText, styles.secondaryButtonText]}
               />

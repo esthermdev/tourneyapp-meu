@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  StyleSheet, 
-  View, 
-  Text, 
-  Alert, 
-  TouchableOpacity, 
+import React, { useState, useEffect, useMemo } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
@@ -20,9 +20,29 @@ import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+async function sendPushNotification(expoPushToken) {
+  const message = {
+    to: expoPushToken,
+    sound: 'default',
+    title: 'Original Title',
+    body: 'And here is the body!',
+    data: { someData: 'goes here' },
+  };
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  });
+}
+
 export default function Account({ session }) {
   const { profile, setProfile } = useAuth();
-
+  const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState('');
@@ -35,7 +55,7 @@ export default function Account({ session }) {
     fetchTeams();
   }, []);
 
-	const fetchTeams = async () => {
+  const fetchTeams = async () => {
     const { data, error } = await supabase
       .from('teams')
       .select('id, name');
@@ -50,6 +70,7 @@ export default function Account({ session }) {
   useEffect(() => {
     setLoading(true);
     if (session) {
+      setExpoPushToken(profile?.expo_push_token);
       setTeamId(profile?.team_id ?? '');
       setFullName(profile?.full_name ?? '');
       setAvatarUrl(profile?.avatar_url ?? '');
@@ -85,7 +106,7 @@ export default function Account({ session }) {
 
     } finally {
       Alert.alert(
-        'Profile successfully updated.', 
+        'Profile successfully updated.',
         '',
         [
           {
@@ -150,14 +171,14 @@ export default function Account({ session }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity 
-        style={styles.menuButton} 
+      <TouchableOpacity
+        style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       >
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
 
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -191,13 +212,21 @@ export default function Account({ session }) {
               buttonStyle={styles.primaryButton}
               titleStyle={styles.buttonText}
             />
-            
-            <Button 
-              title="Sign Out" 
-              onPress={signOut} 
+
+            <Button
+              title="Sign Out"
+              onPress={signOut}
               buttonStyle={styles.secondaryButton}
               titleStyle={[styles.buttonText, styles.secondaryButtonText]}
             />
+            <Button
+              style={{ marginTop: 10 }}
+              title="Press to Send Notification"
+              onPress={async () => {
+                await sendPushNotification(expoPushToken);
+              }}
+            />
+            <Text>{profile.id}</Text>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

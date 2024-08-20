@@ -1,17 +1,16 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-interface MedicalRequest {
+interface WaterRefill {
   id: string
   field_number: number
-  status: 'pending' | 'confirmed' | 'resolved'
 }
 
 interface WebhookPayload {
   type: 'INSERT' | 'UPDATE' | 'DELETE'
   table: string
-  record: MedicalRequest
+  record: WaterRefill
   schema: 'public'
-  old_record: null | MedicalRequest
+  old_record: null | WaterRefill
 }
 
 const supabase = createClient(
@@ -29,21 +28,21 @@ Deno.serve(async (req) => {
     })
   }
 
-  const { data: medicalStaff } = await supabase
+  const { data: volunteers } = await supabase
     .from('profiles')
     .select('id, expo_push_token')
-    .eq('is_medical_staff', true)
+    .eq('is_volunteer', true)
     .eq('is_logged_in', true)
 
-  if (medicalStaff && medicalStaff.length > 0) {
+  if (volunteers && volunteers.length > 0) {
     const notification = {
-      title: 'Requesting Trainer',
-      body: `Assistance is required at Field ${payload.record.field_number}`,
+      title: 'Refill Water Jugs',
+      body: `Please refill water jugs at Field ${payload.record.field_number}`,
       data: { requestId: payload.record.id },
     }
 
-    const messages = medicalStaff.map(staff => ({
-      to: staff.expo_push_token,
+    const messages = volunteers.map(volunteer => ({
+      to: volunteer.expo_push_token,
       ...notification,
     }))
 

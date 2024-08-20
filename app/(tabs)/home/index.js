@@ -3,8 +3,10 @@ import { icons } from '../../../constants';
 import HomeButtons from '../../../buttons/HomeButtons';
 import { router } from 'expo-router';
 import { useAuth } from '../../../context/AuthProvider';
-import Push from '../../../components/Push';
+import RequestTrainerNotification from '../../../components/RequestTrainerNotification';
 import MedicButton from '../../../buttons/MedicButton';
+import RequestWaterRefill from '../../../components/RequestWaterRefill';
+import WaterRefillButton from '../../../buttons/WaterRefillButton';
 
 const Home = () => {
   const { user, session } = useAuth();
@@ -23,28 +25,30 @@ const Home = () => {
 
   return (
     <>
-    <View style={styles.container}>
-      <HomeButtons
-        title='My Games'
-        icon={icons.frisbee}
-        buttonStyle='bg-[#FA7930]'
-        handlePress={() => handlePress('mygames')}
-      />
-      <HomeButtons 
-        title='Watch Live'
-        icon={icons.video}
-        buttonStyle='bg-[#FF026C]'
-        handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
-      />
-      <MedicButton />
-      <HomeButtons 
-        title='Field Map'
-        icon={icons.map}
-        buttonStyle='bg-[#B6C846]'
-        handlePress={() => router.push('/home/fieldmap')}
-      />
-    </View>
-    <Push session={session} />
+      <View style={styles.container}>
+        <HomeButtons
+          title='My Games'
+          icon={icons.frisbee}
+          buttonStyle='bg-[#FA7930]'
+          handlePress={() => handlePress('mygames')}
+        />
+        <HomeButtons
+          title='Watch Live'
+          icon={icons.video}
+          buttonStyle='bg-[#FF026C]'
+          handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
+        />
+        <MedicButton />
+        <HomeButtons
+          title='Field Map'
+          icon={icons.map}
+          buttonStyle='bg-[#B6C846]'
+          handlePress={() => router.push('/home/fieldmap')}
+        />
+        <WaterRefillButton />
+      </View>
+      <RequestWaterRefill />
+      <RequestTrainerNotification />
     </>
   )
 }

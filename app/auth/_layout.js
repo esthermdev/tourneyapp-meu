@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import Account from './account';
 import LoginScreen from './index';
 import { useAuth } from '../../context/AuthProvider';
-import Push from '../../components/Push';
+import Push from '../../components/RequestTrainerNotification';
 
 const AuthLayout = () => {
   const { session } = useAuth();
