@@ -41,8 +41,7 @@ const MedicButton = () => {
         .from('medical_requests')
         .insert({
           field_number: selectedField,
-          status: 'pending',
-          request_type: 'medical'
+          status: 'pending'
         })
         .select()
         .single();

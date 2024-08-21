@@ -3,14 +3,14 @@ import { icons } from '../../../constants';
 import HomeButtons from '../../../buttons/HomeButtons';
 import { router } from 'expo-router';
 import { useAuth } from '../../../context/AuthProvider';
-import RequestTrainerNotification from '../../../components/RequestTrainerNotification';
 import MedicButton from '../../../buttons/MedicButton';
-import RequestWaterRefill from '../../../components/RequestWaterRefill';
 import WaterRefillButton from '../../../buttons/WaterRefillButton';
 import RequestCartButton from '../../../buttons/RequestCartButton';
+import TrainerNotification from '../../../components/TrainerNotification';
+import CartNotification from '../../../components/CartNotification';
 
 const Home = () => {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
 
   const handlePress = (screen) => {
     if (!user) {
@@ -48,6 +48,8 @@ const Home = () => {
         />
         <WaterRefillButton />
         <RequestCartButton />
+        <TrainerNotification />
+        <CartNotification />
       </View>
     </>
   )

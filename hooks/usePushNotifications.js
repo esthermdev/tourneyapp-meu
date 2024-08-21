@@ -3,6 +3,8 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
+import { supabase } from '../utils/supabase';
+import { Alert } from 'react-native';
 
 export const usePushNotifications = () => {
     Notifications.setNotificationHandler({
@@ -63,7 +65,7 @@ export const usePushNotifications = () => {
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log(response);
+            console.log(response)
         });
 
         return () => {
@@ -75,5 +77,6 @@ export const usePushNotifications = () => {
     return {
         expoPushToken,
         notification,
+        responseListener
     };
 };

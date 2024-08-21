@@ -5,6 +5,7 @@ import { Image } from '@rneui/base';
 import { icons } from '../constants';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dropdown from '../components/CustomDropdownComponent';
+import { usePushNotifications } from '../hooks/usePushNotifications';
 
 const locations = ['Field', 'Entrance', 'Command Center'];
 
@@ -15,6 +16,9 @@ const RequestCartButton = () => {
   const [fromFieldNumber, setFromFieldNumber] = useState('');
   const [toFieldNumber, setToFieldNumber] = useState('');
   const [fields, setFields] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const { expoPushToken } = usePushNotifications();
 
   useEffect(() => {
     fetchFields();
@@ -31,6 +35,8 @@ const RequestCartButton = () => {
 
   const handleRequestCart = async () => {
     try {
+      setIsButtonDisabled(true);
+
       const { data, error } = await supabase
         .from('cart_requests')
         .insert({
@@ -38,30 +44,26 @@ const RequestCartButton = () => {
           to_location: toLocation,
           from_field_number: fromLocation === 'Field' ? parseInt(fromFieldNumber) : null,
           to_field_number: toLocation === 'Field' ? parseInt(toFieldNumber) : null,
-          status: 'pending'
+          status: 'pending',
+          requester_token: expoPushToken.data
         })
         .select()
         .single();
 
-      const { data: volunteer, error: volunteerError } = await supabase
-        .from('profiles')
-        .select('id, expo_push_token')
-        .eq('is_volunteer', true);
-
-      if (volunteerError) throw volunteerError;
-
-      if (!volunteer || volunteer.length === 0) {
-        throw new Error('No volunteers available');
-      }
-
       if (error) throw error;
 
-      Alert.alert('Success', 'Cart request submitted successfully');
-
+      Alert.alert('Success', 'Cart request submitted successfully. Please wait for a driver.');
       setIsModalVisible(false);
+
+      // Set a timeout to re-enable the button after 30 seconds
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 30000);
+
     } catch (error) {
       console.error('Error submitting cart request:', error);
       Alert.alert('Error', 'Failed to submit cart request');
+      setIsButtonDisabled(false);
     }
   };
 
@@ -69,16 +71,19 @@ const RequestCartButton = () => {
     <View>
 
       <TouchableOpacity
-        style={styles.buttonStyle}
+        style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
         className="bg-[#fad830]"
-        onPress={() => setIsModalVisible(true)}
+        onPress={() => !isButtonDisabled && setIsModalVisible(true)}
+        disabled={isButtonDisabled}
       >
         <Image
           source={icons.frisbee}
           resizeMode='contain'
           style={{ width: 25, height: 25 }}
         />
-        <Text className='text-white font-outfitbold text-lg'>Request Cart</Text>
+        <Text className='text-white font-outfitbold text-lg'>
+          {isButtonDisabled ? 'Request Pending...' : 'Request Cart'}
+        </Text>
       </TouchableOpacity>
 
       <Modal
@@ -138,6 +143,9 @@ const RequestCartButton = () => {
 };
 
 const styles = StyleSheet.create({
+  disabledButton: {
+    opacity: 0.5,
+  },
   labelHeader: {
     fontFamily: 'Outfit-Semibold',
     fontSize: 18
