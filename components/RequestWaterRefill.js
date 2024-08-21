@@ -5,7 +5,7 @@ export default function RequestWaterRefill() {
   const { expoPushToken, notification } = usePushNotifications();
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
+    <View style={{ display: 'none', alignItems: 'center', justifyContent: 'space-around' }}>
       <Text>WATER token: {expoPushToken ? expoPushToken.data : 'No token'}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification ? notification.request.content.title : 'No notification'} </Text>

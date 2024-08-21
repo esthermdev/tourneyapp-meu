@@ -7,6 +7,7 @@ import RequestTrainerNotification from '../../../components/RequestTrainerNotifi
 import MedicButton from '../../../buttons/MedicButton';
 import RequestWaterRefill from '../../../components/RequestWaterRefill';
 import WaterRefillButton from '../../../buttons/WaterRefillButton';
+import RequestCartButton from '../../../buttons/RequestCartButton';
 
 const Home = () => {
   const { user, session } = useAuth();
@@ -46,9 +47,8 @@ const Home = () => {
           handlePress={() => router.push('/home/fieldmap')}
         />
         <WaterRefillButton />
+        <RequestCartButton />
       </View>
-      <RequestWaterRefill />
-      <RequestTrainerNotification />
     </>
   )
 }

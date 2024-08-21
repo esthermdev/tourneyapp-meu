@@ -28,30 +28,25 @@ const MedicButton = () => {
     }
   };
 
-  const showPicker = () => {
-    setIsPickerVisible(true);
-  };
-
-  const hidePicker = () => {
-    setIsPickerVisible(false);
-  };
+  const showPicker = () => setIsPickerVisible(true);
+  const hidePicker = () => setIsPickerVisible(false);
 
   const requestTrainer = async () => {
     if (isRequesting || !selectedField) return;
-
     setIsRequesting(true);
 
     try {
       // Create a single medical request
-      const { data: newRequest, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('medical_requests')
         .insert({
           field_number: selectedField,
           status: 'pending',
+          request_type: 'medical'
         })
         .select()
         .single();
-      
+
       if (insertError) throw insertError;
 
       const { data: medicStaff, error: staffError } = await supabase
@@ -78,16 +73,16 @@ const MedicButton = () => {
 
   return (
     <View>
-      <TouchableOpacity 
-        style={styles.buttonStyle} 
-        className={`bg-[#2956b7] ${isRequesting ? 'opacity-50' : ''}`} 
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        className={`bg-[#2956b7] ${isRequesting ? 'opacity-50' : ''}`}
         onPress={showPicker}
         disabled={isRequesting}
       >
-        <Image 
+        <Image
           source={icons.medic}
           resizeMode='contain'
-          style={{width: 25, height: 25}}
+          style={{ width: 25, height: 25 }}
         />
         <Text className='text-white font-outfitbold text-lg'>{isRequesting ? 'Medic Requested' : 'Medic'}</Text>
       </TouchableOpacity>

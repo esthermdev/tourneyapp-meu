@@ -18,9 +18,6 @@ import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../../utils/supabase';
-import Constants from 'expo-constants';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
 import { usePushNotifications } from '../../hooks/usePushNotifications';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -66,7 +63,7 @@ export default function LoginScreen() {
       Alert.alert('Insert email and password to sign in.', error.message)
     } else {
       router.push('(tabs)/home');
-      console.log('This is user data: ', data)
+      console.log('Logging in user: ', data)
     };
 
     setLoading(false);
@@ -74,10 +71,7 @@ export default function LoginScreen() {
 
   async function signUpWithEmail() {
     setLoading(true)
-    const {
-      data,
-      error,
-    } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });

@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
       title: 'Refill Water Jugs',
       body: `Please refill water jugs at Field ${payload.record.field_number}`,
       data: { requestId: payload.record.id },
-    }
+  }
 
     const messages = volunteers.map(volunteer => ({
       to: volunteer.expo_push_token,

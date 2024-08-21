@@ -1,17 +1,20 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 
-interface MedicalRequest {
-  id: string
-  field_number: number
-  status: 'pending' | 'confirmed'
+interface CartRequest {
+  id: number
+  from_location: string
+  to_location: string
+  from_field_number: number | null
+  to_field_number: number | null
+  status: string
 }
 
 interface WebhookPayload {
   type: 'INSERT' | 'UPDATE' | 'DELETE'
   table: string
-  record: MedicalRequest
+  record: CartRequest
   schema: 'public'
-  old_record: null | MedicalRequest
+  old_record: null | CartRequest
 }
 
 const supabase = createClient(
@@ -20,7 +23,8 @@ const supabase = createClient(
 )
 
 Deno.serve(async (req) => {
-  const payload: WebhookPayload = await req.json()
+  const payload: WebhookPayload = await req.json();
+	const cartRequest = payload.record;
 
   // Only proceed if this is an INSERT operation
   if (payload.type !== 'INSERT') {
@@ -29,21 +33,28 @@ Deno.serve(async (req) => {
     })
   }
 
-  const { data: medicalStaff } = await supabase
+  const { data: volunteers, error } = await supabase
     .from('profiles')
     .select('id, expo_push_token')
-    .eq('is_medical_staff', true)
+    .eq('is_volunteer', true)
+    .eq('is_available', true)
     .eq('is_logged_in', true)
+	
+	if (error) {
+		console.error('Error fetching volunteers:', error);
+		throw new Error('Failed to fetch volunteers');
+	}
 
-  if (medicalStaff && medicalStaff.length > 0) {
-    const notification = {
-      title: 'Requesting Trainer',
-      body: `Assistance is required at Field ${payload.record.field_number}`,
-      data: { requestId: payload.record.id },
-    }
+	if (volunteers && volunteers.length > 0) {
+		const notification = {
+			sound: 'default',
+			title: 'New Cart Request',
+			body: `From: ${cartRequest.from_location}${cartRequest.from_field_number ? ` ${cartRequest.from_field_number}` : ''} To: ${cartRequest.to_location}${cartRequest.to_field_number ? ` ${cartRequest.to_field_number}` : ''}`,
+			data: { requestId: cartRequest.id },
+		}
 
-    const messages = medicalStaff.map(staff => ({
-      to: staff.expo_push_token,
+    const messages = volunteers.map(volunteer => ({
+      to: volunteer.expo_push_token,
       ...notification,
     }))
 
@@ -55,13 +66,10 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify(messages),
     }).then((res) => res.json())
-
-    return new Response(JSON.stringify(res), {
-      headers: { 'Content-Type': 'application/json' },
-    })
   }
 
   return new Response(JSON.stringify({ message: 'No action taken' }), {
     headers: { 'Content-Type': 'application/json' },
   })
+  
 })

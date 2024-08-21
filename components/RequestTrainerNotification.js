@@ -9,7 +9,8 @@ export default function RequestTrainerNotification() {
   useEffect(() => {
     if (notification) {
       const data = notification.request.content.data;
-      if (data.requestId) {
+      const title = notification.request.content.title;
+      if (data.requestId && title === 'Requesting Trainer') {
         Alert.alert(
           'Medical Trainer Needed',
           `${notification.request.content.body}`,
@@ -43,7 +44,7 @@ export default function RequestTrainerNotification() {
   };
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'space-around' }}>
+    <View style={{ display: 'none', alignItems: 'center', justifyContent: 'space-around' }}>
       <Text>TRAINER token: {expoPushToken ? expoPushToken.data : 'No token'}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification ? notification.request.content.title : 'No notification'} </Text>
