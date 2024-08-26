@@ -16,7 +16,15 @@ const Teams = () => {
   const fetchTeams = async () => {
     const { data, error } = await supabase
       .from('teams')
-      .select('id, name, division, avatar_uri, color');
+      .select(
+        `id, 
+        name, 
+        division:division_id (
+          id, name
+        ), 
+        avatar_uri, 
+        color`
+      );
 
     if (error) {
       console.error('Error fetching teams:', error);
@@ -30,11 +38,11 @@ const Teams = () => {
   if (selectedDivision === 'All') {
     filteredTeams = teams;
   } else {
-    filteredTeams = teams.filter(team => team.division === selectedDivision);
+    filteredTeams = teams.filter(team => team.division.name === selectedDivision);
   };
 
   const renderItem = ({ item }) => (
-    <ListItem style={{paddingHorizontal: 20}} bottomDivider>
+    <ListItem style={{ paddingHorizontal: 20 }} bottomDivider>
       <Avatar
         size={60}
         rounded
@@ -44,7 +52,7 @@ const Teams = () => {
       <ListItem.Content>
         <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
         <View className={`rounded-full px-1.5 py-0.5`} style={{ backgroundColor: item.color }}>
-          <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{item.division}</ListItem.Subtitle>
+          <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{item.division.name}</ListItem.Subtitle>
         </View>
       </ListItem.Content>
     </ListItem>
@@ -92,7 +100,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
-  }, 
+  },
   header: {
     fontFamily: 'Outfit-Bold',
     fontSize: 35,

@@ -1,4 +1,3 @@
-// components/MixedScheduleList.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -13,7 +12,7 @@ const scheduleOptions = [
   { title: '9th Place Bracket', route: '9th-place-bracket', icon: 'ribbon-outline' },
 ];
 
-const MixedScheduleList = () => {
+const ScheduleList = () => {
   const router = useRouter();
 
   const renderItem = ({ item }) => (
@@ -34,7 +33,6 @@ const MixedScheduleList = () => {
         data={scheduleOptions}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -65,4 +63,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MixedScheduleList;
+export default ScheduleList;

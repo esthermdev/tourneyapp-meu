@@ -1,48 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Link } from 'expo-router';
+import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const MixedUpdateScoresScreen = () => {
-  const sections = [
-    { title: 'Pool A Games', route: 'settings/admin/update-scores/mixed/poolAGames' },
-    { title: 'Pool B Games', route: 'settings/admin/update-scores/mixed/poolBGames' },
-    { title: 'Pool C Games', route: 'settings/admin/update-scores/mixed/poolCGames' },
-    { title: 'Pool D Games', route: 'settings/admin/update-scores/mixed/poolDGames' },
-    { title: 'Crossover Games', route: 'settings/admin/update-scores/mixed/Crossovers' },
-    { title: 'Quarter Finals', route: 'settings/admin/update-scores/mixed/Quarters' },
-    { title: 'Semi Finals', route: 'settings/admin/update-scores/mixed/SemiFinals' },
-    { title: 'Finals', route: 'settings/admin/update-scores/mixed/Finals' },
-    { title: '3rd Place Games', route: 'settings/admin/update-scores/mixed/ThirdPlace' },
+const AdminScoresIndex = () => {
+  const gameTypes = [
+    { title: 'Pool A', params: { gameType: 'pool', poolId: 7 } },
+    { title: 'Pool B', params: { gameType: 'pool', poolId: 8 } },
+    { title: 'Pool C', params: { gameType: 'pool', poolId: 9 } },
+    { title: 'Pool D', params: { gameType: 'pool', poolId: 10 } },
+    { title: 'Crossovers', params: { gameType: 'bracket', roundId: 4 } },
+    { title: 'Quarters', params: { gameType: 'bracket', roundId: 5 } },
+    { title: 'Semi Finals', params: { gameType: 'bracket', roundId: 6 } },
+    { title: 'Finals', params: { gameType: 'bracket', roundId: 7 } },
+    { title: '3rd Place', params: { gameType: 'bracket', roundId: 8 } },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back-circle" size={25} color="#EA1D25" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Mixed Division</Text>
-        <TouchableOpacity 
-          style={styles.homeButton} 
-          onPress={() => router.navigate('/settings/admin')}
-        >
-          <Ionicons name="home-outline" size={25} color="#EA1D25" />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.subHeader}>Select Games to update</Text>
-        {sections.map((section, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={styles.sectionButton}
-            onPress={() => router.push(section.route)}
-          >
-            <Text style={styles.sectionText}>{section.title}</Text>
-          </TouchableOpacity>
+      <CustomAdminHeader title="Update Scores" />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {gameTypes.map((game, index) => (
+          <Link key={index} href={{ pathname: "/settings/admin/update-scores/mixed/[gameType]", params: game.params }} asChild>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>{game.title}</Text>
+            </TouchableOpacity>
+          </Link>
         ))}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -50,50 +36,23 @@ const MixedUpdateScoresScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#D9D9D9',
-  },
-  backButton: {
-    marginRight: 15,
-  },
-  headerTitle: {
-    fontFamily: 'Outfit-Bold',
-    fontSize: 28,
-    color: '#EA1D25',
-    flex: 1,
-    textAlign: 'center'
-  },
-  homeButton: {
-    padding: 5
-  },
-  content: {
+  scrollContent: {
     padding: 20,
   },
-  subHeader: {
-    fontSize: 20,
-    fontFamily: 'Outfit-Medium',
-    marginBottom: 15,
-    color: '#333',
-  },
-  sectionButton: {
+  button: {
     backgroundColor: '#EA1D25',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 10,
   },
-  sectionText: {
-    color: '#fff',
-    fontFamily: 'Outfit-SemiBold',
+  buttonText: {
+    color: 'white',
+    fontFamily: 'Outfit-Bold',
     fontSize: 18,
     textAlign: 'center',
   },
 });
 
-export default MixedUpdateScoresScreen;
+export default AdminScoresIndex;

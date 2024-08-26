@@ -41,7 +41,7 @@ export default function CartNotification() {
             "Do you want to accept this cart request?",
             [
               { text: "Ignore", style: "cancel" },
-              { text: "Accept", onPress: () => acceptCartRequest(data.requestId) }
+              { text: "Accept", style: "default", onPress: () => acceptCartRequest(data.requestId) }
             ]
           );
         }
