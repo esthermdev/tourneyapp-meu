@@ -10,20 +10,20 @@ const PoolPlay = () => {
     <View style={styles.container}>
       <CustomHeader title="Pool Play" />
       <Tab.Navigator>
-        <Tab.Screen 
-          name="Round1" 
+        <Tab.Screen
+          name="Round1"
           options={{ title: 'R1' }}
-          children={() => <GameComponent roundId={1} poolIds={[7, 8, 9, 10]} title="Round 1" />}
+          children={() => <GameComponent roundId={1} datetimeId={1} division="X" title="Round 1" />}
         />
-        <Tab.Screen 
-          name="Round2" 
+        <Tab.Screen
+          name="Round2"
           options={{ title: 'R2' }}
-          children={() => <GameComponent roundId={2} poolIds={[7, 8, 9, 10]} title="Round 2" />}
+          children={() => <GameComponent roundId={1} datetimeId={2} division="X" title="Round 2" />}
         />
-        <Tab.Screen 
-          name="Round3" 
+        <Tab.Screen
+          name="Round3"
           options={{ title: 'R3' }}
-          children={() => <GameComponent roundId={3} poolIds={[7, 8, 9, 10]} title="Round 3" />}
+          children={() => <GameComponent roundId={1} datetimeId={3} division="X" title="Round 3" />}
         />
       </Tab.Navigator>
     </View>

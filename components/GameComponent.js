@@ -6,24 +6,25 @@ import { Card, Avatar, Icon } from '@rneui/base';
 import { formatDate } from '../utils/formatDate';
 import { formatTime } from '../utils/formatTime';
 
-const GameComponent = ({ roundId, poolIds, title }) => {
+const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
   const [games, setGames] = useState([]);
   const [roundInfo, setRoundInfo] = useState({ date: '', time: '' });
-	const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getGames(roundId, poolIds);
-  }, [roundId, poolIds]);
+    getGames(datetimeId, division, roundId, poolIds);
+  }, [datetimeId, division, roundId, poolIds]);
 
-  const getGames = async (roundId, poolIds) => {
+  const getGames = async (datetimeId, division, roundId, poolIds) => {
     let query = supabase
       .from('games')
       .select(`
         id,
-        round:round_id (
+        pool_id,
+        round_id,
+        datetime:datetime_id (
           id, date, time
         ),
-        pool_id,
         team1:team1_id (
           name, avatar_uri
         ),
@@ -38,10 +39,10 @@ const GameComponent = ({ roundId, poolIds, title }) => {
           name
         )
       `)
-      .eq('round_id', roundId);
+      .eq('division', division).eq('round_id', roundId).eq('datetime_id', datetimeId)
 
     if (poolIds) {
-      query = query.in('pool_id', poolIds);
+      query = query.in('pool_id', poolIds)
     }
 
     const { data, error } = await query;
@@ -53,25 +54,25 @@ const GameComponent = ({ roundId, poolIds, title }) => {
       setGames(filteredGames);
       if (filteredGames.length > 0) {
         setRoundInfo({
-          date: formatDate(filteredGames[0].round.date),
-          time: formatTime(filteredGames[0].round.time)
+          date: formatDate(filteredGames[0].datetime.date),
+          time: formatTime(filteredGames[0].datetime.time)
         });
       }
     }
-		setIsLoading(false);
+    setIsLoading(false);
   };
 
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.header}>
         <Icon type='ionicon' name='location-outline' size={12} color='#8F8DAA' containerStyle={styles.locationIcon} />
-        <Text className='font-outfitregular text-[#8F8DAA]'>{}
+        <Text className='font-outfitregular text-[#8F8DAA]'>{ }
           Field {item.field?.name || 'Number'}
         </Text>
       </View>
       <View style={styles.content}>
         <View style={styles.teamContainer}>
-          <Avatar 
+          <Avatar
             size={75}
             rounded
             source={{ uri: item.team1.avatar_uri }}
@@ -85,19 +86,19 @@ const GameComponent = ({ roundId, poolIds, title }) => {
           <Text style={styles.score}>{item.scores[0].team2_score}</Text>
         </View>
         <View style={styles.teamContainer}>
-          <Avatar 
+          <Avatar
             size={75}
             rounded
             source={{ uri: item.team2.avatar_uri }}
             containerStyle={styles.avatarContainer}
-          />  
+          />
           <Text style={styles.teamName}>{item.team2.name}</Text>
         </View>
       </View>
     </Card>
   );
 
-	const renderPlaceholder = () => (
+  const renderPlaceholder = () => (
     <View style={styles.placeholderContainer}>
       <Icon
         type='ionicon'
@@ -132,7 +133,7 @@ const GameComponent = ({ roundId, poolIds, title }) => {
             <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
             <Text style={styles.time}>{roundInfo.time}</Text>
           </View>
-          <FlashList 
+          <FlashList
             data={games}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}

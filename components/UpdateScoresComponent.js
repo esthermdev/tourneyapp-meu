@@ -7,7 +7,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import CustomAdminHeader from '../components/CustomAdminHeader';
 
-const UpdateScoresComponent = ({ roundId, poolId, title }) => {
+const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 	const [games, setGames] = useState([]);
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [currentGame, setCurrentGame] = useState(null);
@@ -26,8 +26,10 @@ const UpdateScoresComponent = ({ roundId, poolId, title }) => {
 			.from('games')
 			.select(`
         id,
-        rounds!inner (
-          date, time
+        pool_id,
+        round_id,
+        datetime:datetime_id (
+          id, date, time
         ),
         team1:team1_id (
           name, avatar_uri
@@ -38,15 +40,16 @@ const UpdateScoresComponent = ({ roundId, poolId, title }) => {
         scores!inner (
           team1_score,
           team2_score,
-          is_finished
+					is_finished
         ),
         field: field_id (
           name
         )
       `)
+			.eq('division', division)
 
 		if (roundId) {
-			query = query.eq('round_id', roundId).order('id');
+			query = query.eq('round_id', roundId)
 		} else if (poolId) {
 			query = query.eq('pool_id', poolId).order('id');
 		}
@@ -171,7 +174,7 @@ const UpdateScoresComponent = ({ roundId, poolId, title }) => {
 				</View>
 			</View>
 			<View style={styles.cardFooter}>
-				<Text style={styles.fieldText}>{formatTime(item.rounds?.time)} - Wainright {item.field?.name || 'Number'}</Text>
+				<Text style={styles.fieldText}>{formatTime(item.datetime?.time)} - Wainright {item.field?.name || 'Number'}</Text>
 				<Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
 				<TouchableOpacity onPress={() => openModal(item)}>
 					<Ionicons name="pencil" size={20} color="#EA1D25" />

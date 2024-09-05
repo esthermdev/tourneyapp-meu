@@ -72,15 +72,11 @@ const RequestCartButton = () => {
 
       <TouchableOpacity
         style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
-        className="bg-[#fad830]"
+        className="bg-[#E9BD21]"
         onPress={() => !isButtonDisabled && setIsModalVisible(true)}
         disabled={isButtonDisabled}
       >
-        <Image
-          source={icons.frisbee}
-          resizeMode='contain'
-          style={{ width: 25, height: 25 }}
-        />
+        <Ionicons name="car" size={30} color="#FFF" />
         <Text className='text-white font-outfitbold text-lg'>
           {isButtonDisabled ? 'Request Pending...' : 'Request Cart'}
         </Text>
@@ -152,7 +148,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     width: 160,
-    height: 187,
+    height: 136,
     padding: 20,
     justifyContent: 'space-between',
     borderRadius: 22

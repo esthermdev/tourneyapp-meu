@@ -25,7 +25,7 @@ const MyGamesScreen = () => {
       .from('games')
       .select(`
         id,
-        rounds!inner (
+        datetime: datetime_id (
           date, time
         ),
         team1:team1_id (
@@ -51,7 +51,7 @@ const MyGamesScreen = () => {
     } else {
       // Group games by date
       const groupedGames = data.reduce((acc, game) => {
-        const date = new Date(game.rounds.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        const date = new Date(game.datetime.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         if (!acc[date]) acc[date] = [];
         acc[date].push(game);
         return acc;
@@ -98,7 +98,7 @@ const MyGamesScreen = () => {
   const GameCard = ({ game, openModal }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.timeFieldContainer}>
-        <Text style={styles.timeText}>{formatTime(game.rounds.time)}</Text>
+        <Text style={styles.timeText}>{formatTime(game.datetime.time)}</Text>
         <View style={styles.fieldContainer}>
           <Icon name="location-outline" type="ionicon" size={12} color="#8F8DAA" />
           <Text style={styles.fieldText}>{game.field.name}</Text>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 5,
-    marginLeft: 50 
+    marginLeft: 50
   },
   vsText: {
     fontFamily: 'Outfit-Regular',

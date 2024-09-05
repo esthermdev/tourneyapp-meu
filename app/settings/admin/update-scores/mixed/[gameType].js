@@ -10,11 +10,11 @@ const DynamicGameScreen = () => {
 			return `Pool ${String.fromCharCode(65 + parseInt(poolId) - 7)} Games`;
 		}
 		const bracketTitles = {
-			'4': 'Crossovers',
-			'5': 'Quarter Finals',
-			'6': 'Semi Finals',
-			'7': 'Finals',
-			'8': '3rd Place Games',
+			2: 'Crossovers',
+			3: 'Quarter Finals',
+			4: 'Semi Finals',
+			5: 'Finals',
+			6: '3rd Place Games',
 		};
 		return bracketTitles[roundId] || 'Games';
 	};
@@ -22,8 +22,9 @@ const DynamicGameScreen = () => {
 	return (
 		<UpdateScoresComponent
 			poolId={gameType === 'pool' ? parseInt(poolId) : undefined}
-			roundId={gameType === 'bracket' ? parseInt(roundId) : undefined}
+			roundId={gameType === 'bracket' ? roundId : undefined}
 			title={getTitle()}
+			division='X'
 		/>
 	);
 };

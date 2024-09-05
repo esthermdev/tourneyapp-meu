@@ -10,11 +10,11 @@ const AdminScoresIndex = () => {
     { title: 'Pool B', params: { gameType: 'pool', poolId: 8 } },
     { title: 'Pool C', params: { gameType: 'pool', poolId: 9 } },
     { title: 'Pool D', params: { gameType: 'pool', poolId: 10 } },
-    { title: 'Crossovers', params: { gameType: 'bracket', roundId: 4 } },
-    { title: 'Quarters', params: { gameType: 'bracket', roundId: 5 } },
-    { title: 'Semi Finals', params: { gameType: 'bracket', roundId: 6 } },
-    { title: 'Finals', params: { gameType: 'bracket', roundId: 7 } },
-    { title: '3rd Place', params: { gameType: 'bracket', roundId: 8 } },
+    { title: 'Crossovers', params: { gameType: 'bracket', roundId: 2 } },
+    { title: 'Quarters', params: { gameType: 'bracket', roundId: 3 } },
+    { title: 'Semi Finals', params: { gameType: 'bracket', roundId: 4 } },
+    { title: 'Finals', params: { gameType: 'bracket', roundId: 5 } },
+    { title: '3rd Place', params: { gameType: 'bracket', roundId: 6 } },
   ];
 
   return (

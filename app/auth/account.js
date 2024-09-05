@@ -146,12 +146,17 @@ export default function Account({ session }) {
   const DropdownComponent = useMemo(() => {
     return (
       <Dropdown
+
         style={styles.dropdown}
-        itemTextStyle={styles.dropdownItemText}
         selectedTextStyle={styles.dropdownSelectedText}
         placeholderStyle={styles.dropdownPlaceholder}
         containerStyle={styles.dropdownList}
-        activeColor='#EA1D25'
+        activeColor='#FFEBEC'
+        renderRightIcon={() => (
+          <View>
+            <Ionicons name="caret-down" size={24} color="#333243" />
+          </View>
+        )}
         data={teams}
         labelField='name'
         valueField='id'
@@ -159,9 +164,10 @@ export default function Account({ session }) {
         value={teamId}
         onChange={item => setTeamId(item.id)}
         search
+        inputSearchStyle={styles.searchInput}
         searchPlaceholder="Search..."
         renderItem={item => (
-          <View style={styles.dropdownItem}>
+          <View>
             <Text style={styles.dropdownItemText}>{item.name}</Text>
           </View>
         )}
@@ -170,7 +176,7 @@ export default function Account({ session }) {
   }, [teams, teamId]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className='h-full' style={styles.container}>
       <TouchableOpacity
         style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -235,6 +241,9 @@ export default function Account({ session }) {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff'
+  },
   menuButton: {
     marginTop: 20,
     marginLeft: 20
@@ -251,77 +260,86 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 16,
-    fontFamily: 'Outfit-Medium',
+    fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 60,
+    borderColor: '#8F8DAA',
     borderWidth: 1,
     marginBottom: 20,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    paddingHorizontal: 20,
+    borderRadius: 30,
     fontFamily: 'Outfit-Regular',
     fontSize: 18
-  },
-  inputLabel: {
-    fontFamily: 'Outfit-Medium',
-    color: '#333243',
-    fontSize: 16,
-    marginBottom: 5
   },
   dropdownContainer: {
     marginBottom: 20,
   },
   dropdownLabel: {
     fontSize: 16,
-    fontFamily: 'Outfit-Medium',
+    fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   dropdown: {
-    height: 50,
-    borderColor: '#ccc',
+    height: 60,
+    borderColor: '#8F8DAA',
     borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 10,
+    borderRadius: 30,
+    paddingHorizontal: 20,
     backgroundColor: 'white',
   },
+  searchInput: {
+    borderColor: '#CBC9E1',
+    borderRadius: 12,
+    margin: 0,
+    fontFamily: 'Outfit-Light'
+  },
   dropdownList: {
-    borderColor: '#ccc',
+    borderColor: '#8F8DAA',
     borderWidth: 1,
-    borderRadius: 4,
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: {
+      height: 10
+    },
+    borderRadius: 20,
     backgroundColor: '#fff',
     marginTop: 4,
+    padding: 10,
   },
   dropdownItemText: {
     fontSize: 16,
     fontFamily: 'Outfit-Regular',
-    color: '#333243',
+    color: 'black',
+    padding: 15
   },
   dropdownPlaceholder: {
-    color: '#999',
+    color: 'black',
     fontFamily: 'Outfit-Regular',
     fontSize: 16,
   },
   dropdownSelectedText: {
-    color: '#333243',
+    color: 'black',
     fontFamily: 'Outfit-Regular',
     fontSize: 16,
   },
   primaryButton: {
+    height: 60,
     backgroundColor: '#EA1D25',
-    borderRadius: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 30,
     marginBottom: 10,
   },
   secondaryButton: {
+    height: 60,
     backgroundColor: '#fff',
     borderColor: '#EA1D25',
     borderWidth: 1,
-    borderRadius: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 30,
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
@@ -329,10 +347,5 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     color: '#EA1D25',
-  },
-  dropdownItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
   },
 });

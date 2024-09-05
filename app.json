@@ -14,7 +14,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.esmdev.TourneyAppMEU"
+      "bundleIdentifier": "com.esmdev.TourneyAppMEU",
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {

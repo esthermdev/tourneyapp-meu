@@ -5,6 +5,7 @@ import { StyleSheet, Text, Alert, View, Modal, TouchableOpacity } from 'react-na
 import { Picker } from '@react-native-picker/picker';
 import { icons } from '../constants';
 import { supabase } from '../utils/supabase';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthProvider';
 
 const WaterRefillButton = () => {
@@ -78,15 +79,11 @@ const WaterRefillButton = () => {
     <View>
       <TouchableOpacity
         style={styles.buttonStyle}
-        className={`bg-[#29b7ab] ${isRequesting ? 'opacity-50' : ''}`}
+        className={`bg-[#3DC5C5] ${isRequesting ? 'opacity-50' : ''}`}
         onPress={showPicker}
         disabled={isRequesting}
       >
-        <Image
-          source={icons.medic}
-          resizeMode='contain'
-          style={{ width: 25, height: 25 }}
-        />
+        <Ionicons name="water" size={27} color="#FFF" />
         <Text className='text-white font-outfitbold text-lg'>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
       </TouchableOpacity>
 
@@ -127,7 +124,7 @@ export default WaterRefillButton;
 const styles = StyleSheet.create({
   buttonStyle: {
     width: 160,
-    height: 187,
+    height: 136,
     padding: 20,
     justifyContent: 'space-between',
     borderRadius: 22

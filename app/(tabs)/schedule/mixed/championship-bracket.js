@@ -10,25 +10,37 @@ const ChampionshipBracket = () => {
     <View style={styles.container}>
       <CustomHeader title='Championship Bracket' />
       <Tab.Navigator>
-        <Tab.Screen 
-          name="Crossover" 
+        <Tab.Screen
+          name="Crossover"
           options={{ title: 'CP' }}
-          children={() => <GameComponent roundId={4} title="Crossover" />}
+          children={() => <GameComponent roundId={2} datetimeId={4} division="X" title="Crossover" />}
         />
-        <Tab.Screen 
-          name="Quarters" 
+        <Tab.Screen
+          name="Quarters"
           options={{ title: 'Q' }}
-          children={() => <GameComponent roundId={5} title="Quarter Finals" />}
+          children={() => (
+            <View style={styles.container}>
+              <GameComponent roundId={3} datetimeId={5} division="X" title="Quarter Finals" />
+            </View>
+          )}
         />
-        <Tab.Screen 
-          name="Semis" 
+        <Tab.Screen
+          name="Semis"
           options={{ title: 'SF' }}
-          children={() => <GameComponent roundId={6} title="Semi Finals" />}
+          children={() => (
+            <View style={styles.container}>
+              <GameComponent roundId={4} datetimeId={6} division="X" title="Semi Finals" />
+            </View>
+          )}
         />
-        <Tab.Screen 
-          name="Finals" 
+        <Tab.Screen
+          name="Finals"
           options={{ title: 'F' }}
-          children={() => <GameComponent roundId={7} title="Finals" />}
+          children={() => (
+            <View style={styles.container}>
+              <GameComponent roundId={5} datetimeId={7} division="X" title="Finals" />
+            </View>
+          )}
         />
       </Tab.Navigator>
     </View>

@@ -81,7 +81,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className='h-full' style={styles.container}>
       <TouchableOpacity
         style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -93,7 +93,7 @@ export default function LoginScreen() {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>
-            <Text style={styles.header}>Welcome</Text>
+            <Text style={styles.header}>Welcome!</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
@@ -114,7 +114,7 @@ export default function LoginScreen() {
                 autoCapitalize='none'
               />
             </View>
-            <View style={[styles.verticallySpaced, styles.mt20]}>
+            <View>
               <Button
                 title="Sign in"
                 disabled={loading}
@@ -123,7 +123,7 @@ export default function LoginScreen() {
                 titleStyle={styles.buttonText}
               />
             </View>
-            <View style={styles.signupContainer}>
+            <View>
               <Text style={styles.signupText}>Not an existing user?</Text>
               <Button
                 title='Sign up'
@@ -141,6 +141,9 @@ export default function LoginScreen() {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff'
+  },
   menuButton: {
     marginTop: 20,
     marginLeft: 20
@@ -156,15 +159,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 12,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 60,
+    borderColor: '#8F8DAA',
     borderWidth: 1,
-    marginTop: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    paddingHorizontal: 22,
+    borderRadius: 30,
     fontFamily: 'Outfit-Regular',
     fontSize: 18
   },
@@ -173,32 +175,33 @@ const styles = StyleSheet.create({
     color: '#333243',
   },
   primaryButton: {
+    height: 60,
     backgroundColor: '#EA1D25',
-    borderRadius: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 22,
+    borderRadius: 30,
+    marginBottom: 20,
   },
   secondaryButton: {
+    height: 60,
     backgroundColor: '#fff',
     borderColor: '#EA1D25',
     borderWidth: 1,
-    borderRadius: 8,
-    paddingVertical: 12,
+    paddingHorizontal: 22,
+    borderRadius: 30,
     marginTop: 10,
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
-    fontSize: 16,
+    fontSize: 18,
   },
   secondaryButtonText: {
     color: '#EA1D25',
   },
-  signupContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
   signupText: {
     fontFamily: 'Outfit-Regular',
+    fontSize: 16,
     color: '#333243',
     marginBottom: 10,
+    alignSelf: 'center'
   },
 });

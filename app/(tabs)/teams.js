@@ -19,9 +19,9 @@ const Teams = () => {
       .select(
         `id, 
         name, 
-        division:division_id (
-          id, name
-        ), 
+        pool:pool_id (
+          division
+        ),
         avatar_uri, 
         color`
       );
@@ -38,7 +38,20 @@ const Teams = () => {
   if (selectedDivision === 'All') {
     filteredTeams = teams;
   } else {
-    filteredTeams = teams.filter(team => team.division.name === selectedDivision);
+    filteredTeams = teams.filter(team => team.pool.division === selectedDivision);
+  };
+
+  const renderLabel = (team) => {
+    switch (team.pool.division) {
+      case 'O':
+        return 'Open';
+      case 'X':
+        return 'Mixed';
+      case 'W':
+        return 'Women';
+      default:
+        return team.pool.division; // fallback to the original division if it's not O, X, or W
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -52,7 +65,7 @@ const Teams = () => {
       <ListItem.Content>
         <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
         <View className={`rounded-full px-1.5 py-0.5`} style={{ backgroundColor: item.color }}>
-          <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{item.division.name}</ListItem.Subtitle>
+          <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{renderLabel(item)}</ListItem.Subtitle>
         </View>
       </ListItem.Content>
     </ListItem>
@@ -68,13 +81,13 @@ const Teams = () => {
         <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Open')}>
+        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('O')}>
           <Text style={styles.filterByText}>Open</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#FF285C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Womens')}>
+        <TouchableOpacity className='bg-[#FF285C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('W')}>
           <Text style={styles.filterByText}>Womens</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#6D28FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('Mixed')}>
+        <TouchableOpacity className='bg-[#6D28FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('X')}>
           <Text style={styles.filterByText}>Mixed</Text>
         </TouchableOpacity>
       </View>

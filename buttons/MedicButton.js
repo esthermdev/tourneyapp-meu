@@ -123,7 +123,7 @@ export default MedicButton;
 const styles = StyleSheet.create({
   buttonStyle: {
     width: 160,
-    height: 187,
+    height: 136,
     padding: 20,
     justifyContent: 'space-between',
     borderRadius: 22

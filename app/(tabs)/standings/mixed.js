@@ -1,16 +1,24 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { Card } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { router } from 'expo-router';
 
 const MixedStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
   const [poolBStandings, setPoolBStandings] = useState([]);
   const [poolCStandings, setPoolCStandings] = useState([]);
   const [poolDStandings, setPoolDStandings] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchStandings();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchStandings().then(() => setRefreshing(false));
   }, []);
 
   const fetchStandings = async () => {
@@ -58,9 +66,21 @@ const MixedStandings = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="chevron-back-outline" size={25} color="#EA1D25" />
+        </TouchableOpacity>
         <Text style={styles.header}>Mixed</Text>
       </View>
-      <ScrollView style={styles.standingsContainer}>
+      <ScrollView
+        style={styles.standingsContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#EA1D25']} // This sets the color of the refresh spinner
+          />
+        }
+      >
         {renderStandings(poolAStandings, 'A')}
         {renderStandings(poolBStandings, 'B')}
         {renderStandings(poolCStandings, 'C')}
@@ -80,11 +100,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
-  }, 
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   header: {
     fontFamily: 'Outfit-Bold',
     fontSize: 35,
-    color: '#EA1D25'
+    color: '#EA1D25',
   },
   standingsContainer: {
     flex: 1,
@@ -136,6 +158,9 @@ const styles = StyleSheet.create({
     color: '#333243',
     width: 50,
     textAlign: 'right',
+  },
+  backButton: {
+    marginRight: 15,
   },
 });
 

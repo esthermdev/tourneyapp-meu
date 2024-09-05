@@ -9,14 +9,14 @@ export default function App() {
     <View className='bg-white h-full'>
       <View className='h-11'></View>
       <View className='flex-3 py-3 justify-center items-center'>
-        <Image 
+        <Image
           source={images.logoW}
           resizeMode='contain'
-          style={{width: 90, height: 90}}
+          style={{ width: 90, height: 90 }}
         />
       </View>
       <View className='flex-1 justify-center items-center'>
-        <Image 
+        <Image
           source={images.frisbeePlayer}
           resizeMode='contain'
           style={{ width: '100%' }}
@@ -24,13 +24,13 @@ export default function App() {
       </View>
       <View className='flex-2 px-[35] pt-5 pb-12'>
         <View className='mb-12'>
-          <Text className='font-outfitregular text-center' style={{ fontSize: 18 }}>Welcome to</Text>
-          <Text className='font-outfitbold text-center py-1' style={{ fontSize: 38 }}>Vacationland</Text>
+          <Text className='font-outfitregular text-center' style={{ fontSize: 18, }}>Welcome to</Text>
+          <Text className='font-outfitbold text-center' style={{ fontSize: 38, marginVertical: 25 }}>Vacationland</Text>
           <Text className='font-outfitbold text-center' style={{ fontSize: 16 }}>2024</Text>
         </View>
-        <CustomButtonWithIcon 
-          title='Continue' 
-          buttonStyles='bg-primary rounded-full px-[25] py-[22] flex-row' 
+        <CustomButtonWithIcon
+          title='Continue'
+          buttonStyles='bg-primary rounded-full px-[25] py-[22] flex-row'
           handlePress={() => router.push('(tabs)/home')}
         />
       </View>
