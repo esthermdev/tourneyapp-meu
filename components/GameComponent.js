@@ -63,10 +63,10 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
   };
 
   const renderItem = ({ item }) => (
-    <Card containerStyle={styles.cardContainer}>
+    <Card containerStyle={styles.card}>
       <View style={styles.header}>
-        <Icon type='ionicon' name='location-outline' size={12} color='#8F8DAA' containerStyle={styles.locationIcon} />
-        <Text className='font-outfitregular text-[#8F8DAA]'>{ }
+        <Icon type='ionicon' name='location' size={14} color='#8F8DAA' containerStyle={styles.locationIcon} />
+        <Text className='font-outfitregular text-[#8F8DAA] text-base mr-2'>{ }
           Field {item.field?.name || 'Number'}
         </Text>
       </View>
@@ -75,10 +75,10 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
           <Avatar
             size={75}
             rounded
-            source={{ uri: item.team1.avatar_uri }}
+            source={{ uri: item.team1?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team1.name}</Text>
+          <Text style={styles.teamName}>{item.team1?.name}</Text>
         </View>
         <View style={styles.scoreContainer}>
           <Text style={styles.score}>{item.scores[0].team1_score}</Text>
@@ -89,10 +89,10 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
           <Avatar
             size={75}
             rounded
-            source={{ uri: item.team2.avatar_uri }}
+            source={{ uri: item.team2?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team2.name}</Text>
+          <Text style={styles.teamName}>{item.team2?.name}</Text>
         </View>
       </View>
     </Card>
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#D9D9D9',
+    paddingTop: 25
   },
   title: {
     fontFamily: 'Outfit-Bold',
@@ -162,20 +163,22 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   timeContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    backgroundColor: '#EA1D25',
+    padding: 15,
+    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginBottom: 12
   },
   time: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
     fontSize: 20,
-    color: '#EA1D25'
+    color: 'white'
   },
-  cardContainer: {
+  card: {
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
@@ -184,8 +187,9 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderWidth: 1,
     borderColor: '#CBCAD8',
-    padding: 24,
-    marginBottom: 10,
+    marginTop: 0,
+    marginBottom: 12,
+    marginHorizontal: 20
   },
   header: {
     flexDirection: 'row',
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
   teamName: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 14,
+    fontSize: 16,
   },
   scoreContainer: {
     flexDirection: 'row',

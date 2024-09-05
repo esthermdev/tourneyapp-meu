@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { Card } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { router } from 'expo-router';
 import CustomHeader from '../../../components/CustomHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MixedStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
@@ -54,7 +53,6 @@ const MixedStandings = () => {
         <Text style={styles.poolHeader}>Pool {poolName}</Text>
         <Text style={styles.wlHeader}>W–L</Text>
       </View>
-      <Card.Divider />
       {standings.map((team, i) => (
         <View key={i} style={styles.teamRow}>
           <Text style={styles.teamName}>{team.teams.name} ({team.teams.seed})</Text>
@@ -68,7 +66,7 @@ const MixedStandings = () => {
     <View style={styles.container}>
       <CustomHeader title='Mixed' />
       <ScrollView
-        style={styles.standingsContainer}
+        contentContainerStyle={styles.standingsContainer}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -92,29 +90,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   standingsContainer: {
-    flex: 1,
-    padding: 10,
+    paddingTop: 20
   },
   poolCard: {
-    borderRadius: 10,
-    marginBottom: 20,
-    padding: 15,
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginTop: 0,
+    marginBottom: 12,
+    marginHorizontal: 20,
+    padding: 10
   },
   poolHeaderContainer: {
     flexDirection: 'row',
+    backgroundColor: '#EA1D25',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    borderRadius: 7,
+    padding: 12
   },
   poolHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 24,
-    color: '#EA1D25',
+    fontSize: 18,
+    color: 'white',
   },
   wlHeader: {
     fontFamily: 'Outfit-Bold',
@@ -125,9 +126,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE',
+    marginTop: 0,
+    padding: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#CBC9E1',
   },
   teamName: {
     fontFamily: 'Outfit-Medium',
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   recordText: {
-    fontFamily: 'Outfit-Regular',
+    fontFamily: 'Outfit-Medium',
     fontSize: 16,
     color: '#333243',
     width: 50,

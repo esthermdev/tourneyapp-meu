@@ -9,7 +9,15 @@ const PoolPlay = () => {
   return (
     <View style={styles.container}>
       <CustomHeader title="Pool Play" />
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: '#EA1D25',
+          tabBarInactiveTintColor: '#8F8DAA',
+          tabBarItemStyle: { borderBottomColor: '#8F8DAA' },
+          tabBarLabelStyle: { fontFamily: 'Outfit-Semibold' },
+          tabBarIndicatorStyle: { backgroundColor: '#EA1D25', }
+        }}
+      >
         <Tab.Screen
           name="Round1"
           options={{ title: 'R1' }}
