@@ -5,6 +5,7 @@ import { Card, Avatar, Icon } from '@rneui/base';
 import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomHeader from '../../../components/CustomHeader';
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
@@ -100,7 +101,7 @@ const MyGamesScreen = () => {
       <View style={styles.timeFieldContainer}>
         <Text style={styles.timeText}>{formatTime(game.datetime.time)}</Text>
         <View style={styles.fieldContainer}>
-          <Icon name="location-outline" type="ionicon" size={12} color="#8F8DAA" />
+          <Icon name="location" type="ionicon" size={12} color="#8F8DAA" />
           <Text style={styles.fieldText}>{game.field.name}</Text>
         </View>
       </View>
@@ -118,27 +119,40 @@ const MyGamesScreen = () => {
         <Text style={styles.teamName}>{game.team2.name}</Text>
         <Text style={styles.scoreText}>{game.scores[0].team2_score}</Text>
       </View>
-      <TouchableOpacity
-        style={[styles.updateButton, game.is_finished && styles.disabledButton]}
-        onPress={() => openModal(game)}
-        disabled={game.scores[0].is_finished}
-      >
-        <Text style={[styles.updateButtonText, game.scores[0].is_finished && styles.disabledButtonText]}>
-          {game.scores[0].is_finished ? 'Game Finished' : 'Update Score'}
-        </Text>
-      </TouchableOpacity>
+
+      {game.scores[0].is_finished ? (
+        <TouchableOpacity
+          style={[styles.updateButton, game.is_finished && styles.disabledButton]}
+          onPress={() => openModal(game)}
+          disabled={game.scores[0].is_finished}
+        >
+          <Text style={[styles.updateButtonText, game.scores[0].is_finished && styles.disabledButtonText]}>
+            Game Finished
+          </Text>
+          <Ionicons name='checkmark-circle' size={15} color='#8F8DAA' />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.updateButton}
+          onPress={() => openModal(game)}
+        >
+          <Text style={styles.updateButtonText}>Update Score</Text>
+          <Ionicons name='create' size={15} color='#2871FF' />
+        </TouchableOpacity>
+      )}
     </Card>
   );
 
   const renderSectionHeader = ({ section: { title } }) => (
     <View style={styles.sectionHeaderContainer}>
-      <Ionicons name="calendar" size={24} color="#EA1D25" />
+      <Ionicons name="calendar-clear" size={24} color="#EA1D25" />
       <Text style={styles.sectionHeader}>{title}</Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <CustomHeader title='My Games' />
       <SectionList
         sections={games}
         keyExtractor={(item, index) => item.id.toString() + index}
@@ -157,7 +171,7 @@ const MyGamesScreen = () => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Update Score</Text>
             <View style={styles.scoreInputContainer}>
-              <Text>{currentGame?.team1.name}</Text>
+              <Text style={styles.teamNameScoreInput}>{currentGame?.team1.name}</Text>
               <TextInput
                 style={styles.scoreInput}
                 value={team1Score}
@@ -166,7 +180,7 @@ const MyGamesScreen = () => {
               />
             </View>
             <View style={styles.scoreInputContainer}>
-              <Text>{currentGame?.team2.name}</Text>
+              <Text style={styles.teamNameScoreInput}>{currentGame?.team2.name}</Text>
               <TextInput
                 style={styles.scoreInput}
                 value={team2Score}
@@ -175,10 +189,10 @@ const MyGamesScreen = () => {
               />
             </View>
             <TouchableOpacity style={styles.updateScoreButton} onPress={handleUpdateScore}>
-              <Text style={styles.updateScoreButtonText}>Update Score</Text>
+              <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -202,8 +216,11 @@ const styles = StyleSheet.create({
   sectionHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    backgroundColor: 'hsl(244.14, 35%, 92%)',
+    borderRadius: 12,
+    padding: 20,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    backgroundColor: '#FFF0F0',
   },
   sectionHeader: {
     fontFamily: 'Outfit-Bold',
@@ -213,8 +230,9 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     borderRadius: 20,
-    marginHorizontal: 15,
-    marginVertical: 10,
+    marginTop: 0,
+    marginHorizontal: 20,
+    marginBottom: 12,
     padding: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -226,7 +244,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   timeText: {
     fontFamily: 'Outfit-Regular',
@@ -246,7 +264,7 @@ const styles = StyleSheet.create({
   teamContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
+    marginVertical: 0,
   },
   avatarContainer: {
     borderWidth: 1,
@@ -260,14 +278,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   scoreText: {
-    fontFamily: 'Outfit-Medium',
+    fontFamily: 'Outfit-Bold',
     fontSize: 18,
     color: '#333243',
   },
   vsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
+    marginVertical: 12,
     marginLeft: 50
   },
   vsText: {
@@ -283,14 +301,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#BAB8CB',
   },
   updateButton: {
-    marginTop: 10,
-    alignSelf: 'flex-end',
+    marginTop: 12,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'row'
   },
   updateButtonText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 14,
+    fontSize: 15,
     color: '#2871FF',
     textDecorationLine: 'underline',
+    marginRight: 5
   },
   disabledButton: {
     opacity: 0.5,
@@ -304,47 +325,52 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 12,
     width: '80%',
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
+    fontSize: 20,
+    fontFamily: 'Outfit-Bold',
+    marginBottom: 4
   },
   scoreInputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 8
+  },
+  teamNameScoreInput: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16
   },
   scoreInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 5,
     width: 50,
+    borderWidth: 1,
+    borderColor: '#333243',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     textAlign: 'center',
+    fontFamily: 'Outfit-Regular',
+    fontSize: 16
   },
   updateScoreButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#6ECC34',
     padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  updateScoreButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    borderRadius: 100,
+    marginTop: 12
   },
   closeButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: '#EA1D25',
     padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
+    borderRadius: 100,
+    marginTop: 8,
   },
-  closeButtonText: {
+  buttonText: {
     color: 'white',
+    fontFamily: 'Outfit-Bold',
     textAlign: 'center',
+    fontSize: 16
   },
 });
 

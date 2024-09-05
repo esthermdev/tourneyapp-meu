@@ -8,20 +8,20 @@ const DrawerLayout = () => {
 		<Drawer
 			screenOptions={{
 				headerShown: false,
-				drawerItemStyle: {marginHorizontal: 30},
-				drawerLabelStyle: {fontFamily: 'Outfit-Regular', fontSize: 18, color: '#333243'},
+				drawerItemStyle: { marginHorizontal: 30 },
+				drawerLabelStyle: { fontFamily: 'Outfit-Regular', fontSize: 18, color: '#333243' },
 				drawerActiveTintColor: '#EA1D25',
 			}}
 			drawerContent={(props) => <CustomDrawerContent {...props} />}
 		>
-			<Drawer.Screen 
+			<Drawer.Screen
 				name='index'
 				options={{
 					headerShown: false,
 					drawerLabel: 'Welcome',
 				}}
 			/>
-			<Drawer.Screen 
+			<Drawer.Screen
 				name='(tabs)'
 				options={{
 					headerShown: false,
@@ -29,7 +29,7 @@ const DrawerLayout = () => {
 					drawerIcon: () => <Ionicon name='home' />
 				}}
 			/>
-			<Drawer.Screen 
+			<Drawer.Screen
 				name='auth'
 				options={{
 					headerShown: false,
@@ -37,13 +37,14 @@ const DrawerLayout = () => {
 					drawerIcon: () => <Ionicon name='person' />
 				}}
 			/>
-			<Drawer.Screen 
+			{/* <Drawer.Screen 
 				name="settings"
 				options={{
 					drawerLabel: () => null,
 					drawerItemStyle: { display: 'none' }
+					
 				}}
-			/>
+			/> */}
 		</Drawer>
 	);
 };

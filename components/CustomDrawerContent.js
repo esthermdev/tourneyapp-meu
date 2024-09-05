@@ -34,14 +34,14 @@ const CustomDrawerContent = (props) => {
           />
         ))}
       </DrawerContentScrollView>
-      <View style={styles.bottomDrawerSection}>
+      {/* <View style={styles.bottomDrawerSection}>
         <DrawerItem
           label="Settings"
           labelStyle={styles.settingsLabelStyle}
           onPress={() => router.push('/settings')}
           icon={({ color, size }) => <Ionicon name='settings' size={size} color={color} />}
         />
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -75,13 +75,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 24
   },
   drawerItemLabelStyle: {
-    fontFamily: 'Outfit-Regular', 
-    fontSize: 18, 
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18,
     color: '#EA1D25'
   },
-  settingsLabelStyle: { 
-    fontFamily: 'Outfit-Regular', 
-    fontSize: 18 
+  settingsLabelStyle: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18
   },
   bottomDrawerSection: {
     marginBottom: 15,

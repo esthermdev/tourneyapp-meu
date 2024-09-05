@@ -90,7 +90,7 @@ const RequestCartButton = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
-              <Ionicons name="close" size={24} color="#333" />
+              <Ionicons name="close" size={20} color="#8F8DAA" />
             </TouchableOpacity>
 
             <Text style={styles.labelHeader}>From:</Text>
@@ -143,8 +143,10 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   labelHeader: {
-    fontFamily: 'Outfit-Semibold',
-    fontSize: 18
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16,
+    marginTop: 4,
+    marginBottom: 8
   },
   buttonStyle: {
     width: 160,
@@ -163,24 +165,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    width: '90%',
-    maxWidth: 400,
+    width: '80%',
+    maxWidth: 300
   },
   closeButton: {
     alignSelf: 'flex-end',
-    marginBottom: 10,
   },
   submitButton: {
-    backgroundColor: '#FA7930',
+    backgroundColor: '#EA1D25',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 100,
     alignItems: 'center',
     marginTop: 20,
   },
   submitButtonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16
   },
 });
 

@@ -8,7 +8,7 @@ const CustomHeader = ({ title }) => {
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="chevron-back-outline" size={25} color="#EA1D25" />
+        <Ionicons name="arrow-back-outline" size={23} color="#EA1D25" />
       </TouchableOpacity>
       <Text style={styles.header}>{title}</Text>
     </View>
@@ -21,14 +21,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: '#D9D9D9',
     borderBottomWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     backgroundColor: '#fff',
+    justifyContent: 'space-between'
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 20,
-    color: '#EA1D25'
+    fontSize: 24,
+    color: 'black',
   },
   backButton: {
     marginRight: 15,

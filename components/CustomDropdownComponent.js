@@ -24,7 +24,7 @@ export const Dropdown = ({ label, data, onSelect, selectedValue }) => {
 				<Text style={styles.buttonText}>
 					{selectedValue || label}
 				</Text>
-				<Ionicons name={visible ? "chevron-up" : "chevron-down"} size={24} color="#333" />
+				<Ionicons name={visible ? "caret-up" : "caret-down"} size={20} color="#333" />
 			</TouchableOpacity>
 			<Modal visible={visible} transparent animationType="none">
 				<TouchableOpacity
@@ -46,22 +46,20 @@ export const Dropdown = ({ label, data, onSelect, selectedValue }) => {
 
 const styles = StyleSheet.create({
 	container: {
-		marginBottom: 20,
+		marginBottom: 8,
 	},
 	button: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		height: 50,
-		paddingHorizontal: 10,
+		padding: 15,
 		borderWidth: 1,
 		borderColor: '#ccc',
-		borderRadius: 5,
-		marginTop: 8
+		borderRadius: 8,
 	},
 	buttonText: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 18,
+		fontSize: 16,
 	},
 	overlay: {
 		flex: 1,
@@ -71,10 +69,10 @@ const styles = StyleSheet.create({
 	},
 	dropdown: {
 		backgroundColor: 'white',
-		width: '50%',
-		maxHeight: 300,
-		borderRadius: 5,
-		padding: 10,
+		width: '60%',
+		maxWidth: 200,
+		maxHeight: 350,
+		borderRadius: 12,
 		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
@@ -82,14 +80,15 @@ const styles = StyleSheet.create({
 		elevation: 5,
 	},
 	item: {
-		padding: 10,
-		borderBottomWidth: 1,
+		paddingVertical: 15,
 		borderBottomColor: '#ccc',
+		borderBottomWidth: 1,
+		marginHorizontal: 10,
 		alignItems: 'center'
 	},
 	listItem: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 16,
+		fontSize: 18,
 	}
 });
 

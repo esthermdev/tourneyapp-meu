@@ -1,9 +1,11 @@
 import { Image, ScrollView, StyleSheet } from 'react-native'
 import { images } from '../../../constants';
+import CustomHeader from '../../../components/CustomHeader';
 
 const FieldMap = () => {
   return (
     <>
+      <CustomHeader title='Field Map' />
       <ScrollView
         contentContainerStyle={styles.container}
         maximumZoomScale={2}
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   image: {
-    aspectRatio: 1
+    aspectRatio: 1,
   }
 })
 

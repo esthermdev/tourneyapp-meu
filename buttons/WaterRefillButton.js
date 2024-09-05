@@ -1,12 +1,19 @@
-// MedicButton.js
 import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  Alert,
+  View,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Platform
+} from 'react-native';
 import { Image } from '@rneui/base';
-import { StyleSheet, Text, Alert, View, Modal, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { icons } from '../constants';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../utils/supabase';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../context/AuthProvider';
 
 const WaterRefillButton = () => {
   const [isRequesting, setIsRequesting] = useState(false);
@@ -75,6 +82,10 @@ const WaterRefillButton = () => {
     }
   };
 
+  const closeModal = () => {
+    setIsPickerVisible(false);
+  };
+
   return (
     <View>
       <TouchableOpacity
@@ -91,29 +102,51 @@ const WaterRefillButton = () => {
         visible={isPickerVisible}
         transparent={true}
         animationType="slide"
+        onRequestClose={closeModal}
+        onDismiss={closeModal} // This will handle iOS swipe down
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.pickerContainer}>
-            <Text style={styles.pickerTitle}>Select Field</Text>
-            <Picker
-              selectedValue={selectedField}
-              onValueChange={(itemValue) => setSelectedField(itemValue)}
-              style={styles.picker}
-            >
-              {fields.map((field) => (
-                <Picker.Item key={field.id} label={`Field ${field.id}`} value={field.id} />
-              ))}
-            </Picker>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.cancelButton} onPress={hidePicker}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={requestWater}>
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
-            </View>
+        <TouchableWithoutFeedback onPress={closeModal}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.pickerContainer}>
+                <Text style={styles.pickerTitle}>Select Field</Text>
+                {Platform.OS === 'ios' ? (
+                  <Picker
+                    selectedValue={selectedField}
+                    onValueChange={(itemValue) => setSelectedField(itemValue)}
+                    style={styles.picker}
+                    itemStyle={styles.pickerItemStyle}
+                  >
+                    {fields.map((field) => (
+                      <Picker.Item key={field.id} label={`Field ${field.id}`} value={field.id} />
+                    ))}
+                  </Picker>
+                ) : (
+                  <View style={styles.androidPickerContainer}>
+                    <Picker
+                      selectedValue={selectedField}
+                      onValueChange={(itemValue) => setSelectedField(itemValue)}
+                      style={styles.picker}
+                      mode="dropdown"
+                    >
+                      {fields.map((field) => (
+                        <Picker.Item key={field.id} label={`Field ${field.id}`} value={field.id} />
+                      ))}
+                    </Picker>
+                  </View>
+                )}
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.confirmButton} onPress={requestWater}>
+                    <Text style={styles.buttonText}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -135,6 +168,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  androidPickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
   pickerContainer: {
     backgroundColor: 'white',
     borderRadius: 10,
@@ -142,13 +181,17 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   pickerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'Outfit-Bold',
     marginBottom: 10,
     textAlign: 'center',
   },
   picker: {
     width: '100%',
+  },
+  pickerItemStyle: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 20
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -156,20 +199,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#333243',
     padding: 10,
-    borderRadius: 5,
-    width: '40%',
+    borderRadius: 100,
+    width: '47%',
   },
   confirmButton: {
-    backgroundColor: '#2956b7',
+    backgroundColor: '#EA1D25',
     padding: 10,
-    borderRadius: 5,
-    width: '40%',
+    borderRadius: 100,
+    width: '47%',
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16
   },
 });
