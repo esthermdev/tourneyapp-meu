@@ -4,6 +4,7 @@ import { Card } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
+import CustomHeader from '../../../components/CustomHeader';
 
 const MixedStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
@@ -65,12 +66,7 @@ const MixedStandings = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="chevron-back-outline" size={25} color="#EA1D25" />
-        </TouchableOpacity>
-        <Text style={styles.header}>Mixed</Text>
-      </View>
+      <CustomHeader title='Mixed' />
       <ScrollView
         style={styles.standingsContainer}
         refreshControl={
@@ -94,19 +90,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white'
-  },
-  headerContainer: {
-    borderBottomColor: '#D9D9D9',
-    borderBottomWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  header: {
-    fontFamily: 'Outfit-Bold',
-    fontSize: 35,
-    color: '#EA1D25',
   },
   standingsContainer: {
     flex: 1,
