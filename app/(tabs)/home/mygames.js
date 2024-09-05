@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, SectionList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, SectionList, RefreshControl } from 'react-native';
 import { supabase } from '../../../utils/supabase';
 import { Card, Avatar, Icon } from '@rneui/base';
 import { formatTime } from '../../../utils/formatTime';
@@ -14,11 +14,17 @@ const MyGamesScreen = () => {
   const [currentGame, setCurrentGame] = useState(null);
   const [team1Score, setTeam1Score] = useState('');
   const [team2Score, setTeam2Score] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (profile && profile.team_id) {
       fetchGames(profile.team_id);
     }
+  }, [profile]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchGames(profile.team_id).then(() => setRefreshing(false));
   }, [profile]);
 
   const fetchGames = async (teamId) => {
@@ -154,6 +160,13 @@ const MyGamesScreen = () => {
     <View style={styles.container}>
       <CustomHeader title='My Games' />
       <SectionList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#EA1D25']} // This sets the color of the refresh spinner
+          />
+        }
         sections={games}
         keyExtractor={(item, index) => item.id.toString() + index}
         renderItem={({ item }) => (

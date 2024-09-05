@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, RefreshControl } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
@@ -10,9 +10,15 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
   const [games, setGames] = useState([]);
   const [roundInfo, setRoundInfo] = useState({ date: '', time: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getGames(datetimeId, division, roundId, poolIds);
+  }, [datetimeId, division, roundId, poolIds]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getGames(datetimeId, division, roundId, poolIds).then(() => setRefreshing(false));
   }, [datetimeId, division, roundId, poolIds]);
 
   const getGames = async (datetimeId, division, roundId, poolIds) => {
@@ -134,6 +140,13 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
             <Text style={styles.time}>{roundInfo.time}</Text>
           </View>
           <FlashList
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#EA1D25']} // This sets the color of the refresh spinner
+              />
+            }
             data={games}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}

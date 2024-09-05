@@ -26,20 +26,12 @@ const ChampionshipBracket = () => {
         <Tab.Screen
           name="Quarters"
           options={{ title: 'Q' }}
-          children={() => (
-            <View style={styles.container}>
-              <GameComponent roundId={3} datetimeId={5} division="X" title="Quarter Finals" />
-            </View>
-          )}
+          children={() => <GameComponent roundId={3} datetimeId={5} division="X" title="Quarter Finals" />}
         />
         <Tab.Screen
           name="Semis"
           options={{ title: 'SF' }}
-          children={() => (
-            <View style={styles.container}>
-              <GameComponent roundId={4} datetimeId={6} division="X" title="Semi Finals" />
-            </View>
-          )}
+          children={() => <GameComponent roundId={4} datetimeId={6} division="X" title="Semi Finals" />}
         />
         <Tab.Screen
           name="Finals"

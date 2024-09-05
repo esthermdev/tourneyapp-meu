@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native';
 import { Card } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
 import CustomHeader from '../../../components/CustomHeader';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MixedStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
