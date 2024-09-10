@@ -9,7 +9,7 @@ export default function TabLayout() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Tabs 
+      <Tabs
         tabBar={(props) => <TabBar {...props} />}
         screenOptions={{
           header: () => <Header />
@@ -32,13 +32,19 @@ export default function TabLayout() {
           options={{
             title: 'Standings',
           }}
-        />   
+        />
         <Tabs.Screen
           name="teams"
           options={{
             title: 'Teams',
           }}
-        />   
+        />
+        <Tabs.Screen
+          name="info"
+          options={{
+            title: 'Info',
+          }}
+        />
       </Tabs>
     </SafeAreaView>
   );
