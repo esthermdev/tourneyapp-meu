@@ -1,23 +1,11 @@
-// app/(settings)/_layout.js
 import { Stack } from 'expo-router';
 
-export default function SettingsLayout() {
+export default function AdminLayout() {
+
   return (
     <Stack>
-      <Stack.Screen 
-        name="index" 
-        options={{
-          title: 'Settings',
-          headerShown: false
-        }} 
-      />
-      <Stack.Screen 
-        name="admin" 
-        options={{
-          title: 'Admin',
-          headerShown: false
-        }} 
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="update-scores" options={{ headerShown: false }} />
     </Stack>
   );
 }

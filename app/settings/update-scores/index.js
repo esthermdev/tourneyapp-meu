@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const UpdateScoresScreen = () => {
   const divisions = [
-    { title: 'Mixed Division', route: 'settings/admin/update-scores/mixed', icon: 'people' },
+    { title: 'Mixed Division', route: 'settings/update-scores/mixed', icon: 'people' },
     // { title: 'Open Division', route: 'settings/admin/update-scores/open', icon: 'people-outline' },
     // Add more divisions as needed
   ];
@@ -22,15 +22,15 @@ const UpdateScoresScreen = () => {
       <View style={styles.content}>
         <Text style={styles.subHeader}>Select a Division</Text>
         {divisions.map((division, index) => (
-          <TouchableOpacity 
-            key={index} 
+          <TouchableOpacity
+            key={index}
             style={styles.divisionButton}
             onPress={() => router.push(division.route)}
           >
             <Ionicons name={division.icon} size={24} color="#1E2A3A" style={styles.icon} />
             <Text style={styles.divisionText}>{division.title}</Text>
           </TouchableOpacity>
-        ))}       
+        ))}
       </View>
     </SafeAreaView>
   );

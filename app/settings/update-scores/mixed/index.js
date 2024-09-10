@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
-import CustomAdminHeader from '../../../../../components/CustomAdminHeader';
+import CustomAdminHeader from '../../../../components/CustomAdminHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AdminScoresIndex = () => {
@@ -22,7 +22,7 @@ const AdminScoresIndex = () => {
       <CustomAdminHeader title="Update Scores" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {gameTypes.map((game, index) => (
-          <Link key={index} href={{ pathname: "/settings/admin/update-scores/mixed/[gameType]", params: game.params }} asChild>
+          <Link key={index} href={{ pathname: "/settings/update-scores/mixed/[gameType]", params: game.params }} asChild>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>{game.title}</Text>
             </TouchableOpacity>

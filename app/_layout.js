@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';

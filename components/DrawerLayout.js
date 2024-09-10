@@ -37,14 +37,13 @@ const DrawerLayout = () => {
 					drawerIcon: () => <Ionicon name='person' />
 				}}
 			/>
-			{/* <Drawer.Screen 
+			<Drawer.Screen
 				name="settings"
 				options={{
 					drawerLabel: () => null,
 					drawerItemStyle: { display: 'none' }
-					
 				}}
-			/> */}
+			/>
 		</Drawer>
 	);
 };

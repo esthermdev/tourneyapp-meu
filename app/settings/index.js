@@ -1,69 +1,46 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '../../context/AuthProvider'; // Adjust the path as needed
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { router, useNavigation } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { DrawerActions } from '@react-navigation/native';
 
-const SettingsOption = ({ title, icon, onPress }) => (
-  <TouchableOpacity style={styles.optionButton} onPress={onPress}>
-    <Ionicons name={icon} size={24} color="#333243" />
+const AdminOption = ({ title, icon, onPress, disabled }) => (
+  <TouchableOpacity style={styles.optionButton} disabled={disabled} onPress={onPress}>
+    <Ionicons name={icon} size={40} color="#FFFFFF" />
     <Text style={styles.optionText}>{title}</Text>
-    <Ionicons name="chevron-forward" size={24} color="#333243" />
   </TouchableOpacity>
 );
 
-const SettingsScreen = () => {
-  const router = useRouter();
-  const navigation = useNavigation();
-  const { user, profile } = useAuth();
-
-  console.log(profile)
-
-  const navigateToAdmin = () => {
-    if (user && profile.is_admin) {
-      router.push('settings/admin');
-    } else {
-      alert('You do not have permission to access the admin dashboard.');
-    }
-  };
-
-  const openDrawer = () => {
-    navigation.dispatch(DrawerActions.openDrawer());
-  };
-
-  const settingsOptions = [
-    { title: 'Notifications', icon: 'notifications-outline', onPress: () => console.log('Notifications pressed') },
-    { title: 'Privacy', icon: 'lock-closed-outline', onPress: () => console.log('Privacy pressed') },
-    { title: 'Help & Support', icon: 'help-circle-outline', onPress: () => console.log('Help & Support pressed') },
-    { title: 'About', icon: 'information-circle-outline', onPress: () => console.log('About pressed') },
+const AdminScreen = () => {
+  const adminOptions = [
+    { title: 'Update Scores', icon: 'bar-chart', route: 'settings/update-scores', disabled: false },
+    { title: 'Trainers List', icon: 'people', route: 'settings/manage-teams', disabled: true },
+    { title: 'Cart Requests', icon: 'calendar', route: 'settings/schedule-games', disabled: true },
   ];
+
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={openDrawer} style={styles.menuButton}>
-          <Ionicons name="menu" size={25} color="#333243" />
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+          <Ionicons name='menu' size={25} color='orange' />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Settings</Text>
+        <Text style={styles.headerTitle}>Admin Dashboard</Text>
       </View>
-      
-      {settingsOptions.map((option, index) => (
-        <SettingsOption key={index} {...option} />
-      ))}
-
-      {profile && profile.is_admin ? (
-        <TouchableOpacity style={styles.adminButton} onPress={navigateToAdmin}>
-          <Ionicons name="settings-outline" size={24} color="white" />
-          <Text style={styles.adminButtonText}>Admin Dashboard</Text>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.placeholderContainer}>
-          <Text style={styles.placeholderText}>Additional settings options will appear here based on your account type.</Text>
-        </View>
-      )}
+      <Text style={styles.subtitle}>What do you need?</Text>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        {adminOptions.map((option, index) => (
+          <AdminOption
+            key={index}
+            title={option.title}
+            icon={option.icon}
+            disabled={option.disabled}
+            onPress={() => router.push(option.route)}
+          />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -71,63 +48,55 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1E2A3A',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#34495E',
   },
-  menuButton: {
+  backButton: {
     marginRight: 15,
   },
-  headerText: {
-    fontSize: 28,
+  headerTitle: {
     fontFamily: 'Outfit-Bold',
-    color: '#333243',
+    fontSize: 28,
+    color: '#FFFFFF',
+    marginLeft: 10
+  },
+  subtitle: {
+    fontFamily: 'Outfit-Medium',
+    fontSize: 18,
+    color: '#FFFFFF',
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    padding: 20,
   },
   optionButton: {
-    flexDirection: 'row',
+    width: '45%',
+    aspectRatio: 1,
+    backgroundColor: '#FFA000',
+    borderRadius: 15,
+    padding: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 1,
+    marginBottom: 20,
   },
   optionText: {
-    flex: 1,
+    color: '#FFFFFF',
     fontSize: 16,
-    fontFamily: 'Outfit-Regular',
-    marginLeft: 15,
-    color: '#333243',
-  },
-  adminButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EA1D25',
-    padding: 15,
-    borderRadius: 5,
-    margin: 20,
-  },
-  adminButtonText: {
-    color: '#fff',
-    fontFamily: 'Outfit-Regular',
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  placeholderContainer: {
-    backgroundColor: '#e0e0e0',
-    padding: 20,
-    margin: 20,
-    borderRadius: 5,
-  },
-  placeholderText: {
-    color: '#666',
+    fontFamily: 'Outfit-SemiBold',
+    marginTop: 10,
     textAlign: 'center',
-    fontSize: 14,
   },
 });
 
-export default SettingsScreen;
+export default AdminScreen;

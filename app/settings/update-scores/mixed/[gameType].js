@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import UpdateScoresComponent from '../../../../../components/UpdateScoresComponent';
+import UpdateScoresComponent from '../../../../components/UpdateScoresComponent';
 
 const DynamicGameScreen = () => {
 	const { gameType, poolId, roundId } = useLocalSearchParams();

@@ -5,9 +5,11 @@ import { Image } from '@rneui/base';
 import { images } from '../constants';
 import { useRouter } from 'expo-router';
 import Ionicon from '@expo/vector-icons/Ionicons';
+import { useAuth } from '../context/AuthProvider';
 
 const CustomDrawerContent = (props) => {
   const router = useRouter();
+  const { profile } = useAuth();
 
   const drawerItems = [
     { name: 'index', label: 'Welcome' },
@@ -34,14 +36,19 @@ const CustomDrawerContent = (props) => {
           />
         ))}
       </DrawerContentScrollView>
-      {/* <View style={styles.bottomDrawerSection}>
-        <DrawerItem
-          label="Settings"
-          labelStyle={styles.settingsLabelStyle}
-          onPress={() => router.push('/settings')}
-          icon={({ color, size }) => <Ionicon name='settings' size={size} color={color} />}
-        />
-      </View> */}
+      {profile && profile.is_admin ? (
+        <View style={styles.bottomDrawerSection}>
+          <DrawerItem
+            label="Admin"
+            labelStyle={styles.settingsLabelStyle}
+            onPress={() => router.push('/settings')}
+            icon={({ color, size }) => <Ionicon name='settings' size={size} color={color} />}
+          />
+        </View>
+      ) : (
+        <View></View>
+      )
+      }
     </View>
   );
 };
