@@ -7,11 +7,10 @@ const InfoScreen = () => {
 	const router = useRouter();
 
 	const infoItems = [
-		{ title: 'Essential Info', route: 'essential-info' },
-		{ title: 'Rules', route: 'rules' },
-		{ title: 'Map', route: 'map' },
-		{ title: 'In Case of Emergency', route: 'emergency' },
-		{ title: 'Food & Drinks', route: 'food-drinks' },
+		{ title: 'Tournament Info', route: 'tournament-info' },
+		{ title: 'Rules', route: 'rules-sotg' },
+		{ title: 'Vendors', route: 'vendors' },
+		{ title: 'Emergency', route: 'emergency' },
 		{ title: 'Credits', route: 'credits' },
 	];
 
@@ -19,7 +18,7 @@ const InfoScreen = () => {
 		<TouchableOpacity
 			key={index}
 			style={styles.infoItem}
-		// onPress={() => router.push(`/info/${item.route}`)}
+			onPress={() => router.push(`/info/${item.route}`)}
 		>
 			<Text style={styles.infoItemText}>{item.title}</Text>
 			<Ionicons name="chevron-forward" size={24} color="#333" />

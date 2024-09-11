@@ -112,7 +112,7 @@ const MyGamesScreen = () => {
         </View>
       </View>
       <View style={styles.teamContainer}>
-        <Avatar rounded size={40} source={{ uri: game.team1.avatar_uri }} containerStyle={styles.avatarContainer} />
+        <Avatar rounded size={40} source={{ uri: game.team1.avatar_uri }} />
         <Text style={styles.teamName}>{game.team1.name}</Text>
         <Text style={styles.scoreText}>{game.scores[0].team1_score}</Text>
       </View>
@@ -121,7 +121,7 @@ const MyGamesScreen = () => {
         <View style={styles.vsLine} />
       </View>
       <View style={styles.teamContainer}>
-        <Avatar rounded size={40} source={{ uri: game.team2.avatar_uri }} containerStyle={styles.avatarContainer} />
+        <Avatar rounded size={40} source={{ uri: game.team2.avatar_uri }} />
         <Text style={styles.teamName}>{game.team2.name}</Text>
         <Text style={styles.scoreText}>{game.scores[0].team2_score}</Text>
       </View>
@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginHorizontal: 20,
     marginBottom: 12,
+    marginTop: 12,
     backgroundColor: '#FFF0F0',
   },
   sectionHeader: {
@@ -278,10 +279,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 0,
-  },
-  avatarContainer: {
-    borderWidth: 1,
-    borderColor: '#EA1D25',
   },
   teamName: {
     fontFamily: 'Outfit-Bold',

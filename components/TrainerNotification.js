@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { Text, View, Alert } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { usePushNotifications } from '../hooks/usePushNotifications';
+import { useAuth } from '../context/AuthProvider';
 
 export default function RequestTrainerNotification() {
   const { expoPushToken, notification } = usePushNotifications();
+  const { profile } = useAuth();
 
   useEffect(() => {
     if (notification) {
@@ -15,7 +17,8 @@ export default function RequestTrainerNotification() {
           'Medical Trainer Needed',
           `${notification.request.content.body}`,
           [
-            { text: 'OK', style: 'default', onPress: () => respondToMedicalRequest(data.requestId) },
+            { text: 'Cancel', style: 'cancel', onPress: () => console.log('Request denied.') },
+            { text: 'Confirm', style: 'default', onPress: () => respondToMedicalRequest(data.requestId) },
           ]
         )
       }
@@ -30,7 +33,9 @@ export default function RequestTrainerNotification() {
         .from('medical_requests')
         .update({
           status: 'confirmed',
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
+          assigned_to: profile.id,
+          trainer: profile.full_name
         })
         .eq('id', requestId)
         .eq('status', 'pending')

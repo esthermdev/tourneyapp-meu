@@ -15,8 +15,9 @@ const AdminOption = ({ title, icon, onPress, disabled }) => (
 const AdminScreen = () => {
   const adminOptions = [
     { title: 'Update Scores', icon: 'bar-chart', route: 'settings/update-scores', disabled: false },
-    { title: 'Trainers List', icon: 'people', route: 'settings/manage-teams', disabled: true },
-    { title: 'Cart Requests', icon: 'calendar', route: 'settings/schedule-games', disabled: true },
+    { title: 'Trainers List', icon: 'clipboard', route: 'settings/medical-list', disabled: true },
+    { title: 'Cart Requests', icon: 'car', route: 'settings/cart-requests', disabled: true },
+    { title: 'Send Public Announcement', icon: 'megaphone', route: 'settings/announcement', disabled: true },
   ];
 
   const navigation = useNavigation();

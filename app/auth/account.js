@@ -45,7 +45,7 @@ export default function Account({ session }) {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
-  const [teamId, setTeamId] = useState('');
+  const [teamId, setTeamId] = useState(null);
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
 
@@ -71,12 +71,14 @@ export default function Account({ session }) {
     setLoading(true);
     if (session) {
       setExpoPushToken(profile?.expo_push_token);
-      setTeamId(profile?.team_id ?? '');
+      setTeamId(profile?.team_id ?? null);
       setFullName(profile?.full_name ?? '');
       setAvatarUrl(profile?.avatar_url ?? '');
     };
     setLoading(false);
   }, [session, profile]);
+
+  console.log(profile)
 
   async function updateProfile({ full_name, team_id, avatar_url }) {
     try {
@@ -146,7 +148,6 @@ export default function Account({ session }) {
   const DropdownComponent = useMemo(() => {
     return (
       <Dropdown
-
         style={styles.dropdown}
         selectedTextStyle={styles.dropdownSelectedText}
         placeholderStyle={styles.dropdownPlaceholder}
@@ -161,7 +162,7 @@ export default function Account({ session }) {
         labelField='name'
         valueField='id'
         placeholder='Select a team...'
-        value={teamId}
+        value={teamId || null}
         onChange={item => setTeamId(item.id)}
         search
         inputSearchStyle={styles.searchInput}
@@ -205,11 +206,12 @@ export default function Account({ session }) {
               autoCapitalize='words'
               style={styles.input}
             />
-
-            <View style={styles.dropdownContainer}>
-              <Text style={styles.dropdownLabel}>Your Team</Text>
-              {DropdownComponent}
-            </View>
+            {profile && !profile.is_admin ?
+              (<View style={styles.dropdownContainer}>
+                <Text style={styles.dropdownLabel}>Your Team</Text>
+                {DropdownComponent}
+              </View>) : (<></>)
+            }
 
             <Button
               title={loading ? 'Updating ...' : 'Update Profile'}
@@ -218,7 +220,6 @@ export default function Account({ session }) {
               buttonStyle={styles.primaryButton}
               titleStyle={styles.buttonText}
             />
-
             <Button
               title="Sign Out"
               onPress={signOut}
@@ -226,13 +227,15 @@ export default function Account({ session }) {
               titleStyle={[styles.buttonText, styles.secondaryButtonText]}
             />
             <Button
-              style={{ marginTop: 10 }}
-              title="Press to Send Notification"
+              style={{ marginTop: 20 }}
+              title="Press to Test Notification"
               onPress={async () => {
                 await sendPushNotification(expoPushToken);
               }}
             />
+            <Text>{profile.full_name}</Text>
             <Text>{profile.id}</Text>
+            <Text>{profile.expo_push_token}</Text>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
