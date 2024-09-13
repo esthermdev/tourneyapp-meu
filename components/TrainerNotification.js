@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Alert } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { usePushNotifications } from '../hooks/usePushNotifications';
@@ -7,6 +7,26 @@ import { useAuth } from '../context/AuthProvider';
 export default function RequestTrainerNotification() {
   const { expoPushToken, notification } = usePushNotifications();
   const { profile } = useAuth();
+  const [trainers, setTrainers] = useState([]);
+
+  useEffect(() => {
+    fetchTrainers();
+  }, []);
+
+  const fetchTrainers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('is_medical_staff', true)
+        .order('full_name');
+
+      if (error) throw error;
+      setTrainers(data);
+    } catch (error) {
+      console.error('Error fetching trainers:', error);
+    }
+  };
 
   useEffect(() => {
     if (notification) {
@@ -42,9 +62,33 @@ export default function RequestTrainerNotification() {
         .select()
 
       if (error) throw error;
+
     } catch (error) {
       console.error('Error in respondToMedicalRequest:', error);
       Alert.alert('Error', error.message || 'An unexpected error occurred');
+    } finally {
+      toggleAvailability(profile.id, true)
+    }
+  };
+
+  const toggleAvailability = async (trainerId, currentAvailability) => {
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_available: !currentAvailability })
+        .eq('id', trainerId);
+
+      if (error) throw error;
+
+      // Update local state
+      setTrainers(trainers.map(trainer =>
+        trainer.id === trainerId
+          ? { ...trainer, is_available: !currentAvailability }
+          : trainer
+      ));
+    } catch (error) {
+      console.error('Error updating trainer availability:', error);
     }
   };
 

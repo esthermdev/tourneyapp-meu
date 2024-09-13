@@ -14,7 +14,6 @@ const ScheduleScreen = () => {
         <TouchableOpacity
           style={[styles.button, styles.openButton]}
           onPress={() => router.push('schedule/open')}
-          disabled
         >
           <View style={styles.iconContainer}>
             <FontAwesome6 name="people-group" size={40} color="#2871FF" />

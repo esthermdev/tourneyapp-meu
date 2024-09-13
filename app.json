@@ -5,17 +5,16 @@
     "scheme": "myapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/logo-onwhite.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/player.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.esmdev.TourneyAppMEU",
-      "buildNumber": "1"
+      "bundleIdentifier": "com.esmdev.TourneyAppMEU"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +22,8 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.esmdev.TourneyAppMEU",
-      "googleServicesFile": "./android/app/google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "permissions": ["INTERNET"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

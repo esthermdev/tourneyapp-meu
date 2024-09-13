@@ -15,7 +15,7 @@ export default function App() {
           style={{ width: 90, height: 90 }}
         />
       </View>
-      <View className='flex-1 justify-center items-center'>
+      <View className='flex-1 justify-center mt-10 items-center'>
         <Image
           source={images.frisbeePlayer}
           resizeMode='contain'

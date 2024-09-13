@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Alert, View, Modal, TouchableOpacity } from 'react-native';
 import { supabase } from '../utils/supabase';
-import { Image } from '@rneui/base';
-import { icons } from '../constants';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dropdown from '../components/CustomDropdownComponent';
 import { usePushNotifications } from '../hooks/usePushNotifications';
@@ -55,10 +53,10 @@ const RequestCartButton = () => {
       Alert.alert('Success', 'Cart request submitted successfully. Please wait for a driver.');
       setIsModalVisible(false);
 
-      // Set a timeout to re-enable the button after 30 seconds
+      // Set a timeout to re-enable the button after 60 seconds
       setTimeout(() => {
         setIsButtonDisabled(false);
-      }, 30000);
+      }, 60000);
 
     } catch (error) {
       console.error('Error submitting cart request:', error);

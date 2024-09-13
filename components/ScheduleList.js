@@ -12,13 +12,13 @@ const scheduleOptions = [
   { title: '9th Place Bracket', route: '9th-place-bracket', icon: 'award', iconColor: '#7C8514', bgColor: '#7C85141A' },
 ];
 
-const ScheduleList = () => {
+const ScheduleList = ({ division }) => {
   const router = useRouter();
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.optionButton, { backgroundColor: item.bgColor }]}
-      onPress={() => router.push(`/schedule/mixed/${item.route}`)}
+      onPress={() => router.push(`/schedule/${division}/${item.route}`)}
       activeOpacity={0.6}
     >
       <FontAwesome6 name={item.icon} size={22} color={item.iconColor} style={styles.icon} />

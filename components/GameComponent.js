@@ -72,7 +72,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
     <Card containerStyle={styles.card}>
       <View style={styles.header}>
         <Icon type='ionicon' name='location' size={14} color='#8F8DAA' containerStyle={styles.locationIcon} />
-        <Text className='font-outfitregular text-[#8F8DAA] text-base mr-2'>{ }
+        <Text className='font-outfitregular text-[#8F8DAA] text-sm mr-2'>{ }
           Field {item.field?.name || 'Number'}
         </Text>
       </View>
@@ -115,9 +115,6 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
       <Text style={styles.placeholderTitle}>{title} Coming Soon!</Text>
       <Text style={styles.placeholderText}>
         {title} matchups will be available here once previous games are completed.
-      </Text>
-      <Text style={styles.placeholderText}>
-        Stay tuned for exciting knockout stage action!
       </Text>
     </View>
   );
@@ -192,6 +189,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   card: {
+    height: 190,
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
@@ -202,7 +200,9 @@ const styles = StyleSheet.create({
     borderColor: '#CBCAD8',
     marginTop: 0,
     marginBottom: 12,
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    padding: 20,
+    justifyContent: 'center'
   },
   header: {
     flexDirection: 'row',
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   teamName: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 16,
+    fontSize: 15,
   },
   scoreContainer: {
     flexDirection: 'row',

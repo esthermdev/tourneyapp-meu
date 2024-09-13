@@ -5,6 +5,7 @@ import {
   Alert,
   View,
   Modal,
+  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Platform
@@ -16,7 +17,9 @@ import { supabase } from '../utils/supabase';
 
 const MedicButton = () => {
   const [isRequesting, setIsRequesting] = useState(false);
+  const [selected, setSelected] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
+  const [priorityLevel, setPriorityLevel] = useState('Medium');
   const [fields, setFields] = useState([]);
   const [isPickerVisible, setIsPickerVisible] = useState(false);
 
@@ -47,7 +50,8 @@ const MedicButton = () => {
         .from('medical_requests')
         .insert({
           field_number: selectedField,
-          status: 'pending'
+          status: 'pending',
+          priority_level: priorityLevel
         })
         .select()
         .single();
@@ -65,7 +69,7 @@ const MedicButton = () => {
         throw new Error('No medical staff available');
       }
 
-      Alert.alert('Medical assistance requested', 'Help is on the way');
+      Alert.alert('Medical assistance requested', 'Help is on the way. Please allow some time for a trainer to make their way to your location. If no trainer has arrived please try again later as trainers may be unavailable at the moment.');
 
     } catch (error) {
       console.error('Error requesting medical assistance:', error);
@@ -79,6 +83,18 @@ const MedicButton = () => {
   const closeModal = () => {
     setIsPickerVisible(false);
   };
+
+  const renderPriorityButton = (level, color) => (
+    <TouchableOpacity
+      style={[styles.priorityButton, { backgroundColor: color }, priorityLevel === level && styles.selected]}
+      onPress={() => {
+        setPriorityLevel(level)
+      }}
+      activeOpacity={0.9}
+    >
+      <Text style={styles.priorityButtonText}>{level}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View>
@@ -109,7 +125,12 @@ const MedicButton = () => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.pickerContainer}>
-                <Text style={styles.pickerTitle}>Select Field</Text>
+                <Text className='font-outfitregular mb-3 text-base'>
+                  <Text className='font-outfitsemibold'>High:</Text> Fractured bone, ACL tear{'\n'}
+                  <Text className='font-outfitsemibold'>Medium:</Text> Ankle sprain, muscle strain{'\n'}
+                  <Text className='font-outfitsemibold'>Low:</Text> Cramping, minor bruises
+                </Text>
+                <Text style={styles.selecTitle} className='mt-3'>Select Field</Text>
                 {Platform.OS === 'ios' ? (
                   <Picker
                     selectedValue={selectedField}
@@ -135,6 +156,12 @@ const MedicButton = () => {
                     </Picker>
                   </View>
                 )}
+                <Text style={styles.selecTitle}>Select Level of Medical Emergency</Text>
+                <View style={styles.priorityButtonContainer}>
+                  {renderPriorityButton('High', '#FF6347')}
+                  {renderPriorityButton('Medium', '#FFA500', 'Ankle sprain, muscle strain')}
+                  {renderPriorityButton('Low', '#32CD32', 'Cramping, minor bruises')}
+                </View>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
                     <Text style={styles.buttonText}>Cancel</Text>
@@ -180,8 +207,8 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '80%',
   },
-  pickerTitle: {
-    fontSize: 20,
+  selecTitle: {
+    fontSize: 18,
     fontFamily: 'Outfit-Bold',
     marginBottom: 10,
     textAlign: 'center',
@@ -192,6 +219,30 @@ const styles = StyleSheet.create({
   pickerItemStyle: {
     fontFamily: 'Outfit-Regular',
     fontSize: 20
+  },
+  priorityTitle: {
+    fontSize: 18,
+    fontFamily: 'Outfit-Bold',
+    marginTop: 20,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  priorityButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  priorityButton: {
+    padding: 10,
+    borderRadius: 5,
+    width: '30%',
+    justifyContent: 'center'
+  },
+  priorityButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 15,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -215,5 +266,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
     fontSize: 16
+  },
+  selected: {
+    borderWidth: 2,
+    borderColor: '#000',
   },
 });

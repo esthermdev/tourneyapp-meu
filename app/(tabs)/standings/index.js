@@ -13,7 +13,6 @@ const StandingsScreen = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => router.push('standings/open')}
-          disabled
           style={[styles.button, styles.openButton]}
         >
           <View style={styles.iconContainer}>
@@ -24,6 +23,7 @@ const StandingsScreen = () => {
         <TouchableOpacity
           style={[styles.button, styles.mixedButton]}
           onPress={() => router.push('standings/mixed')}
+          disabled
         >
           <View style={styles.iconContainer}>
             <FontAwesome6 name="people-group" size={40} color="#6D28FF" />

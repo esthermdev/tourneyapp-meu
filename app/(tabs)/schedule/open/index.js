@@ -1,12 +1,12 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import ScheduleList from '../../../../components/ScheduleList';
 import CustomHeader from '../../../../components/CustomHeader';
 
-export default function MixedScheduleIndex() {
+export default function OpenScheduleIndex() {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Mixed' />
-      <ScheduleList division='mixed' />
+      <CustomHeader title='Open' />
+      <ScheduleList division='open' />
     </View>
   );
 }

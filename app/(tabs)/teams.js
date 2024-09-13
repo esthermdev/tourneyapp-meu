@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../utils/supabase';
@@ -8,9 +8,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const Teams = () => {
   const [teams, setTeams] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState('All');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchTeams();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchTeams().then(() => setRefreshing(false));
   }, []);
 
   const fetchTeams = async () => {
@@ -43,8 +49,8 @@ const Teams = () => {
 
   const renderLabel = (team) => {
     switch (team.pool.division) {
-      case 'O':
-        return 'Open';
+      case 'UO':
+        return 'Upper Open';
       case 'X':
         return 'Mixed';
       case 'W':
@@ -57,10 +63,11 @@ const Teams = () => {
   const renderItem = ({ item }) => (
     <ListItem style={{ paddingHorizontal: 20 }} bottomDivider>
       <Avatar
-        size={60}
+        size={50}
         rounded
         source={{ uri: item.avatar_uri }} // replace with actual avatar URLs if available
-        title={item.name[0]} // use the first letter of the team name as the title if no image is available
+        title={item.name[0]}
+        avatarStyle={{ borderColor: 'lightgray', borderWidth: 1 }} // use the first letter of the team name as the title if no image is available
       />
       <ListItem.Content>
         <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
@@ -81,8 +88,8 @@ const Teams = () => {
         <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('O')}>
-          <Text style={styles.filterByText}>Open</Text>
+        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('UO')}>
+          <Text style={styles.filterByText}>Upper Open</Text>
         </TouchableOpacity>
         <TouchableOpacity className='bg-[#FF285C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('W')}>
           <Text style={styles.filterByText}>Womens</Text>
@@ -92,6 +99,13 @@ const Teams = () => {
         </TouchableOpacity>
       </View>
       <FlashList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#EA1D25']} // This sets the color of the refresh spinner
+          />
+        }
         data={filteredTeams}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}

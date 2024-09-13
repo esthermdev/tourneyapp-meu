@@ -108,12 +108,12 @@ const MyGamesScreen = () => {
         <Text style={styles.timeText}>{formatTime(game.datetime.time)}</Text>
         <View style={styles.fieldContainer}>
           <Icon name="location" type="ionicon" size={12} color="#8F8DAA" />
-          <Text style={styles.fieldText}>{game.field.name}</Text>
+          <Text style={styles.fieldText}>{game.field?.name}</Text>
         </View>
       </View>
       <View style={styles.teamContainer}>
         <Avatar rounded size={40} source={{ uri: game.team1.avatar_uri }} />
-        <Text style={styles.teamName}>{game.team1.name}</Text>
+        <Text style={styles.teamName}>{game.team1?.name}</Text>
         <Text style={styles.scoreText}>{game.scores[0].team1_score}</Text>
       </View>
       <View style={styles.vsContainer}>
@@ -122,7 +122,7 @@ const MyGamesScreen = () => {
       </View>
       <View style={styles.teamContainer}>
         <Avatar rounded size={40} source={{ uri: game.team2.avatar_uri }} />
-        <Text style={styles.teamName}>{game.team2.name}</Text>
+        <Text style={styles.teamName}>{game.team2?.name}</Text>
         <Text style={styles.scoreText}>{game.scores[0].team2_score}</Text>
       </View>
 
