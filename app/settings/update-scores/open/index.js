@@ -6,10 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AdminScoresIndex = () => {
   const gameTypes = [
-    { title: 'Pool A', params: { gameType: 'pool', poolId: 7 } },
-    { title: 'Pool B', params: { gameType: 'pool', poolId: 8 } },
-    { title: 'Pool C', params: { gameType: 'pool', poolId: 9 } },
-    { title: 'Pool D', params: { gameType: 'pool', poolId: 10 } },
+    { title: 'Pool A', params: { gameType: 'pool', poolId: 1 } },
+    { title: 'Pool B', params: { gameType: 'pool', poolId: 2 } },
+    { title: 'Pool C', params: { gameType: 'pool', poolId: 3 } },
+    { title: 'Pool D', params: { gameType: 'pool', poolId: 4 } },
     { title: 'Crossovers', params: { gameType: 'bracket', roundId: 2 } },
     { title: 'Quarters', params: { gameType: 'bracket', roundId: 3 } },
     { title: 'Semi Finals', params: { gameType: 'bracket', roundId: 4 } },
@@ -22,7 +22,7 @@ const AdminScoresIndex = () => {
       <CustomAdminHeader title="Update Scores" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {gameTypes.map((game, index) => (
-          <Link key={index} href={{ pathname: "/settings/update-scores/mixed/[gameType]", params: game.params }} asChild>
+          <Link key={index} href={{ pathname: "/settings/update-scores/open/[gameType]", params: game.params }} asChild>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>{game.title}</Text>
             </TouchableOpacity>

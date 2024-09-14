@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 const UpdateScoresScreen = () => {
   const divisions = [
-    { title: 'Mixed Division', route: 'settings/update-scores/mixed', icon: 'people' },
+    { title: 'Open Division', route: 'settings/update-scores/open', icon: 'people' },
     // { title: 'Open Division', route: 'settings/admin/update-scores/open', icon: 'people-outline' },
     // Add more divisions as needed
   ];

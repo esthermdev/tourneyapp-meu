@@ -7,7 +7,7 @@ const DynamicGameScreen = () => {
 
 	const getTitle = () => {
 		if (gameType === 'pool') {
-			return `Pool ${String.fromCharCode(65 + parseInt(poolId) - 7)} Games`;
+			return `Pool ${String.fromCharCode(65 + parseInt(poolId) - 1)} Games`;
 		}
 		const bracketTitles = {
 			2: 'Crossovers',
@@ -24,7 +24,7 @@ const DynamicGameScreen = () => {
 			poolId={gameType === 'pool' ? parseInt(poolId) : undefined}
 			roundId={gameType === 'bracket' ? roundId : undefined}
 			title={getTitle()}
-			division='X'
+			division='UO'
 		/>
 	);
 };
