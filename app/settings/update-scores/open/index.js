@@ -6,10 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AdminScoresIndex = () => {
   const gameTypes = [
-    { title: 'Pool A', params: { gameType: 'pool', poolId: 1 } },
-    { title: 'Pool B', params: { gameType: 'pool', poolId: 2 } },
-    { title: 'Pool C', params: { gameType: 'pool', poolId: 3 } },
-    { title: 'Pool D', params: { gameType: 'pool', poolId: 4 } },
+    { title: 'Pool A', params: { gameType: 'pool', poolId: 1, roundId: 1 } },
+    { title: 'Pool B', params: { gameType: 'pool', poolId: 2, roundId: 1 } },
+    { title: 'Pool C', params: { gameType: 'pool', poolId: 3, roundId: 1 } },
+    { title: 'Pool D', params: { gameType: 'pool', poolId: 4, roundId: 1 } },
     { title: 'Crossovers', params: { gameType: 'bracket', roundId: 2 } },
     { title: 'Quarters', params: { gameType: 'bracket', roundId: 3 } },
     { title: 'Semi Finals', params: { gameType: 'bracket', roundId: 4 } },

@@ -42,6 +42,7 @@
     },
     "runtimeVersion": "1.0.0",
     "updates": {
+      "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/489fb70f-4a80-4dec-9c24-be48db502895"
     }
   }

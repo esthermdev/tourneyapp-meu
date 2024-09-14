@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
@@ -24,9 +23,9 @@ export default function App() {
       </View>
       <View className='flex-2 px-[35] pt-5 pb-12'>
         <View className='mb-12'>
-          <Text className='font-outfitregular text-center' style={{ fontSize: 18, }}>Welcome to</Text>
-          <Text className='font-outfitbold text-center' style={{ fontSize: 38, marginVertical: 25 }}>Vacationland</Text>
-          <Text className='font-outfitbold text-center' style={{ fontSize: 16 }}>2024</Text>
+          <Text className='font-outfitregular text-center' style={{ fontSize: 20, }}>Welcome to</Text>
+          <Text className='font-outfitbold text-center' style={{ fontSize: 38, marginVertical: 25 }}>Lobster Pot</Text>
+          <Text className='font-outfitbold text-center' style={{ fontSize: 28 }}>2024</Text>
         </View>
         <CustomButtonWithIcon
           title='Continue'

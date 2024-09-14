@@ -4,7 +4,7 @@ import { supabase } from '../utils/supabase';
 import { Card, Avatar } from '@rneui/base';
 import { formatTime } from '../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import CustomAdminHeader from '../components/CustomAdminHeader';
 
 const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
@@ -133,7 +133,84 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 		}
 	}
 
-	const handleResetAllGames = async () => {
+	const handleMarkAllAsFinished = async () => {
+		Alert.alert(
+			"Mark All Games as Finished",
+			`Are you sure you want to mark all games as finished for ${poolId ? 'this pool' : 'this round'}?`,
+			[
+				{
+					text: "Cancel",
+					style: "cancel"
+				},
+				{
+					text: "Yes, Mark All as Finished",
+					onPress: async () => {
+						try {
+							// Step 1: Fetch game IDs
+							let { data: gameIds, error: fetchError } = await supabase
+								.from('games')
+								.select('id')
+								.eq(poolId ? 'pool_id' : 'round_id', poolId || roundId);
+
+							if (fetchError) throw fetchError;
+
+							if (!gameIds || gameIds.length === 0) {
+								Alert.alert('Info', 'No games found to update.');
+								return;
+							}
+
+							// Extract just the IDs
+							const ids = gameIds.map(game => game.id);
+
+							// Step 2: Update scores for these games
+							const { data, error: updateError } = await supabase
+								.from('scores')
+								.update({ is_finished: true })
+								.in('game_id', ids);
+
+							if (updateError) throw updateError;
+
+							Alert.alert('Success', 'All games marked as finished');
+							getGames();
+						} catch (error) {
+							console.error('Error marking all games as finished:', error);
+							Alert.alert('Error', 'Failed to mark all games as finished');
+						}
+					}
+				}
+			]
+		);
+	};
+
+	const handleResetAllPoolPlayGames = async () => {
+		Alert.alert(
+			"Reset All Games",
+			`Are you sure you want to reset all scores to 0 and mark all games as unfinished for ${title}?`,
+			[
+				{
+					text: "Cancel",
+					style: "cancel"
+				},
+				{
+					text: "Yes, Reset All",
+					onPress: async () => {
+						const { error } = await supabase
+							.rpc('reset_pool_scores', { pool_id_param: poolId });
+
+						if (error) {
+							console.error('Error resetting games:', error);
+							Alert.alert('Error', 'Failed to reset games');
+						} else {
+							Alert.alert('Success', `All ${title} games have been reset`);
+							getGames();
+						}
+					}
+				}
+			]
+		);
+	}
+
+	const handleResetAllBracketGames = async () => {
 		Alert.alert(
 			"Reset All Games",
 			`Are you sure you want to reset all scores to 0 and mark all games as unfinished for ${title}?`,
@@ -177,7 +254,7 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 				<Text style={styles.fieldText}>{formatTime(item.datetime?.time)} - Wainright {item.field?.name || 'Number'}</Text>
 				<Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
 				<TouchableOpacity onPress={() => openModal(item)}>
-					<Ionicons name="pencil" size={20} color="#EA1D25" />
+					<FontAwesome name="pencil-square" size={22} color="#EA1D25" />
 				</TouchableOpacity>
 			</View>
 		</Card>
@@ -208,9 +285,16 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 						estimatedItemSize={200}
 						contentContainerStyle={styles.listContentContainer}
 					/>
-					<TouchableOpacity style={styles.resetButton} onPress={handleResetAllGames}>
-						<Text style={styles.resetButtonText}>Reset All Games</Text>
-					</TouchableOpacity>
+					{poolId || roundId ? (
+						<>
+							<TouchableOpacity style={styles.resetButton} onPress={poolId ? handleResetAllPoolPlayGames : handleResetAllBracketGames}>
+								<Text style={styles.buttonText}>Reset All Games</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.allFinishButton} onPress={handleMarkAllAsFinished}>
+								<Text style={styles.buttonText}>Mark All Games as Finished</Text>
+							</TouchableOpacity>
+						</>
+					) : null}
 				</>
 			) : (
 				renderPlaceholder()
@@ -252,19 +336,19 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 							style={styles.submitButton}
 							onPress={handleUpdateScore}
 						>
-							<Text style={styles.submitButtonText}>Update Score</Text>
+							<Text style={styles.buttonText}>Update Score</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={styles.finishButton}
 							onPress={handleMarkAsFinished}
 						>
-							<Text style={styles.submitButtonText}>Mark as Finished</Text>
+							<Text style={styles.buttonText}>Mark as Finished</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={styles.closeButton}
 							onPress={() => setModalVisible(false)}
 						>
-							<Text style={styles.closeButtonText}>Close</Text>
+							<Text style={styles.buttonText}>Close</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -308,15 +392,24 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		color: '#666',
 	},
+	allFinishButton: {
+		backgroundColor: '#4CAF50',
+		padding: 10,
+		borderRadius: 5,
+		marginHorizontal: 25,
+		marginTop: 10,
+		marginBottom: 15,
+		alignItems: 'center',
+	},
 	resetButton: {
 		backgroundColor: '#FF6347',
 		padding: 10,
 		borderRadius: 5,
-		marginHorizontal: 15,
-		marginBottom: 15,
+		marginHorizontal: 25,
+		marginTop: 10,
 		alignItems: 'center',
 	},
-	resetButtonText: {
+	buttonText: {
 		color: 'white',
 		fontFamily: 'Outfit-Bold',
 		fontSize: 16,
@@ -422,22 +515,12 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		alignItems: 'center',
 	},
-	submitButtonText: {
-		color: 'white',
-		fontFamily: 'Outfit-Bold',
-		fontSize: 16,
-	},
 	closeButton: {
 		backgroundColor: 'gray',
 		padding: 10,
 		borderRadius: 5,
 		marginTop: 10,
 		alignItems: 'center',
-	},
-	closeButtonText: {
-		color: 'white',
-		fontFamily: 'Outfit-Regular',
-		fontSize: 16,
 	},
 });
 
