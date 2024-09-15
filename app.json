@@ -4,6 +4,7 @@
     "slug": "TourneyApp-MEU",
     "scheme": "myapp",
     "version": "1.0.0",
+    "owner": "esmdev",
     "orientation": "portrait",
     "icon": "./assets/images/logo-onwhite.png",
     "userInterfaceStyle": "light",
@@ -18,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo-onwhite.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.esmdev.TourneyAppMEU",
@@ -30,19 +31,21 @@
     },
     "plugins": [
       "expo-router",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-updates"
     ],
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "489fb70f-4a80-4dec-9c24-be48db502895"
       }
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "updates": {
+      "enabled": true,
       "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
       "url": "https://u.expo.dev/489fb70f-4a80-4dec-9c24-be48db502895"
     }
   }

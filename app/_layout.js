@@ -5,6 +5,8 @@ import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 
+
+// Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
