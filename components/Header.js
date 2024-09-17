@@ -1,33 +1,31 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { images } from '../constants';
-import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-import Constants from 'expo-constants';
 
 const Header = () => {
 	const navigation = useNavigation();
 
 	return (
 		<>
-		<View style={styles.container}>
-			<View style={styles.content}>
-				<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-					<Ionicons name='menu' size={25}/>
-				</TouchableOpacity>		
-				<Image 
-					source={images.logoW}
-					style={styles.logo}
-				/>
-				<TouchableOpacity style={styles.button} onPress={() => router.push('auth/account')}>
-					<Ionicons name='person' 
-						size={25}
-						color='#EA1D25'
+			<View style={styles.container}>
+				<View style={styles.content}>
+					<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+						<Ionicons name='menu' size={25} />
+					</TouchableOpacity>
+					<Image
+						source={images.logoW}
+						style={styles.logo}
 					/>
-				</TouchableOpacity>	
+					<TouchableOpacity style={styles.button} onPress={() => router.push('auth/account')}>
+						<Ionicons name='person'
+							size={25}
+							color='#EA1D25'
+						/>
+					</TouchableOpacity>
+				</View>
 			</View>
-		</View>
 		</>
 	);
 };

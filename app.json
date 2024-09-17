@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "TourneyApp-MEU",
+    "name": "Maine Ultimate",
     "slug": "TourneyApp-MEU",
-    "scheme": "myapp",
+    "scheme": "tourneyapp-meu",
     "version": "1.0.0",
     "owner": "esmdev",
     "orientation": "portrait",
-    "icon": "./assets/images/logo-onwhite.png",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/player.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
@@ -19,7 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo-onwhite.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "splash": {
+        "image": "./assets/images/adaptive-icon.png",
+        "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       },
       "package": "com.esmdev.TourneyAppMEU",

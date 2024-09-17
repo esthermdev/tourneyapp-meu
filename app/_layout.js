@@ -4,7 +4,7 @@ import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
-
+import * as Updates from 'expo-updates';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
@@ -24,12 +24,36 @@ const RootLayout = () => {
 	})
 
 	useEffect(() => {
-		if (error) throw error;
+		async function prepareApp() {
+			try {
+				if (error) throw error;
 
-		if (fontsLoaded) {
-			SplashScreen.hideAsync();
+				await checkForUpdates();
+
+				if (fontsLoaded) {
+					await SplashScreen.hideAsync();
+				}
+			} catch (e) {
+				console.warn(e);
+			}
 		}
+
+		prepareApp();
 	}, [fontsLoaded, error]);
+
+	async function checkForUpdates() {
+		try {
+			const update = await Updates.checkForUpdateAsync();
+			if (update.isAvailable) {
+				await Updates.fetchUpdateAsync();
+				await Updates.reloadAsync();
+			}
+		} catch (error) {
+			// Handle or log error
+			console.error('Error checking for updates:', error);
+		}
+	}
+
 
 	if (!fontsLoaded && !error) {
 		return null;
