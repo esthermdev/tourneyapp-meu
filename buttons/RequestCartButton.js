@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dropdown from '../components/CustomDropdownComponent';
 import { usePushNotifications } from '../hooks/usePushNotifications';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const locations = ['Field', 'Entrance', 'Command Center'];
 
@@ -90,7 +91,15 @@ const RequestCartButton = () => {
             <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
               <Ionicons name="close" size={20} color="#8F8DAA" />
             </TouchableOpacity>
-
+            <Text style={styles.noteText}>
+              Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
+              {'\n\n'}
+              • If you're in a group, please submit only one request.{'\n'}
+              • Allow up to 5 minutes for a driver to reach you.{'\n'}
+              • If no driver arrives after 5 minutes, feel free to submit another request.
+              {'\n\n'}
+              Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
+            </Text>
             <Text style={styles.labelHeader}>From:</Text>
             <Dropdown
               label="From Location"
@@ -181,6 +190,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Bold',
     fontSize: 16
   },
+  noteText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: 15,
+    color: '#666',
+    marginVertical: 10,
+  }
 });
 
 export default RequestCartButton;

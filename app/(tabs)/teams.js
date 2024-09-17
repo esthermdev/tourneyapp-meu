@@ -50,7 +50,9 @@ const Teams = () => {
   const renderLabel = (team) => {
     switch (team.pool.division) {
       case 'UO':
-        return 'Upper Open';
+        return 'Men - Upper';
+      case 'MO':
+        return 'Men - Middle';
       case 'X':
         return 'Mixed';
       case 'W':
@@ -65,9 +67,9 @@ const Teams = () => {
       <Avatar
         size={50}
         rounded
-        source={{ uri: item.avatar_uri }} // replace with actual avatar URLs if available
+        source={{ uri: item?.avatar_uri }} // replace with actual avatar URLs if available
         title={item.name[0]}
-        avatarStyle={{ borderColor: 'lightgray', borderWidth: 1 }} // use the first letter of the team name as the title if no image is available
+        avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }} // use the first letter of the team name as the title if no image is available
       />
       <ListItem.Content>
         <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
@@ -83,13 +85,19 @@ const Teams = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Teams</Text>
       </View>
-      <View className='d-flex flex-row items-center px-5 h-12'>
+      <View className='d-flex flex-row flex-wrap p-5'>
         <Text className='font-outfitlight text-gray-500'>Filters: </Text>
-        <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('All')}>
+        <TouchableOpacity className='bg-[#FA7930] rounded-full py-0.5 px-[7] mx-1 mb-2' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
         </TouchableOpacity>
         <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('UO')}>
-          <Text style={styles.filterByText}>Upper Open</Text>
+          <Text style={styles.filterByText}>Men - Upper</Text>
+        </TouchableOpacity>
+        <TouchableOpacity className='bg-[#239d95] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('MO')}>
+          <Text style={styles.filterByText}>Men - Middle</Text>
+        </TouchableOpacity>
+        <TouchableOpacity className='bg-[#2a8cba] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('LO')}>
+          <Text style={styles.filterByText}>Men - Lower</Text>
         </TouchableOpacity>
         <TouchableOpacity className='bg-[#FF285C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('W')}>
           <Text style={styles.filterByText}>Womens</Text>

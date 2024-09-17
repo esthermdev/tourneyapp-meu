@@ -5,8 +5,8 @@ import CustomHeader from '../../../../components/CustomHeader';
 export default function OpenScheduleIndex() {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Open' />
-      <ScheduleList division='open' />
+      <CustomHeader title='Men - Upper' />
+      <ScheduleList division='upper_open' />
     </View>
   );
 }

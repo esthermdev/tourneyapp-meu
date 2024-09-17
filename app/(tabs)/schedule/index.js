@@ -12,13 +12,13 @@ const ScheduleScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={[styles.button, styles.openButton]}
-          onPress={() => router.push('schedule/open')}
+          style={[styles.button, styles.upperOpenButton]}
+          onPress={() => router.push('schedule/upper_open')}
         >
           <View style={styles.iconContainer}>
             <FontAwesome6 name="people-group" size={40} color="#2871FF" />
           </View>
-          <Text style={styles.buttonText}>Open</Text>
+          <Text style={styles.buttonText}>Men - Upper</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.mixedButton]}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  openButton: {
+  upperOpenButton: {
     backgroundColor: '#2871FF',
   },
   mixedButton: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'Outfit-SemiBold'
   },
 });

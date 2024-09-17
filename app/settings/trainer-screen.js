@@ -1,6 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { SafeAreaView, StyleSheet, Text, View, FlatList, Switch } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase'; // Adjust the import path as needed
 import TrainersList from '../../components/TrainersList'; // Import the existing TrainersList component

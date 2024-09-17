@@ -5,7 +5,7 @@ const StandingsLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Standings', headerShown: false }} />
       <Stack.Screen name="mixed" options={{ title: 'Mixed', headerShown: false }} />
-      <Stack.Screen name="open" options={{ title: 'Open', headerShown: false }} />
+      <Stack.Screen name="upper_open" options={{ title: 'Open', headerShown: false }} />
     </Stack>
   );
 };

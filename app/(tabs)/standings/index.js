@@ -12,13 +12,13 @@ const StandingsScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => router.push('standings/open')}
+          onPress={() => router.push('standings/upper_open')}
           style={[styles.button, styles.openButton]}
         >
           <View style={styles.iconContainer}>
             <FontAwesome6 name="people-group" size={40} color="#2871FF" />
           </View>
-          <Text style={styles.buttonText}>Open</Text>
+          <Text style={styles.buttonText}>Men - Upper</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.mixedButton]}
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'Outfit-SemiBold'
   },
 });

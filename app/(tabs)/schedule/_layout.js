@@ -8,7 +8,7 @@ const GamesSchedule = () => {
       <Stack>
         <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }} />
         <Stack.Screen name='mixed' options={{ title: 'Mixed', headerShown: false }} />
-        <Stack.Screen name='open' options={{ title: 'Open', headerShown: false }} />
+        <Stack.Screen name='upper_open' options={{ title: 'Open', headerShown: false }} />
       </Stack>
     </View>
   );
