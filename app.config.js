@@ -12,18 +12,4 @@ export default ({ config }) => ({
   updates: {
     url: "https://u.expo.dev/489fb70f-4a80-4dec-9c24-be48db502895"
   },
-  plugins: [
-    ...config.plugins,
-    [
-      "expo-build-properties",
-      {
-        android: {
-          extraProguardRules: `
-            -keep class com.facebook.hermes.unicode.** { *; }
-            -keep class com.facebook.jni.** { *; }
-          `
-        }
-      }
-    ]
-  ]
 });

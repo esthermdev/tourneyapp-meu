@@ -10,7 +10,6 @@ import * as Updates from 'expo-updates';
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-
 	const [fontsLoaded, error] = useFonts({
 		"Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
 		"Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
@@ -37,7 +36,6 @@ const RootLayout = () => {
 				console.warn(e);
 			}
 		}
-
 		prepareApp();
 	}, [fontsLoaded, error]);
 

@@ -37,7 +37,12 @@
     "plugins": [
       "expo-router",
       "expo-notifications",
-      "expo-updates"
+      [
+        "expo-updates",
+        {
+          "username": "esmdev"
+        }
+      ]
     ],
     "extra": {
       "router": {
