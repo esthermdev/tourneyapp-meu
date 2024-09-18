@@ -14,6 +14,7 @@ import { Image } from '@rneui/base';
 import { Picker } from '@react-native-picker/picker';
 import { icons } from '../constants';
 import { supabase } from '../utils/supabase';
+import { ScrollView } from 'react-native-gesture-handler';
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
@@ -126,18 +127,26 @@ const MedicButton = ({ buttonStyle }) => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.pickerContainer}>
-                <Text className='font-outfitregular mb-3 text-base'>
-                  <Text className='font-outfitsemibold'>High:</Text> Fractured bone, ACL tear{'\n'}
-                  <Text className='font-outfitsemibold'>Medium:</Text> Ankle sprain, muscle strain{'\n'}
-                  <Text className='font-outfitsemibold'>Low:</Text> Cramping, minor bruises
-                </Text>
+                <ScrollView>
+                  <Text style={styles.selecTitle}>Select Level of Medical Emergency</Text>
+                  <View style={styles.priorityButtonContainer}>
+                    {renderPriorityButton('High', '#FF6347')}
+                    {renderPriorityButton('Med', '#FFA500', 'Ankle sprain, muscle strain')}
+                    {renderPriorityButton('Low', '#32CD32', 'Cramping, minor bruises')}
+                  </View>
+                  <Text className='font-outfitregular mb-3 text-base'>
+                    <Text className='font-outfitsemibold'>High:</Text> Fractured bone, ACL tear{'\n'}
+                    <Text className='font-outfitsemibold'>Medium:</Text> Ankle sprain, muscle strain{'\n'}
+                    <Text className='font-outfitsemibold'>Low:</Text> Cramping, minor bruises
+                  </Text>
+                </ScrollView>
                 <Text style={styles.selecTitle} className='mt-3'>Select Field</Text>
                 {Platform.OS === 'ios' ? (
                   <Picker
                     selectedValue={selectedField}
                     onValueChange={(itemValue) => setSelectedField(itemValue)}
-                    style={styles.picker}
                     itemStyle={styles.pickerItemStyle}
+                    numberOfLines={1}
                   >
                     {fields.map((field) => (
                       <Picker.Item key={field.id} label={`Field ${field.id}`} value={field.id} />
@@ -157,12 +166,6 @@ const MedicButton = ({ buttonStyle }) => {
                     </Picker>
                   </View>
                 )}
-                <Text style={styles.selecTitle}>Select Level of Medical Emergency</Text>
-                <View style={styles.priorityButtonContainer}>
-                  {renderPriorityButton('High', '#FF6347')}
-                  {renderPriorityButton('Medium', '#FFA500', 'Ankle sprain, muscle strain')}
-                  {renderPriorityButton('Low', '#32CD32', 'Cramping, minor bruises')}
-                </View>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
                     <Text style={styles.buttonText}>Cancel</Text>
@@ -220,9 +223,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  picker: {
-    width: '100%',
-  },
   pickerItemStyle: {
     fontFamily: 'Outfit-Regular',
     fontSize: 20
@@ -236,13 +236,14 @@ const styles = StyleSheet.create({
   },
   priorityButtonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    gap: 10,
     marginBottom: 20,
   },
   priorityButton: {
     padding: 10,
     borderRadius: 5,
-    width: '30%',
+    width: '25%',
     justifyContent: 'center'
   },
   priorityButtonText: {
