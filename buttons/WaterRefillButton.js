@@ -7,13 +7,14 @@ import {
   Modal,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
-import { Image } from '@rneui/base';
 import { Picker } from '@react-native-picker/picker';
-import { icons } from '../constants';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../utils/supabase';
+const { width } = Dimensions.get('window');
+const buttonWidth = (width - 70) / 2;
 
 const WaterRefillButton = () => {
   const [isRequesting, setIsRequesting] = useState(false);
@@ -89,8 +90,7 @@ const WaterRefillButton = () => {
   return (
     <View>
       <TouchableOpacity
-        style={styles.buttonStyle}
-        className={`bg-[#3DC5C5] ${isRequesting ? 'opacity-50' : ''}`}
+        style={[styles.buttonStyle, isRequesting && styles.disabledButton]}
         onPress={showPicker}
         disabled={isRequesting}
       >
@@ -156,11 +156,17 @@ export default WaterRefillButton;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    width: 160,
-    height: 136,
+    flex: 1,
     padding: 20,
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    borderRadius: 22
+    borderRadius: 22,
+    minHeight: 120,
+    width: buttonWidth,
+    backgroundColor: '#3DC5C5',
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   modalContainer: {
     flex: 1,

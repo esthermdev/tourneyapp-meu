@@ -4,7 +4,11 @@ import { supabase } from '../utils/supabase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dropdown from '../components/CustomDropdownComponent';
 import { usePushNotifications } from '../hooks/usePushNotifications';
+import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+
+const { width } = Dimensions.get('window');
+const buttonWidth = (width - 70) / 2;
 
 const locations = ['Field', 'Entrance', 'Command Center'];
 
@@ -91,15 +95,17 @@ const RequestCartButton = () => {
             <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
               <Ionicons name="close" size={20} color="#8F8DAA" />
             </TouchableOpacity>
-            <Text style={styles.noteText}>
-              Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
-              {'\n\n'}
-              • If you're in a group, please submit only one request.{'\n'}
-              • Allow up to 5 minutes for a driver to reach you.{'\n'}
-              • If no driver arrives after 5 minutes, feel free to submit another request.
-              {'\n\n'}
-              Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
-            </Text>
+            <ScrollView showsVerticalScrollIndicator>
+              <Text style={styles.noteText}>
+                Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
+                {'\n\n'}
+                • If you're in a group, please submit only one request.{'\n'}
+                • Allow up to 5 minutes for a driver to reach you.{'\n'}
+                • If no driver arrives after 5 minutes, feel free to submit another request.
+                {'\n\n'}
+                Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
+              </Text>
+            </ScrollView>
             <Text style={styles.labelHeader}>From:</Text>
             <Dropdown
               label="From Location"
@@ -156,11 +162,14 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   buttonStyle: {
-    width: 160,
-    height: 136,
+    flex: 1,
     padding: 20,
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    borderRadius: 22
+    borderRadius: 22,
+    minHeight: 120,
+    width: buttonWidth,
+    backgroundColor: '#E9BD21',
   },
   modalContainer: {
     flex: 1,
@@ -173,7 +182,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: '80%',
-    maxWidth: 300
+    height: '60%',
+    maxWidth: 350,
   },
   closeButton: {
     alignSelf: 'flex-end',

@@ -7,14 +7,14 @@ export default function App() {
   return (
     <View className='bg-white h-full'>
       <View className='h-11'></View>
-      <View className='flex-3 py-3 justify-center items-center'>
+      <View className='flex-1 py-3 justify-start items-center'>
         <Image
           source={images.logoW}
           resizeMode='contain'
           style={{ width: 90, height: 90 }}
         />
       </View>
-      <View className='flex-1 justify-center items-center' style={{ marginTop: 50 }}>
+      <View className='flex-1 justify-center items-center'>
         <Image
           source={images.frisbeePlayer}
           resizeMode='contain'

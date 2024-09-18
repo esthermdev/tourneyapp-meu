@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { icons } from '../../../constants';
 import HomeButtons from '../../../buttons/HomeButtons';
 import { router } from 'expo-router';
@@ -8,6 +8,8 @@ import WaterRefillButton from '../../../buttons/WaterRefillButton';
 import RequestCartButton from '../../../buttons/RequestCartButton';
 import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
+
+
 
 const Home = () => {
   const { user } = useAuth();
@@ -26,30 +28,38 @@ const Home = () => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={styles.mainButtonsContainer}>
         <HomeButtons
           title='My Games'
           icon={icons.frisbee}
-          buttonStyle='bg-[#FA7930]'
+          buttonStyle={{ backgroundColor: '#FA7930' }}
           handlePress={() => handlePress('mygames')}
         />
         <HomeButtons
           title='Watch Live'
           icon={icons.video}
-          buttonStyle='bg-[#FF026C]'
+          buttonStyle={{ backgroundColor: '#FF026C' }}
           handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
         />
-        <MedicButton />
         <HomeButtons
           title='Field Map'
           icon={icons.map}
-          buttonStyle='bg-[#B6C846]'
+          buttonStyle={{ backgroundColor: '#B6C846' }}
           handlePress={() => router.push('/home/fieldmap')}
         />
-        <WaterRefillButton />
+        <MedicButton />
+        <WaterRefillButton buttonStyle={styles.button} />
         <RequestCartButton />
         <TrainerNotification />
         <CartNotification />
+      </View>
+      <View style={styles.donationButtonContainer}>
+        <TouchableOpacity
+          onPress={() => router.push('https://maineultimate.org/s/171999/MU+General+Donation')}
+          style={styles.donationButton}
+        >
+          <Text className='font-outfitsemibold text-lg text-center items-center'>Donation</Text>
+        </TouchableOpacity>
       </View>
     </>
   )
@@ -58,16 +68,26 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  container: {
+  mainButtonsContainer: {
     flex: 1,
-    backgroundColor: 'white',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
-    rowGap: 20,
-    paddingTop: 15,
-    paddingBottom: 25,
-    paddingHorizontal: 25
+    padding: 25,
+    backgroundColor: '#fff',
+    gap: 15,
+    alignContent: 'flex-start',
+    justifyContent: 'center',
+  },
+  donationButtonContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 25,
+    paddingBottom: 25
+  },
+  donationButton: {
+    padding: 15,
+    borderRadius: 70,
+    borderWidth: 2,
+    borderColor: '#EA1D25',
   },
   tokenContainer: {
     marginTop: 20,

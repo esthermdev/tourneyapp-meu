@@ -19,6 +19,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -184,12 +185,11 @@ export default function Account({ session }) {
       >
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
-
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
+          <ScrollView contentContainerStyle={styles.content}>
             <Text style={styles.header}>My Account</Text>
             <Text style={styles.inputLabel}>Your Email</Text>
             <TextInput
@@ -236,7 +236,7 @@ export default function Account({ session }) {
             <Text>{profile.full_name}</Text>
             <Text>{profile.id}</Text>
             <Text>{profile.expo_push_token}</Text>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>

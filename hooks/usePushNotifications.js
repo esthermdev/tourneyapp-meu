@@ -32,7 +32,7 @@ export const usePushNotifications = () => {
                 finalStatus = status;
             }
             if (finalStatus !== "granted") {
-                alert("Failed to get push token for push notification");
+                console.log("Failed to get push token for push notification");
                 return;
             }
 
@@ -40,7 +40,7 @@ export const usePushNotifications = () => {
                 projectId: Constants.expoConfig?.extra?.eas.projectId,
             });
         } else {
-            alert("Must be using a physical device for Push notifications");
+            console.log("Must be using a physical device for Push notifications");
         }
 
         if (Platform.OS === "android") {

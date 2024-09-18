@@ -5,7 +5,7 @@ import {
   Alert,
   View,
   Modal,
-  Button,
+  Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Platform
@@ -14,8 +14,10 @@ import { Image } from '@rneui/base';
 import { Picker } from '@react-native-picker/picker';
 import { icons } from '../constants';
 import { supabase } from '../utils/supabase';
+const { width } = Dimensions.get('window');
+const buttonWidth = (width - 70) / 2;
 
-const MedicButton = () => {
+const MedicButton = ({ buttonStyle }) => {
   const [isRequesting, setIsRequesting] = useState(false);
   const [selected, setSelected] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
@@ -99,8 +101,7 @@ const MedicButton = () => {
   return (
     <View>
       <TouchableOpacity
-        style={styles.buttonStyle}
-        className={`bg-[#2956b7] ${isRequesting ? 'opacity-50' : ''}`}
+        style={[styles.buttonStyle, isRequesting && styles.disabledButton]}
         onPress={showPicker}
         disabled={isRequesting}
       >
@@ -183,11 +184,17 @@ export default MedicButton;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    width: 160,
-    height: 136,
+    flex: 1,
     padding: 20,
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    borderRadius: 22
+    borderRadius: 22,
+    minHeight: 120,
+    width: buttonWidth,
+    backgroundColor: '#2956b7',
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   modalContainer: {
     flex: 1,
