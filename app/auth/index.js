@@ -89,7 +89,9 @@ export default function LoginScreen() {
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={100}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>

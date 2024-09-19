@@ -24,7 +24,7 @@ const DynamicGameScreen = () => {
 			poolId={gameType === 'pool' ? parseInt(poolId) : undefined}
 			roundId={gameType === 'bracket' ? roundId : undefined}
 			title={getTitle()}
-			division='UO'
+			division='MU'
 		/>
 	);
 };

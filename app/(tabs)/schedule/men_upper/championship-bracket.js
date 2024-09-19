@@ -8,7 +8,7 @@ const Tab = createMaterialTopTabNavigator();
 const ChampionshipBracket = () => {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Championship Bracket' />
+      <CustomHeader title='Championship Bracket' route='schedule/men_upper' />
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#EA1D25',

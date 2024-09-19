@@ -22,7 +22,7 @@ const AdminScoresIndex = () => {
       <CustomAdminHeader title="Update Scores" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {gameTypes.map((game, index) => (
-          <Link key={index} href={{ pathname: "/settings/update-scores/open/[gameType]", params: game.params }} asChild>
+          <Link key={index} href={{ pathname: "/settings/update-scores/men_upper/[gameType]", params: game.params }} asChild>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>{game.title}</Text>
             </TouchableOpacity>

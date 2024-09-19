@@ -140,7 +140,7 @@ const RequestCartButton = () => {
               />
             )}
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart}>
+            <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart} disabled>
               <Text style={styles.submitButtonText}>Request Cart</Text>
             </TouchableOpacity>
           </View>

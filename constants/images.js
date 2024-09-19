@@ -4,5 +4,6 @@ import fieldMap from '../assets/images/wainwright-field-map.png';
 import frisbeePlayer from '../assets/images/player.png';
 import loginBg from '../assets/images/LoginBackground.png';
 import avatar from '../assets/images/avatar-placeholder.png';
+import lobsterPotLogo from '../assets/images/LPlogo.png';
 
-export default { logoW, logoB, fieldMap, frisbeePlayer, loginBg, avatar };
+export default { logoW, logoB, fieldMap, frisbeePlayer, loginBg, avatar, lobsterPotLogo };

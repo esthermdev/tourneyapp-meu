@@ -8,7 +8,7 @@ const CustomAdminHeader = ({ title }) => {
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.navigate('settings')}>
         <Ionicons name="arrow-back-circle" size={30} color="#EA1D25" />
       </TouchableOpacity>
       <Text style={styles.headerTitle}>{title}</Text>

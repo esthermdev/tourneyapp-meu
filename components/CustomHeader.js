@@ -4,10 +4,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const CustomHeader = ({ title }) => {
+const CustomHeader = ({ title, route }) => {
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.navigate(`${route}`)}>
         <Ionicons name="arrow-back-outline" size={23} color="#EA1D25" />
       </TouchableOpacity>
       <Text style={styles.header}>{title}</Text>

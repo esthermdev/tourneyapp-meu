@@ -8,7 +8,7 @@ const Tab = createMaterialTopTabNavigator();
 const ThirdToSeventhPlace = () => {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Placement Games' />
+      <CustomHeader title='Placement Games' route='schedule/men_upper' />
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#EA1D25',

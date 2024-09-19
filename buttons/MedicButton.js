@@ -170,7 +170,7 @@ const MedicButton = ({ buttonStyle }) => {
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
                     <Text style={styles.buttonText}>Cancel</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.confirmButton} onPress={requestTrainer}>
+                  <TouchableOpacity style={styles.confirmButton} onPress={requestTrainer} disabled>
                     <Text style={styles.buttonText}>Confirm</Text>
                   </TouchableOpacity>
                 </View>

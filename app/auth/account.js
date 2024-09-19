@@ -231,9 +231,6 @@ export default function Account({ session }) {
                 await sendPushNotification(expoPushToken);
               }}
             />
-            <Text>{profile.full_name}</Text>
-            <Text>{profile.id}</Text>
-            <Text>{profile.expo_push_token}</Text>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

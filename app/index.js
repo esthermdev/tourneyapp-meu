@@ -16,7 +16,7 @@ export default function App() {
       </View>
       <View className='flex-1 justify-center items-center'>
         <Image
-          source={images.frisbeePlayer}
+          source={images.lobsterPotLogo}
           resizeMode='contain'
           style={{ width: '100%' }}
         />

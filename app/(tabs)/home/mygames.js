@@ -158,7 +158,7 @@ const MyGamesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <CustomHeader title='My Games' />
+      <CustomHeader title='My Games' route='home' />
       <SectionList
         refreshControl={
           <RefreshControl

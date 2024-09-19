@@ -5,7 +5,7 @@ import CustomHeader from '../../../components/CustomHeader';
 const FieldMap = () => {
   return (
     <>
-      <CustomHeader title='Field Map' />
+      <CustomHeader title='Field Map' route='home' />
       <ScrollView
         contentContainerStyle={styles.container}
         maximumZoomScale={2}

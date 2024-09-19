@@ -65,7 +65,7 @@ const OpenStandings = () => {
 
   return (
     <View style={styles.container}>
-      <CustomHeader title='Men - Upper' />
+      <CustomHeader title='Men - Upper' route='standings' />
       <ScrollView
         contentContainerStyle={styles.standingsContainer}
         refreshControl={
