@@ -77,9 +77,7 @@ export default function Account({ session }) {
       setAvatarUrl(profile?.avatar_url ?? '');
     };
     setLoading(false);
-  }, [session, profile]);
-
-  console.log(profile)
+  }, [session]);
 
   async function updateProfile({ full_name, team_id, avatar_url }) {
     try {

@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 import * as Updates from 'expo-updates';
+import Constants from 'expo-constants';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
@@ -27,7 +28,9 @@ const RootLayout = () => {
 			try {
 				if (error) throw error;
 
-				await checkForUpdates();
+				if (!__DEV__) {
+					await checkForUpdates();
+				}
 
 				if (fontsLoaded) {
 					await SplashScreen.hideAsync();
@@ -40,6 +43,11 @@ const RootLayout = () => {
 	}, [fontsLoaded, error]);
 
 	async function checkForUpdates() {
+		if (__DEV__) {
+			console.log('Update check skipped in development build');
+			return;
+		}
+
 		try {
 			const update = await Updates.checkForUpdateAsync();
 			if (update.isAvailable) {
@@ -47,7 +55,6 @@ const RootLayout = () => {
 				await Updates.reloadAsync();
 			}
 		} catch (error) {
-			// Handle or log error
 			console.error('Error checking for updates:', error);
 		}
 	}

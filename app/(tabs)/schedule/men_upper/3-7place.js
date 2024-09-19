@@ -5,10 +5,10 @@ import CustomHeader from '../../../../components/CustomHeader';
 
 const Tab = createMaterialTopTabNavigator();
 
-const ChampionshipBracket = () => {
+const ThirdToSeventhPlace = () => {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Championship Bracket' />
+      <CustomHeader title='Placement Games' />
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#EA1D25',
@@ -19,28 +19,24 @@ const ChampionshipBracket = () => {
         }}
       >
         <Tab.Screen
-          name="Crossover"
-          options={{ title: 'CP' }}
-          children={() => <GameComponent roundId={2} datetimeId={4} division="" title="Crossover" />}
+          name="3rd Place"
+          options={{ title: '3rd' }}
+          children={() => <GameComponent roundId={6} datetimeId={4} division="MU" title="3rd Place" />}
         />
         <Tab.Screen
-          name="Quarters"
-          options={{ title: 'Q' }}
-          children={() => <GameComponent roundId={3} datetimeId={5} division="" title="Quarter Finals" />}
+          name="5th Place Semi"
+          options={{ title: '5 SF' }}
+          children={() => <GameComponent roundId={7} datetimeId={5} division="MU" title="5th Place Semis" />}
         />
         <Tab.Screen
-          name="Semis"
-          options={{ title: 'SF' }}
-          children={() => <GameComponent roundId={4} datetimeId={6} division="" title="Semi Finals" />}
+          name="5th Place"
+          options={{ title: '5th' }}
+          children={() => <GameComponent roundId={8} datetimeId={6} division="MU" title="5th Place" />}
         />
         <Tab.Screen
-          name="Finals"
-          options={{ title: 'F' }}
-          children={() => (
-            <View style={styles.container}>
-              <GameComponent roundId={5} datetimeId={7} division="" title="Finals" />
-            </View>
-          )}
+          name="7th Place"
+          options={{ title: '7th' }}
+          children={() => <GameComponent roundId={9} datetimeId={7} division="MU" title="7th Place" />}
         />
       </Tab.Navigator>
     </View>
@@ -54,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChampionshipBracket;
+export default ThirdToSeventhPlace;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { View, Text, StyleSheet } from 'react-native';
+import DivisionButton from '../../../buttons/DivisionButton';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const ScheduleScreen = () => {
@@ -10,35 +10,51 @@ const ScheduleScreen = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Schedule</Text>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, styles.upperOpenButton]}
-          onPress={() => router.push('schedule/upper_open')}
-        >
-          <View style={styles.iconContainer}>
-            <FontAwesome6 name="people-group" size={40} color="#2871FF" />
-          </View>
-          <Text style={styles.buttonText}>Men - Upper</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.mixedButton]}
-          onPress={() => router.push('schedule/mixed')}
-        >
-          <View style={styles.iconContainer}>
-            <FontAwesome6 name="people-group" size={40} color="#6D28FF" />
-          </View>
-          <Text style={styles.buttonText}>Mixed</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.womenButton]}
-          onPress={() => router.push('schedule/women')}
-          disabled
-        >
-          <View style={styles.iconContainer}>
-            <FontAwesome6 name="people-group" size={40} color='#FF026C' />
-          </View>
-          <Text style={styles.buttonText}>Women</Text>
-        </TouchableOpacity>
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.buttonContainer}>
+          <DivisionButton
+            title='Men - Upper'
+            route='schedule/men_upper'
+            color='#2871FF'
+            disabled={false}
+            icon='people-group'
+          />
+          <DivisionButton
+            title='Men - Middle'
+            route='schedule/men_lower'
+            color='#0AB359'
+            disabled={true}
+            icon='people-group'
+          />
+          <DivisionButton
+            title='Men - Lower'
+            route='schedule/men_middle'
+            color='#F2A541'
+            disabled={true}
+            icon='people-group'
+          />
+          <DivisionButton
+            title='Women - Upper'
+            route='schedule/women_upper'
+            color='#FF026C'
+            disabled={true}
+            icon='people-group'
+          />
+          <DivisionButton
+            title='Women - Lower'
+            route='schedule/women_lower'
+            color='#BD41F2'
+            disabled={true}
+            icon='people-group'
+          />
+          <DivisionButton
+            title='Mixed'
+            route='schedule/mixed'
+            color='#FF7429'
+            disabled={true}
+            icon='people-group'
+          />
+        </ScrollView>
       </View>
     </View>
   );
@@ -60,59 +76,15 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#EA1D25'
   },
-  title: {
-    fontSize: 28,
-    fontFamily: 'Outfit-Bold',
-    marginBottom: 30,
-    color: '#FFFFFF',
-  },
   buttonContainer: {
-    flex: 1,
-    flexWrap: 'wrap',
+    flexGrow: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-    gap: 15
-  },
-  button: {
-    width: '40%',
-    aspectRatio: 0.8,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  upperOpenButton: {
-    backgroundColor: '#2871FF',
-  },
-  mixedButton: {
-    backgroundColor: '#6D28FF',
-  },
-  womenButton: {
-    backgroundColor: '#FF026C',
-  },
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'white',
-    shadowColor: 'white',
-    shadowOpacity: 1,
-    shadowOffset: { width: 0, height: -2 },
-    shadowRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 20,
-    fontFamily: 'Outfit-SemiBold'
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    gap: 15,  // Changed from 'center'
+    justifyContent: 'center',  // Changed from 'center'
+    padding: 25,
+    paddingBottom: 50,  // Add some extra padding at the bottom
   },
 });
 

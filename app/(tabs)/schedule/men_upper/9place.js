@@ -5,10 +5,10 @@ import CustomHeader from '../../../../components/CustomHeader';
 
 const Tab = createMaterialTopTabNavigator();
 
-const ChampionshipBracket = () => {
+const NinthPlace = () => {
   return (
     <View style={styles.container}>
-      <CustomHeader title='Championship Bracket' />
+      <CustomHeader title='Placement Games' />
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor: '#EA1D25',
@@ -19,28 +19,19 @@ const ChampionshipBracket = () => {
         }}
       >
         <Tab.Screen
-          name="Crossover"
-          options={{ title: 'CP' }}
-          children={() => <GameComponent roundId={2} datetimeId={4} division="" title="Crossover" />}
+          name="9th Place Quarter"
+          options={{ title: '9 Q' }}
+          children={() => <GameComponent roundId={10} datetimeId={4} division="MU" title="9th Place Quarters" />}
         />
         <Tab.Screen
-          name="Quarters"
-          options={{ title: 'Q' }}
-          children={() => <GameComponent roundId={3} datetimeId={5} division="" title="Quarter Finals" />}
+          name="9th Place Semi"
+          options={{ title: '9 SF' }}
+          children={() => <GameComponent roundId={11} datetimeId={5} division="MU" title="9th Place Semis" />}
         />
         <Tab.Screen
-          name="Semis"
-          options={{ title: 'SF' }}
-          children={() => <GameComponent roundId={4} datetimeId={6} division="" title="Semi Finals" />}
-        />
-        <Tab.Screen
-          name="Finals"
-          options={{ title: 'F' }}
-          children={() => (
-            <View style={styles.container}>
-              <GameComponent roundId={5} datetimeId={7} division="" title="Finals" />
-            </View>
-          )}
+          name="9th Place"
+          options={{ title: '9th' }}
+          children={() => <GameComponent roundId={12} datetimeId={6} division="MU" title="9th Place" />}
         />
       </Tab.Navigator>
     </View>
@@ -54,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChampionshipBracket;
+export default NinthPlace;

@@ -6,10 +6,9 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 const scheduleOptions = [
   { title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
   { title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
-  { title: '3rd Place', route: '3rd-place', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
-  { title: '5th Place Bracket', route: '5th-place-bracket', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
-  { title: '7th Place', route: '7th-place', icon: 'award', iconColor: '#B0A00F', bgColor: '#B0A00F1A' },
-  { title: '9th Place Bracket', route: '9th-place-bracket', icon: 'award', iconColor: '#7C8514', bgColor: '#7C85141A' },
+  { title: '3rd to 7th Place', route: '3-7place', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
+  { title: '9th Place', route: '9place', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
+  { title: '11th to 15th Place', route: '11-15place', icon: 'award', iconColor: '#B0A00F', bgColor: '#B0A00F1A' },
 ];
 
 const ScheduleList = ({ division }) => {

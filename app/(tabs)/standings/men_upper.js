@@ -9,6 +9,7 @@ const OpenStandings = () => {
   const [poolBStandings, setPoolBStandings] = useState([]);
   const [poolCStandings, setPoolCStandings] = useState([]);
   const [poolDStandings, setPoolDStandings] = useState([]);
+  const [poolEStandings, setPoolEStandings] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const OpenStandings = () => {
         pool_rank,
         teams (name, pool_id, seed)
       `)
-      .order('pool_rank')
+      .order('team_id')
 
     if (error) {
       console.error('Error fetching teams:', error);
@@ -44,6 +45,7 @@ const OpenStandings = () => {
     setPoolBStandings(data.filter(team => team.teams.pool_id === 2));
     setPoolCStandings(data.filter(team => team.teams.pool_id === 3));
     setPoolDStandings(data.filter(team => team.teams.pool_id === 4));
+    setPoolEStandings(data.filter(team => team.teams.pool_id === 5));
   };
 
   const renderStandings = (standings, poolName) => (
@@ -78,6 +80,7 @@ const OpenStandings = () => {
         {renderStandings(poolBStandings, 'B')}
         {renderStandings(poolCStandings, 'C')}
         {renderStandings(poolDStandings, 'D')}
+        {renderStandings(poolEStandings, 'E')}
       </ScrollView>
     </View>
   );

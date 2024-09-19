@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#D9D9D9',
-    paddingTop: 25
+    paddingVertical: 15
   },
   title: {
     fontFamily: 'Outfit-Bold',

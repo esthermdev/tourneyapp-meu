@@ -13,6 +13,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
+      "url": "https://u.expo.dev/489fb70f-4a80-4dec-9c24-be48db502895"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.esmdev.TourneyAppMEU"
@@ -48,13 +55,6 @@
       "router": {
         "origin": false
       }
-    },
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "enabled": true,
-      "fallbackToCacheTimeout": 0,
-      "checkAutomatically": "ON_LOAD",
-      "url": "https://u.expo.dev/489fb70f-4a80-4dec-9c24-be48db502895"
     }
   }
 }
