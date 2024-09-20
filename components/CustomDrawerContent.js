@@ -21,8 +21,7 @@ const CustomDrawerContent = (props) => {
     <View style={styles.container}>
       <DrawerContentScrollView {...props}>
         <View style={styles.logoContainer}>
-          <Image source={images.logoW} style={styles.logo} />
-          <Text style={styles.tournamentName}>Lobster Pot 2024</Text>
+          <Image source={images.lpTitleLogo} style={{ width: 200, height: 200 }} />
         </View>
         <View style={styles.divider}></View>
         {drawerItems.map((item) => (
@@ -59,8 +58,6 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 30,
   },
   divider: {
     borderWidth: 0.3,
@@ -69,22 +66,17 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 10,
   },
-  logo: {
-    width: 80,
-    height: 80,
-  },
   tournamentName: {
     fontSize: 20,
     fontFamily: 'Outfit-Bold',
-    marginTop: 30,
   },
   drawerItemStyle: {
     marginHorizontal: 24
   },
   drawerItemLabelStyle: {
-    fontFamily: 'Outfit-Regular',
+    fontFamily: 'Outfit-Medium',
     fontSize: 18,
-    color: '#EA1D25'
+    color: '#000'
   },
   settingsLabelStyle: {
     fontFamily: 'Outfit-Regular',

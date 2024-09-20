@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D9D9D9',
     borderBottomWidth: 1,
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   header: {
     fontFamily: 'Outfit-Bold',

@@ -195,7 +195,7 @@ export default function Account({ session }) {
               value={session?.user?.email}
               editable={false}
               style={styles.input}
-              className='text-gray-400'
+              className='text-gray-300'
             />
             <Text style={styles.inputLabel}>Your Name</Text>
             <TextInput
