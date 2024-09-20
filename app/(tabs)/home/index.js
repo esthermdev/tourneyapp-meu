@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <View style={{ backgroundColor: '#fff' }}>
+    <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <ScrollView contentContainerStyle={styles.mainButtonsContainer}>
         <HomeButtons
           title='My Games'
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   donationButtonContainer: {
     backgroundColor: '#fff',
     paddingHorizontal: 25,
-    paddingBottom: 25
+    padding: 25
   },
   donationButton: {
     padding: 15,
