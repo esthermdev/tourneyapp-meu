@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <View style={{ backgroundColor: '#fff' }}>
       <ScrollView contentContainerStyle={styles.mainButtonsContainer}>
         <HomeButtons
           title='My Games'
@@ -62,7 +62,7 @@ const Home = () => {
           <Text className='font-outfitsemibold text-lg text-center items-center'>Donation</Text>
         </TouchableOpacity>
       </View>
-    </>
+    </View>
   )
 }
 

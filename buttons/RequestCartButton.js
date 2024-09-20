@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: '80%',
-    height: '60%',
+    height: '80%',
     maxWidth: 350,
   },
   closeButton: {
