@@ -4,14 +4,12 @@ import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
-import * as Updates from 'expo-updates';
-import Constants from 'expo-constants';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-	const [fontsLoaded, error] = useFonts({
+	const [loaded, error] = useFonts({
 		"Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
 		"Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),
 		"Outfit-ExtraBold": require("../assets/fonts/Outfit-ExtraBold.ttf"),
@@ -24,45 +22,14 @@ const RootLayout = () => {
 	})
 
 	useEffect(() => {
-		async function prepareApp() {
-			try {
-				if (error) throw error;
-
-				if (!__DEV__) {
-					await checkForUpdates();
-				}
-
-				if (fontsLoaded) {
-					await SplashScreen.hideAsync();
-				}
-			} catch (e) {
-				console.warn(e);
-			}
+		if (loaded || error) {
+			SplashScreen.hideAsync();
 		}
-		prepareApp();
-	}, [fontsLoaded, error]);
+	}, [loaded, error]);
 
-	async function checkForUpdates() {
-		if (__DEV__) {
-			console.log('Update check skipped in development build');
-			return;
-		}
-
-		try {
-			const update = await Updates.checkForUpdateAsync();
-			if (update.isAvailable) {
-				await Updates.fetchUpdateAsync();
-				await Updates.reloadAsync();
-			}
-		} catch (error) {
-			console.error('Error checking for updates:', error);
-		}
-	}
-
-
-	if (!fontsLoaded && !error) {
+	if (!loaded && !error) {
 		return null;
-	};
+	}
 
 	return (
 		<AuthProvider>
