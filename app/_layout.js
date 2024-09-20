@@ -4,6 +4,7 @@ import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
+import 'expo-dev-client';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();

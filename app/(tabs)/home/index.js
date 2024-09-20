@@ -8,6 +8,7 @@ import WaterRefillButton from '../../../buttons/WaterRefillButton';
 import RequestCartButton from '../../../buttons/RequestCartButton';
 import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -27,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <>
+    <ScrollView style={{ backgroundColor: '#fff' }}>
       <View style={styles.mainButtonsContainer}>
         <HomeButtons
           title='My Games'
@@ -61,7 +62,7 @@ const Home = () => {
           <Text className='font-outfitsemibold text-lg text-center items-center'>Donation</Text>
         </TouchableOpacity>
       </View>
-    </>
+    </ScrollView>
   )
 }
 

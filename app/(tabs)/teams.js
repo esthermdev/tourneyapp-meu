@@ -89,7 +89,7 @@ const Teams = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Teams</Text>
       </View>
-      <View className='d-flex flex-row flex-wrap p-5'>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 10 }}>
         <Text className='font-outfitlight text-gray-500'>Filters: </Text>
         <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[7] mx-1 mb-2' onPress={() => setSelectedDivision('All')}>
           <Text style={styles.filterByText}>All</Text>
