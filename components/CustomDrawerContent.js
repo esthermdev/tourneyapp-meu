@@ -22,7 +22,7 @@ const CustomDrawerContent = (props) => {
       <DrawerContentScrollView {...props}>
         <View style={styles.logoContainer}>
           <Image source={images.logoW} style={styles.logo} />
-          <Text style={styles.tournamentName}>Vacationland 2024</Text>
+          <Text style={styles.tournamentName}>Lobster Pot 2024</Text>
         </View>
         <View style={styles.divider}></View>
         {drawerItems.map((item) => (

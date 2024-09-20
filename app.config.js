@@ -42,7 +42,7 @@ export default ({ config }) => ({
   },
   android: {
     ...config.android,
-    package: getUniqueIdentifier(),
+    package: "com.esmdev.TourneyAppMEU",
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
   }
 });

@@ -28,8 +28,8 @@ const Home = () => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: '#fff' }}>
-      <View style={styles.mainButtonsContainer}>
+    <>
+      <ScrollView contentContainerStyle={styles.mainButtonsContainer}>
         <HomeButtons
           title='My Games'
           icon={icons.frisbee}
@@ -53,7 +53,7 @@ const Home = () => {
         <RequestCartButton />
         <TrainerNotification />
         <CartNotification />
-      </View>
+      </ScrollView>
       <View style={styles.donationButtonContainer}>
         <TouchableOpacity
           onPress={() => router.push('https://maineultimate.org/s/171999/MU+General+Donation')}
@@ -62,7 +62,7 @@ const Home = () => {
           <Text className='font-outfitsemibold text-lg text-center items-center'>Donation</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   )
 }
 
@@ -70,7 +70,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   mainButtonsContainer: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 25,
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     gap: 15,
     alignContent: 'flex-start',
     justifyContent: 'center',
+    paddingBottom: 50,
   },
   donationButtonContainer: {
     backgroundColor: '#fff',
