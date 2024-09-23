@@ -15,8 +15,10 @@ import { Picker } from '@react-native-picker/picker';
 import { icons } from '../constants';
 import { supabase } from '../utils/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
+import { ms } from 'react-native-size-matters';
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
+
 
 const MedicButton = ({ buttonStyle }) => {
   const [isRequesting, setIsRequesting] = useState(false);
@@ -95,7 +97,7 @@ const MedicButton = ({ buttonStyle }) => {
       }}
       activeOpacity={0.9}
     >
-      <Text style={styles.priorityButtonText}>{level}</Text>
+      <Text style={styles.priorityButtonText} maxFontSizeMultiplier={1.2}>{level}</Text>
     </TouchableOpacity>
   );
 
@@ -111,7 +113,7 @@ const MedicButton = ({ buttonStyle }) => {
           resizeMode='contain'
           style={{ width: 25, height: 25 }}
         />
-        <Text className='text-white font-outfitbold text-lg'>
+        <Text maxFontSizeMultiplier={1.1} style={styles.text}>
           {isRequesting ? 'Medic Requested' : 'Medic'}
         </Text>
       </TouchableOpacity>
@@ -128,19 +130,19 @@ const MedicButton = ({ buttonStyle }) => {
             <TouchableWithoutFeedback>
               <View style={styles.pickerContainer}>
                 <ScrollView>
-                  <Text style={styles.selecTitle}>Select Level of Medical Emergency</Text>
+                  <Text style={styles.selecTitle} maxFontSizeMultiplier={1.2}>Select Level of Medical Emergency</Text>
                   <View style={styles.priorityButtonContainer}>
                     {renderPriorityButton('High', '#FF6347')}
                     {renderPriorityButton('Med', '#FFA500', 'Ankle sprain, muscle strain')}
                     {renderPriorityButton('Low', '#32CD32', 'Cramping, minor bruises')}
                   </View>
-                  <Text className='font-outfitregular mb-3 text-base'>
+                  <Text className='font-outfitregular my-3' style={styles.priorityDescription} maxFontSizeMultiplier={1.2}>
                     <Text className='font-outfitsemibold'>High:</Text> Fractured bone, ACL tear{'\n'}
                     <Text className='font-outfitsemibold'>Medium:</Text> Ankle sprain, muscle strain{'\n'}
                     <Text className='font-outfitsemibold'>Low:</Text> Cramping, minor bruises
                   </Text>
                 </ScrollView>
-                <Text style={styles.selecTitle} className='mt-3'>Select Field</Text>
+                <Text style={styles.selecTitle} className='mt-3' maxFontSizeMultiplier={1.2}>Select Field</Text>
                 {Platform.OS === 'ios' ? (
                   <Picker
                     selectedValue={selectedField}
@@ -168,10 +170,10 @@ const MedicButton = ({ buttonStyle }) => {
                 )}
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.confirmButton} onPress={requestTrainer} disabled>
-                    <Text style={styles.buttonText}>Confirm</Text>
+                    <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -192,9 +194,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderRadius: 22,
-    minHeight: 120,
+    minHeight: 140,
     width: buttonWidth,
     backgroundColor: '#2956b7',
+  },
+  text: {
+    fontSize: ms(18),
+    fontFamily: 'Outfit-Bold',
+    color: '#fff'
   },
   disabledButton: {
     opacity: 0.5,
@@ -218,17 +225,20 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   selecTitle: {
-    fontSize: 18,
+    fontSize: ms(18),
     fontFamily: 'Outfit-Bold',
     marginBottom: 10,
     textAlign: 'center',
   },
+  priorityDescription: {
+    fontSize: ms(16)
+  },
   pickerItemStyle: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 20
+    fontSize: ms(20)
   },
   priorityTitle: {
-    fontSize: 18,
+    fontSize: ms(18),
     fontFamily: 'Outfit-Bold',
     marginTop: 20,
     marginBottom: 10,
@@ -238,7 +248,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
-    marginBottom: 20,
+    marginVertical: 10
   },
   priorityButton: {
     padding: 10,
@@ -250,7 +260,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 15,
+    fontSize: ms(15),
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -273,7 +283,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 16
+    fontSize: ms(16)
   },
   selected: {
     borderWidth: 2,

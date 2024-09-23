@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { ms } from 'react-native-size-matters';
 
 const InfoScreen = () => {
 	const router = useRouter();
@@ -20,7 +21,7 @@ const InfoScreen = () => {
 			style={styles.infoItem}
 			onPress={() => router.push(`/info/${item.route}`)}
 		>
-			<Text style={styles.infoItemText}>{item.title}</Text>
+			<Text style={styles.infoItemText} maxFontSizeMultiplier={1.2}>{item.title}</Text>
 			<Ionicons name="chevron-forward" size={24} color="#333" />
 		</TouchableOpacity>
 	);
@@ -28,7 +29,7 @@ const InfoScreen = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.headerContainer}>
-				<Text style={styles.header}>Information</Text>
+				<Text style={styles.header} maxFontSizeMultiplier={1}>Information</Text>
 			</View>
 			<ScrollView style={styles.content}>
 				{infoItems.map(renderInfoItem)}
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		fontFamily: 'Outfit-Bold',
-		fontSize: 35,
+		fontSize: ms(35),
 		color: '#EA1D25'
 	},
 	content: {
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
 	},
 	infoItemText: {
 		fontFamily: 'Outfit-Bold',
-		fontSize: 18,
+		fontSize: ms(18),
 		color: '#333',
 	},
 });

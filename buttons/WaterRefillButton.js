@@ -13,6 +13,8 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../utils/supabase';
+import { ms } from 'react-native-size-matters';
+
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
@@ -95,7 +97,7 @@ const WaterRefillButton = () => {
         disabled={isRequesting}
       >
         <Ionicons name="water" size={27} color="#FFF" />
-        <Text className='text-white font-outfitbold text-lg'>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
+        <Text maxFontSizeMultiplier={1.1} style={styles.text}>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
       </TouchableOpacity>
 
       <Modal
@@ -109,7 +111,7 @@ const WaterRefillButton = () => {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.pickerContainer}>
-                <Text style={styles.pickerTitle}>Select Field</Text>
+                <Text style={styles.pickerTitle} maxFontSizeMultiplier={1.2}>Select Field</Text>
                 {Platform.OS === 'ios' ? (
                   <Picker
                     selectedValue={selectedField}
@@ -137,10 +139,10 @@ const WaterRefillButton = () => {
                 )}
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
-                    <Text style={styles.buttonText}>Cancel</Text>
+                    <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.confirmButton} onPress={requestWater} disabled>
-                    <Text style={styles.buttonText}>Confirm</Text>
+                    <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -161,9 +163,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderRadius: 22,
-    minHeight: 120,
+    minHeight: 140,
     width: buttonWidth,
     backgroundColor: '#3DC5C5',
+  },
+  text: {
+    fontSize: ms(18),
+    fontFamily: 'Outfit-Bold',
+    color: '#fff'
   },
   disabledButton: {
     opacity: 0.5,
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   pickerTitle: {
-    fontSize: 20,
+    fontSize: ms(20),
     fontFamily: 'Outfit-Bold',
     marginBottom: 10,
     textAlign: 'center',
@@ -197,7 +204,7 @@ const styles = StyleSheet.create({
   },
   pickerItemStyle: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 20
+    fontSize: ms(20)
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -220,6 +227,6 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 16
+    fontSize: ms(16)
   },
 });

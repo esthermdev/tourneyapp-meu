@@ -3,6 +3,8 @@ import { StyleSheet, Text, Dimensions } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
+import { s, vs, ms, mvs } from 'react-native-size-matters';
+
 
 const HomeButtons = ({ title, icon, buttonStyle, handlePress, disabled }) => {
   return (
@@ -16,7 +18,7 @@ const HomeButtons = ({ title, icon, buttonStyle, handlePress, disabled }) => {
         resizeMode='contain'
         style={{ width: 25, height: 25 }}
       />
-      <Text className='text-white font-outfitbold text-lg'>{title}</Text>
+      <Text maxFontSizeMultiplier={1.1} style={styles.text}>{title}</Text>
     </TouchableOpacity>
   )
 }
@@ -30,7 +32,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderRadius: 22,
-    minHeight: 120,
+    minHeight: 140,
     width: buttonWidth,
+  },
+  text: {
+    fontSize: ms(18),
+    fontFamily: 'Outfit-Bold',
+    color: '#fff'
   }
 })

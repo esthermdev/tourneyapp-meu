@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { ListItem, Avatar } from '@rneui/base';
 import CustomHeader from '../../../components/CustomHeader';
 import { supabase } from '../../../utils/supabase';
+import { ms } from 'react-native-size-matters';
 
 const Vendors = () => {
 	const [vendors, setVendors] = useState([]);
@@ -30,14 +31,14 @@ const Vendors = () => {
 		<ListItem key={item.id} bottomDivider>
 			<Avatar containerStyle={{ backgroundColor: 'purple' }} size={50} rounded title={item.name[0]} source={{ uri: item?.avatar_url }} />
 			<ListItem.Content>
-				<ListItem.Title className='font-outfitmedium text-lg'>{item.name}</ListItem.Title>
+				<ListItem.Title className='font-outfitmedium' style={{ fontSize: ms(16) }}>{item.name}</ListItem.Title>
 			</ListItem.Content>
 		</ListItem>
 	)
 
 	return (
 		<View style={styles.container}>
-			<CustomHeader title='Vendors' />
+			<CustomHeader title='Vendors' route='info' />
 			<FlatList
 				data={vendors}
 				key={(item) => item.id}
@@ -57,17 +58,17 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 18,
+		fontSize: ms(18),
 		color: '#333',
 	},
 	contentHeader: {
 		fontFamily: 'Outfit-Bold',
-		fontSize: 20,
+		fontSize: ms(20),
 		color: '#333',
 	},
 	contentSubHeader: {
 		fontFamily: 'Outfit-SemiBold',
-		fontSize: 18,
+		fontSize: ms(18),
 		color: '#333',
 	}
 });

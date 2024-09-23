@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react'
 import Ionicon from '@expo/vector-icons/Ionicons';
+import { ms, s } from 'react-native-size-matters';
 
 const TabBar = ({ state, descriptors, navigation }) => {
 
@@ -12,23 +13,23 @@ const TabBar = ({ state, descriptors, navigation }) => {
     switch (routeName) {
       case 'home':
         iconName = 'home';
-        size = 21;
+        size = ms(21);
         break;
       case 'schedule':
         iconName = 'calendar';
-        size = 21;
+        size = ms(21);
         break;
       case 'teams':
         iconName = 'people';
-        size = 25;
+        size = ms(25);
         break;
       case 'standings':
         iconName = 'medal';
-        size = 21;
+        size = ms(21);
         break;
       case 'info':
         iconName = 'information-circle';
-        size = 26;
+        size = ms(26);
         break;
       default:
         iconName = 'home';
@@ -90,7 +91,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
               {getIcon(route.name, isFocused)}
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={{ color: isFocused ? primaryColor : secondaryColor, fontFamily: 'Outfit-Regular' }}>
+              <Text maxFontSizeMultiplier={1.1} style={{ color: isFocused ? primaryColor : secondaryColor, fontFamily: 'Outfit-Regular', fontSize: ms(13) }}>
                 {label}
               </Text>
             </View>
@@ -107,10 +108,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 56,
+    height: ms(55),
     backgroundColor: '#fff',
     borderTopColor: 'lightgrey',
-    borderTopWidth: 0.3,
+    borderTopWidth: ms(0.3),
   },
   tabBarItem: {
     flex: 1,

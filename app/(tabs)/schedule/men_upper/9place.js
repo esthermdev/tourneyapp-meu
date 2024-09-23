@@ -2,6 +2,7 @@ import { View, StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import GameComponent from '../../../../components/GameComponent';
 import CustomHeader from '../../../../components/CustomHeader';
+import { ms } from 'react-native-size-matters';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -14,7 +15,7 @@ const NinthPlace = () => {
           tabBarActiveTintColor: '#EA1D25',
           tabBarInactiveTintColor: '#8F8DAA',
           tabBarItemStyle: { borderBottomColor: '#8F8DAA' },
-          tabBarLabelStyle: { fontFamily: 'Outfit-Semibold' },
+          tabBarLabelStyle: { fontFamily: 'Outfit-Semibold', fontSize: ms(12) },
           tabBarIndicatorStyle: { backgroundColor: '#EA1D25', }
         }}
       >

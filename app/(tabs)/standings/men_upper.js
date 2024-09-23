@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native
 import { Card } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
 import CustomHeader from '../../../components/CustomHeader';
+import { s, ms, } from 'react-native-size-matters';
 
 const OpenStandings = () => {
   const [poolAStandings, setPoolAStandings] = useState([]);
@@ -51,13 +52,13 @@ const OpenStandings = () => {
   const renderStandings = (standings, poolName) => (
     <Card containerStyle={styles.poolCard}>
       <View style={styles.poolHeaderContainer}>
-        <Text style={styles.poolHeader}>Pool {poolName}</Text>
-        <Text style={styles.wlHeader}>W–L</Text>
+        <Text maxFontSizeMultiplier={1.2} style={styles.poolHeader}>Pool {poolName}{' '}</Text>
+        <Text maxFontSizeMultiplier={1.2} style={styles.wlHeader}>W–L</Text>
       </View>
       {standings.map((team, i) => (
         <View key={i} style={styles.teamRow}>
-          <Text style={styles.teamName}>{team.teams.name} ({team.teams.seed})</Text>
-          <Text style={styles.recordText}>{team.wins}–{team.losses}</Text>
+          <Text maxFontSizeMultiplier={1.2} style={styles.teamName}>{team.teams.name} ({team.teams.seed})</Text>
+          <Text maxFontSizeMultiplier={1.2} style={styles.recordText}>{team.wins}–{team.losses}</Text>
         </View>
       ))}
     </Card>
@@ -116,13 +117,13 @@ const styles = StyleSheet.create({
   },
   poolHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 18,
+    fontSize: ms(18),
     color: 'white',
   },
   wlHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 18,
-    color: '#EA1D25',
+    fontSize: ms(18),
+    color: '#fff',
   },
   teamRow: {
     flexDirection: 'row',
@@ -135,13 +136,13 @@ const styles = StyleSheet.create({
   },
   teamName: {
     fontFamily: 'Outfit-Medium',
-    fontSize: 16,
+    fontSize: ms(16),
     color: '#333243',
     flex: 1,
   },
   recordText: {
     fontFamily: 'Outfit-Medium',
-    fontSize: 16,
+    fontSize: ms(16),
     color: '#333243',
     width: 50,
     textAlign: 'right',

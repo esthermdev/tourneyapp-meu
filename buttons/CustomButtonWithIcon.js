@@ -1,16 +1,16 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Icon } from '@rneui/base';
+import { s, ms } from 'react-native-size-matters';
 
-const CustomButtonWithIcon = ({ title, handlePress, buttonStyles, iconName }) => {
-  	return (
-		<TouchableOpacity 
+const CustomButtonWithIcon = ({ title, handlePress, buttonStyles }) => {
+	return (
+		<TouchableOpacity
 			onPress={handlePress}
 			activeOpacity={0.7}
-			className={`justify-center items-center ${buttonStyles}`}
+			style={buttonStyles}
 		>
-			<Text className={`bg-primary font-outfitsemibold text-xl text-white`}>{title}{' '}
-				<Icon type='ionicon' name='arrow-forward' color='#fff' style={styles.iconStyle}/>
-			</Text>
+			<Text allowFontScaling={false} style={styles.textStyle}>{title}{' '}</Text>
+			<Icon type='ionicon' name='arrow-forward' color='#fff' style={styles.iconStyle} size={s(23)} />
 		</TouchableOpacity>
 	)
 }
@@ -19,7 +19,12 @@ export default CustomButtonWithIcon;
 
 const styles = StyleSheet.create({
 	iconStyle: {
-		paddingLeft: 5,
-		marginTop: 8
+		marginLeft: 5,
+		marginTop: 3
+	},
+	textStyle: {
+		fontFamily: 'Outfit-SemiBold',
+		color: '#fff',
+		fontSize: ms(18)
 	}
 });

@@ -20,6 +20,7 @@ import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+import { s, ms } from 'react-native-size-matters';
 
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -181,7 +182,7 @@ export default function Account({ session }) {
         style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       >
-        <Ionicons name="menu" size={30} color="#EA1D25" />
+        <Ionicons name="menu" size={ms(30)} color="#EA1D25" />
       </TouchableOpacity>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -251,41 +252,41 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 28,
+    fontSize: ms(28),
     color: '#EA1D25',
     marginBottom: 30,
     textAlign: 'center',
   },
   inputLabel: {
-    fontSize: 16,
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   input: {
-    height: 60,
+    height: ms(60),
     borderColor: '#8F8DAA',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 20,
-    borderRadius: 30,
+    borderRadius: 100,
     fontFamily: 'Outfit-Regular',
-    fontSize: 18
+    fontSize: ms(16)
   },
   dropdownContainer: {
-    marginBottom: 20,
+    marginBottom: ms(20),
   },
   dropdownLabel: {
-    fontSize: 16,
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   dropdown: {
-    height: 60,
+    height: ms(60),
     borderColor: '#8F8DAA',
     borderWidth: 1,
-    borderRadius: 30,
+    borderRadius: 100,
     paddingHorizontal: 20,
     backgroundColor: 'white',
   },
@@ -293,7 +294,8 @@ const styles = StyleSheet.create({
     borderColor: '#CBC9E1',
     borderRadius: 12,
     margin: 0,
-    fontFamily: 'Outfit-Light'
+    fontFamily: 'Outfit-Light',
+    fontSize: ms(16)
   },
   dropdownList: {
     borderColor: '#8F8DAA',
@@ -309,7 +311,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dropdownItemText: {
-    fontSize: 16,
+    fontSize: ms(16),
     fontFamily: 'Outfit-Regular',
     color: 'black',
     padding: 15
@@ -317,31 +319,31 @@ const styles = StyleSheet.create({
   dropdownPlaceholder: {
     color: 'black',
     fontFamily: 'Outfit-Regular',
-    fontSize: 16,
+    fontSize: ms(16),
   },
   dropdownSelectedText: {
     color: 'black',
     fontFamily: 'Outfit-Regular',
-    fontSize: 16,
+    fontSize: ms(16),
   },
   primaryButton: {
-    height: 60,
+    height: ms(60),
     backgroundColor: '#EA1D25',
-    paddingHorizontal: 20,
-    borderRadius: 30,
-    marginBottom: 10,
+    paddingHorizontal: ms(20),
+    borderRadius: 100,
+    marginBottom: ms(10),
   },
   secondaryButton: {
-    height: 60,
+    height: ms(60),
     backgroundColor: '#fff',
     borderColor: '#EA1D25',
     borderWidth: 1,
     paddingHorizontal: 20,
-    borderRadius: 30,
+    borderRadius: 100,
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
-    fontSize: 16,
+    fontSize: ms(16),
   },
   secondaryButtonText: {
     color: '#EA1D25',

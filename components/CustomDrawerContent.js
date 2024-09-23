@@ -6,6 +6,7 @@ import { images } from '../constants';
 import { useRouter } from 'expo-router';
 import Ionicon from '@expo/vector-icons/Ionicons';
 import { useAuth } from '../context/AuthProvider';
+import { ms } from 'react-native-size-matters'
 
 const CustomDrawerContent = (props) => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const CustomDrawerContent = (props) => {
             key={item.name}
             label={item.label}
             onPress={() => props.navigation.navigate(item.name)}
-            icon={item.icon ? () => <Ionicon name={item.icon} size={25} color={'#EA1D25'} /> : undefined}
+            icon={item.icon ? () => <Ionicon name={item.icon} size={ms(25)} color={'#EA1D25'} /> : undefined}
           />
         ))}
       </DrawerContentScrollView>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   divider: {
-    borderWidth: 0.3,
+    borderWidth: ms(0.3),
     borderColor: 'lightgray',
     alignSelf: 'center',
     width: '80%',
@@ -75,12 +76,12 @@ const styles = StyleSheet.create({
   },
   drawerItemLabelStyle: {
     fontFamily: 'Outfit-Medium',
-    fontSize: 18,
+    fontSize: ms(18, 0.3),
     color: '#000'
   },
   settingsLabelStyle: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 18
+    fontSize: ms(18, 0.3)
   },
   bottomDrawerSection: {
     marginBottom: 15,

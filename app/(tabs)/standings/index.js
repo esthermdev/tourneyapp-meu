@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import DivisionButton from '../../../buttons/DivisionButton';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { ms } from 'react-native-size-matters';
 
 const StandingsScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Standings</Text>
+        <Text style={styles.header} maxFontSizeMultiplier={1}>Standings</Text>
       </View>
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.buttonContainer}>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 35,
+    fontSize: ms(35),
     color: '#EA1D25'
   },
   buttonContainer: {

@@ -1,36 +1,100 @@
-import { Text, View, Image } from 'react-native';
+import React from 'react';
+import { Text, View, Image, SafeAreaView, ScrollView } from 'react-native';
 import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
+import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
 
 export default function App() {
   return (
-    <View className='bg-white h-full'>
-      <View className='h-11'></View>
-      <View className='flex-0.5 py-3 justify-start items-center'>
-        <Image
-          source={images.logoW}
-          resizeMode='contain'
-          style={{ width: 90, height: 90 }}
-        />
-      </View>
-      <View className='flex-1 justify-center items-center'>
-        <Image
-          source={images.lobsterPotLogo}
-          resizeMode='contain'
-          style={{ width: '100%' }}
-        />
-      </View>
-      <View className='flex-1 px-[35] pt-5'>
-        <Text className='font-outfitregular text-center' style={{ fontSize: 20, }}>Welcome to</Text>
-        <Text className='font-outfitbold text-center' style={{ fontSize: 38, marginVertical: 10 }}>Lobster Pot</Text>
-        <Text className='font-outfitbold text-center' style={{ fontSize: 28 }}>2024</Text>
-        <CustomButtonWithIcon
-          title='Continue'
-          buttonStyles='bg-primary rounded-full px-[25] mt-7 py-[22] flex-row'
-          handlePress={() => router.push('(tabs)/home')}
-        />
-      </View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={images.logoW}
+            resizeMode='contain'
+            style={styles.logo}
+          />
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            source={images.lobsterPotLogo}
+            resizeMode='contain'
+            style={styles.mainImage}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text maxFontSizeMultiplier={1.3} style={styles.welcomeText}>Welcome to</Text>
+          <Text maxFontSizeMultiplier={1.3} style={styles.titleText}>Lobster Pot</Text>
+          <Text maxFontSizeMultiplier={1.3} style={styles.yearText}>2024</Text>
+          <CustomButtonWithIcon
+            title='Continue'
+            buttonStyles={styles.continueButton}
+            handlePress={() => router.push('(tabs)/home')}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+const styles = ScaledSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  logoContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: '20@vs'
+  },
+  logo: {
+    width: '90@ms0.2',
+    height: '90@ms0.2',
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mainImage: {
+    width: '160@s',
+    height: '160@s',
+    aspectRatio: 1,
+  },
+  textContainer: {
+    flex: 1,
+    alignItems: 'center',
+    margin: '25@s',
+    gap: '20@vs'
+  },
+  welcomeText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: '20@ms',
+    textAlign: 'center',
+  },
+  titleText: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: '38@ms',
+    textAlign: 'center',
+  },
+  yearText: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: '25@ms',
+    textAlign: 'center',
+  },
+  continueButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EA1D25',
+    borderRadius: 100,
+    paddingHorizontal: 25,
+    paddingVertical: 22,
+    width: '100%',
+  },
+});

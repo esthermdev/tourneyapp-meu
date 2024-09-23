@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { s, vs, ms } from 'react-native-size-matters';
 
 export const Dropdown = ({ label, data, onSelect, selectedValue }) => {
 	const [visible, setVisible] = useState(false);
@@ -14,7 +15,7 @@ export const Dropdown = ({ label, data, onSelect, selectedValue }) => {
 			onSelect(item);
 			setVisible(false);
 		}}>
-			<Text style={styles.listItem}>{item}</Text>
+			<Text style={styles.listItem} maxFontSizeMultiplier={1}>{item}</Text>
 		</TouchableOpacity>
 	);
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
 	},
 	buttonText: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 16,
+		fontSize: ms(16),
 	},
 	overlay: {
 		flex: 1,
@@ -70,8 +71,7 @@ const styles = StyleSheet.create({
 	dropdown: {
 		backgroundColor: 'white',
 		width: '60%',
-		maxWidth: 200,
-		maxHeight: 350,
+		maxHeight: '30%',
 		borderRadius: 12,
 		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 2 },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 	},
 	listItem: {
 		fontFamily: 'Outfit-Regular',
-		fontSize: 18,
+		fontSize: ms(18),
 	}
 });
 

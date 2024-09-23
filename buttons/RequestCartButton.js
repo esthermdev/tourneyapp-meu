@@ -6,6 +6,7 @@ import Dropdown from '../components/CustomDropdownComponent';
 import { usePushNotifications } from '../hooks/usePushNotifications';
 import { Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { s, ms } from 'react-native-size-matters';
 
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
@@ -80,7 +81,7 @@ const RequestCartButton = () => {
         disabled={isButtonDisabled}
       >
         <Ionicons name="car" size={30} color="#FFF" />
-        <Text className='text-white font-outfitbold text-lg'>
+        <Text maxFontSizeMultiplier={1.1} style={styles.text}>
           {isButtonDisabled ? 'Request Pending...' : 'Request Cart'}
         </Text>
       </TouchableOpacity>
@@ -96,7 +97,7 @@ const RequestCartButton = () => {
               <Ionicons name="close" size={20} color="#8F8DAA" />
             </TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator>
-              <Text style={styles.noteText}>
+              <Text style={styles.noteText} maxFontSizeMultiplier={1.2}>
                 Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
                 {'\n\n'}
                 • If you're in a group, please submit only one request.{'\n'}
@@ -106,7 +107,7 @@ const RequestCartButton = () => {
                 Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
               </Text>
             </ScrollView>
-            <Text style={styles.labelHeader}>From:</Text>
+            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>From:</Text>
             <Dropdown
               label="From Location"
               data={locations}
@@ -123,7 +124,7 @@ const RequestCartButton = () => {
               />
             )}
 
-            <Text style={styles.labelHeader}>To:</Text>
+            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>To:</Text>
             <Dropdown
               label="To Location"
               data={locations}
@@ -141,7 +142,7 @@ const RequestCartButton = () => {
             )}
 
             <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart} disabled>
-              <Text style={styles.submitButtonText}>Request Cart</Text>
+              <Text style={styles.submitButtonText} maxFontSizeMultiplier={1.2}>Request Cart</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -157,8 +158,8 @@ const styles = StyleSheet.create({
   },
   labelHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 16,
-    marginTop: 4,
+    fontSize: ms(16),
+    marginTop: s(20),
     marginBottom: 8
   },
   buttonStyle: {
@@ -167,9 +168,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderRadius: 22,
-    minHeight: 120,
+    minHeight: 140,
     width: buttonWidth,
     backgroundColor: '#E9BD21',
+  },
+  text: {
+    fontSize: ms(18),
+    fontFamily: 'Outfit-Bold',
+    color: '#fff'
   },
   modalContainer: {
     flex: 1,
@@ -183,7 +189,6 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '80%',
     height: '80%',
-    maxWidth: 350,
   },
   closeButton: {
     alignSelf: 'flex-end',
@@ -198,11 +203,11 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: 'white',
     fontFamily: 'Outfit-Bold',
-    fontSize: 16
+    fontSize: ms(16)
   },
   noteText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 15,
+    fontSize: ms(15),
     color: '#666',
     marginVertical: 10,
   }

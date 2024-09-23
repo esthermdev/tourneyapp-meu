@@ -9,8 +9,7 @@ import RequestCartButton from '../../../buttons/RequestCartButton';
 import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
-
-
+import { ms } from 'react-native-size-matters';
 
 const Home = () => {
   const { user } = useAuth();
@@ -59,7 +58,7 @@ const Home = () => {
           onPress={() => router.push('https://maineultimate.org/s/171999/MU+General+Donation')}
           style={styles.donationButton}
         >
-          <Text className='font-outfitsemibold text-lg text-center items-center'>Donation</Text>
+          <Text maxFontSizeMultiplier={1} className='font-outfitsemibold text-center items-center' style={styles.donationText}>Donation</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -82,14 +81,17 @@ const styles = StyleSheet.create({
   },
   donationButtonContainer: {
     backgroundColor: '#fff',
-    paddingHorizontal: 25,
-    padding: 25
+    paddingHorizontal: 20,
+    padding: 20
   },
   donationButton: {
     padding: 15,
     borderRadius: 70,
     borderWidth: 2,
     borderColor: '#EA1D25',
+  },
+  donationText: {
+    fontSize: ms(20)
   },
   tokenContainer: {
     marginTop: 20,

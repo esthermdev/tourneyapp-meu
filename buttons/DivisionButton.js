@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { router } from 'expo-router';
+import { ms } from 'react-native-size-matters';
 
 const DivisionButton = ({ route, title, color, disabled, icon }) => {
   return (
@@ -10,9 +11,9 @@ const DivisionButton = ({ route, title, color, disabled, icon }) => {
       disabled={disabled}
     >
       <View style={styles.iconContainer}>
-        <FontAwesome6 name={icon} size={25} color={color} />
+        <FontAwesome6 name={icon} size={ms(25)} color={color} />
       </View>
-      <Text style={styles.buttonText}>{title}</Text>
+      <Text maxFontSizeMultiplier={1.1} style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   )
 }
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   iconContainer: {
-    width: 50,
-    height: 50,
+    width: ms(50),
+    height: ms(50),
     borderRadius: 40,
     backgroundColor: 'white',
     shadowColor: 'white',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: ms(15),
     fontFamily: 'Outfit-SemiBold'
   },
 });

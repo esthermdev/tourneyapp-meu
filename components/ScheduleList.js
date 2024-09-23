@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { ms } from 'react-native-size-matters';
 
 const scheduleOptions = [
   { title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
@@ -21,7 +22,7 @@ const ScheduleList = ({ division }) => {
       activeOpacity={0.6}
     >
       <FontAwesome6 name={item.icon} size={22} color={item.iconColor} style={styles.icon} />
-      <Text style={[styles.optionButtonText, { color: item.iconColor }]}>{item.title}</Text>
+      <Text style={[styles.optionButtonText, { color: item.iconColor }]} maxFontSizeMultiplier={1}>{item.title}</Text>
       <FontAwesome6 name="chevron-right" size={20} color={item.iconColor} />
     </TouchableOpacity>
   );
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   },
   optionButtonText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: ms(18),
     fontFamily: 'Outfit-SemiBold',
   },
 });

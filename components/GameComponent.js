@@ -5,6 +5,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
 import { formatDate } from '../utils/formatDate';
 import { formatTime } from '../utils/formatTime';
+import { ms, s } from 'react-native-size-matters';
 
 const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
   const [games, setGames] = useState([]);
@@ -72,7 +73,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
     <Card containerStyle={styles.card}>
       <View style={styles.header}>
         <Icon type='ionicon' name='location' size={14} color='#8F8DAA' containerStyle={styles.locationIcon} />
-        <Text className='font-outfitregular text-[#8F8DAA] text-sm mr-2'>{ }
+        <Text className='font-outfitregular text-[#8F8DAA] mr-2' style={{ fontSize: ms(13) }} maxFontSizeMultiplier={1.2}>{ }
           Field {item.field?.name || 'Number'}
         </Text>
       </View>
@@ -84,12 +85,12 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
             source={{ uri: item.team1?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team1?.name}</Text>
+          <Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team1?.name}</Text>
         </View>
         <View style={styles.scoreContainer}>
-          <Text style={styles.score}>{item.scores[0].team1_score}</Text>
-          <Text style={styles.colon}>:</Text>
-          <Text style={styles.score}>{item.scores[0].team2_score}</Text>
+          <Text style={styles.score} maxFontSizeMultiplier={1.1}>{item.scores[0].team1_score}</Text>
+          <Text style={styles.colon} maxFontSizeMultiplier={1.1}>:</Text>
+          <Text style={styles.score} maxFontSizeMultiplier={1.1}>{item.scores[0].team2_score}</Text>
         </View>
         <View style={styles.teamContainer}>
           <Avatar
@@ -98,7 +99,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
             source={{ uri: item.team2?.avatar_uri }}
             containerStyle={styles.avatarContainer}
           />
-          <Text style={styles.teamName}>{item.team2?.name}</Text>
+          <Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team2?.name}</Text>
         </View>
       </View>
     </Card>
@@ -132,9 +133,9 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
       {games.length > 0 ? (
         <>
           <View style={styles.timeContainer}>
-            <Text style={styles.time}>{roundInfo.date}</Text>
+            <Text style={styles.time} maxFontSizeMultiplier={1.1}>{roundInfo.date}</Text>
             <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
-            <Text style={styles.time}>{roundInfo.time}</Text>
+            <Text style={styles.time} maxFontSizeMultiplier={1.1}>{roundInfo.time}</Text>
           </View>
           <FlashList
             refreshControl={
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 24,
+    fontSize: ms(24),
     color: '#EA1D25',
     textAlign: 'center',
     marginVertical: 10,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   time: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 20,
+    fontSize: ms(20),
     color: 'white'
   },
   card: {
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
   teamName: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: 15,
+    fontSize: ms(15),
   },
   scoreContainer: {
     flexDirection: 'row',
@@ -239,11 +240,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   score: {
-    fontSize: 40,
+    fontSize: ms(30),
     fontFamily: 'Outfit-Medium',
   },
   colon: {
-    fontSize: 40,
+    fontSize: ms(30),
     marginHorizontal: 10,
     marginBottom: 8,
     fontFamily: 'Outfit-Medium',
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   placeholderTitle: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 24,
+    fontSize: ms(24),
     color: '#EA1D25',
     marginTop: 20,
     marginBottom: 10,
@@ -264,14 +265,14 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 16,
+    fontSize: ms(16),
     color: '#8F8DAA',
     textAlign: 'center',
     marginBottom: 10,
   },
   loadingText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 18,
+    fontSize: ms(18),
     color: '#8F8DAA',
     textAlign: 'center',
     marginTop: 20,

@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import { images } from '../constants';
+import { s, ms, vs } from 'react-native-size-matters';
 
 const Header = () => {
 	const navigation = useNavigation();
@@ -12,7 +13,7 @@ const Header = () => {
 			<View style={styles.container}>
 				<View style={styles.content}>
 					<TouchableOpacity style={styles.button} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-						<Ionicons name='menu' size={25} />
+						<Ionicons name='menu' size={ms(25)} />
 					</TouchableOpacity>
 					<Image
 						source={images.logoW}
@@ -20,7 +21,7 @@ const Header = () => {
 					/>
 					<TouchableOpacity style={styles.button} onPress={() => router.push('auth/account')}>
 						<Ionicons name='person'
-							size={25}
+							size={ms(25)}
 							color='#EA1D25'
 						/>
 					</TouchableOpacity>
@@ -33,7 +34,7 @@ const Header = () => {
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
-		height: 56,
+		height: ms(56),
 		width: '100%'
 	},
 	content: {
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20
 	},
 	logo: {
-		width: 40,
-		height: 40
+		width: ms(40),
+		height: ms(40)
 	}
 });
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ms } from 'react-native-size-matters';
 
 const CustomHeader = ({ title, route }) => {
   return (
@@ -10,7 +11,7 @@ const CustomHeader = ({ title, route }) => {
       <TouchableOpacity style={styles.backButton} onPress={() => router.navigate(`${route}`)}>
         <Ionicons name="arrow-back-outline" size={23} color="#EA1D25" />
       </TouchableOpacity>
-      <Text style={styles.header}>{title}</Text>
+      <Text style={styles.header} maxFontSizeMultiplier={1}>{title}</Text>
     </View>
   );
 };
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 24,
+    fontSize: ms(24),
     color: 'black',
   },
   backButton: {

@@ -4,6 +4,7 @@ import { FlashList } from '@shopify/flash-list';
 import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../utils/supabase';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { s, ms } from 'react-native-size-matters';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
@@ -67,7 +68,7 @@ const Teams = () => {
   };
 
   const renderItem = ({ item }) => (
-    <ListItem style={{ paddingHorizontal: 20 }} bottomDivider>
+    <ListItem style={{ paddingHorizontal: 15 }} bottomDivider>
       <Avatar
         size={50}
         rounded
@@ -75,10 +76,10 @@ const Teams = () => {
         title={item.name[0]}
         avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }} // use the first letter of the team name as the title if no image is available
       />
-      <ListItem.Content>
-        <ListItem.Title className='font-outfitbold text-lg'>{item.name}</ListItem.Title>
-        <View className={`rounded-full px-1.5 py-0.5`} style={{ backgroundColor: item.color }}>
-          <ListItem.Subtitle className='font-outfitlight' style={styles.division}>{renderLabel(item)}</ListItem.Subtitle>
+      <ListItem.Content style={{ gap: s(5) }}>
+        <ListItem.Title className='font-outfitbold' style={styles.teamName} maxFontSizeMultiplier={1.2}>{item.name}</ListItem.Title>
+        <View className='rounded-full px-[8] py-0.5' style={{ backgroundColor: item.color }}>
+          <ListItem.Subtitle className='font-outfitlight' maxFontSizeMultiplier={1.2} style={styles.division}>{renderLabel(item)}</ListItem.Subtitle>
         </View>
       </ListItem.Content>
     </ListItem>
@@ -87,30 +88,30 @@ const Teams = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Teams</Text>
+        <Text style={styles.header} maxFontSizeMultiplier={1}>Teams</Text>
       </View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', margin: 10 }}>
-        <Text className='font-outfitlight text-gray-500'>Filters: </Text>
-        <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[7] mx-1 mb-2' onPress={() => setSelectedDivision('All')}>
-          <Text style={styles.filterByText}>All</Text>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5, padding: 15 }}>
+        <Text maxFontSizeMultiplier={1.2} className='font-outfitlight text-gray-500 mt-0.3' style={styles.filterTitle}>Filters: </Text>
+        <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('All')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>All</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('MU')}>
-          <Text style={styles.filterByText}>Men - Upper</Text>
+        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MU')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Upper</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#0AB359] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('MM')}>
-          <Text style={styles.filterByText}>Men - Middle</Text>
+        <TouchableOpacity className='bg-[#0AB359] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MM')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Middle</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#efaa34] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('ML')}>
-          <Text style={styles.filterByText}>Men - Lower</Text>
+        <TouchableOpacity className='bg-[#efaa34] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('ML')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Lower</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#FF026C] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('WU')}>
-          <Text style={styles.filterByText}>Women - Upper</Text>
+        <TouchableOpacity className='bg-[#FF026C] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WU')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Upper</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#BD41F2] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('WL')}>
-          <Text style={styles.filterByText}>Women - Lower</Text>
+        <TouchableOpacity className='bg-[#BD41F2] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WL')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Lower</Text>
         </TouchableOpacity>
-        <TouchableOpacity className='bg-[#f77732] rounded-full py-0.5 px-[7] mx-1' onPress={() => setSelectedDivision('X')}>
-          <Text style={styles.filterByText}>Mixed</Text>
+        <TouchableOpacity className='bg-[#f77732] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('X')}>
+          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Mixed</Text>
         </TouchableOpacity>
       </View>
       <FlashList
@@ -124,7 +125,7 @@ const Teams = () => {
         data={filteredTeams}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        estimatedItemSize={50}
+        estimatedItemSize={100}
       />
     </View>
   );
@@ -145,21 +146,23 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 35,
+    fontSize: ms(35),
     color: '#EA1D25'
   },
   teamName: {
-    fontSize: 18,
-    paddingVertical: 10,
+    fontSize: ms(16),
   },
   division: {
     color: 'white', // white text
-    fontSize: 10, // text size
+    fontSize: ms(10), // text size
     textAlign: 'center', // center the text 
+  },
+  filterTitle: {
+    fontSize: ms(12)
   },
   filterByText: {
     fontFamily: 'Outfit-Light',
-    fontSize: 12,
+    fontSize: ms(12),
     color: '#fff'
   }
 });
