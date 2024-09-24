@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderColor: '#EA1D25',
   },
   donationText: {
-    fontSize: ms(20)
+    fontSize: ms(18)
   },
   tokenContainer: {
     marginTop: 20,

@@ -6,6 +6,8 @@ import { formatTime } from '../../../utils/formatTime';
 import { useAuth } from '../../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import CustomHeader from '../../../components/CustomHeader';
+import { ms } from 'react-native-size-matters';
+
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
@@ -105,7 +107,7 @@ const MyGamesScreen = () => {
   const GameCard = ({ game, openModal }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.timeFieldContainer}>
-        <Text style={styles.timeText}>{formatTime(game.datetime.time)}</Text>
+        <Text style={styles.timeText} maxFontSizeMultiplier={1.2}>{formatTime(game.datetime.time)}</Text>
         <View style={styles.fieldContainer}>
           <Icon name="location" type="ionicon" size={12} color="#8F8DAA" />
           <Text style={styles.fieldText}>{game.field?.name}</Text>
@@ -113,17 +115,17 @@ const MyGamesScreen = () => {
       </View>
       <View style={styles.teamContainer}>
         <Avatar rounded size={40} source={{ uri: game.team1.avatar_uri }} />
-        <Text style={styles.teamName}>{game.team1?.name}</Text>
-        <Text style={styles.scoreText}>{game.scores[0].team1_score}</Text>
+        <Text style={styles.teamName} maxFontSizeMultiplier={1.2}>{game.team1?.name}</Text>
+        <Text style={styles.scoreText} maxFontSizeMultiplier={1.2}>{game.scores[0].team1_score}</Text>
       </View>
       <View style={styles.vsContainer}>
-        <Text style={styles.vsText}>vs</Text>
+        <Text style={styles.vsText} maxFontSizeMultiplier={1.2}>vs</Text>
         <View style={styles.vsLine} />
       </View>
       <View style={styles.teamContainer}>
         <Avatar rounded size={40} source={{ uri: game.team2.avatar_uri }} />
-        <Text style={styles.teamName}>{game.team2?.name}</Text>
-        <Text style={styles.scoreText}>{game.scores[0].team2_score}</Text>
+        <Text style={styles.teamName} maxFontSizeMultiplier={1.2}>{game.team2?.name}</Text>
+        <Text style={styles.scoreText} maxFontSizeMultiplier={1.2}>{game.scores[0].team2_score}</Text>
       </View>
 
       {game.scores[0].is_finished ? (
@@ -132,7 +134,7 @@ const MyGamesScreen = () => {
           onPress={() => openModal(game)}
           disabled={game.scores[0].is_finished}
         >
-          <Text style={[styles.updateButtonText, game.scores[0].is_finished && styles.disabledButtonText]}>
+          <Text maxFontSizeMultiplier={1.2} style={[styles.updateButtonText, game.scores[0].is_finished && styles.disabledButtonText]}>
             Game Finished
           </Text>
           <Ionicons name='checkmark-circle' size={15} color='#8F8DAA' />
@@ -142,7 +144,7 @@ const MyGamesScreen = () => {
           style={styles.updateButton}
           onPress={() => openModal(game)}
         >
-          <Text style={styles.updateButtonText}>Update Score</Text>
+          <Text maxFontSizeMultiplier={1.2} style={styles.updateButtonText}>Update Score</Text>
           <Ionicons name='create' size={15} color='#2871FF' />
         </TouchableOpacity>
       )}
@@ -152,7 +154,7 @@ const MyGamesScreen = () => {
   const renderSectionHeader = ({ section: { title } }) => (
     <View style={styles.sectionHeaderContainer}>
       <Ionicons name="calendar-clear" size={24} color="#EA1D25" />
-      <Text style={styles.sectionHeader}>{title}</Text>
+      <Text style={styles.sectionHeader} maxFontSizeMultiplier={1}>{title}</Text>
     </View>
   );
 
@@ -182,9 +184,9 @@ const MyGamesScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Update Score</Text>
+            <Text style={styles.modalTitle} maxFontSizeMultiplier={1.1}>Update Score</Text>
             <View style={styles.scoreInputContainer}>
-              <Text style={styles.teamNameScoreInput}>{currentGame?.team1.name}</Text>
+              <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team1.name}</Text>
               <TextInput
                 style={styles.scoreInput}
                 value={team1Score}
@@ -193,7 +195,7 @@ const MyGamesScreen = () => {
               />
             </View>
             <View style={styles.scoreInputContainer}>
-              <Text style={styles.teamNameScoreInput}>{currentGame?.team2.name}</Text>
+              <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team2.name}</Text>
               <TextInput
                 style={styles.scoreInput}
                 value={team2Score}
@@ -202,10 +204,10 @@ const MyGamesScreen = () => {
               />
             </View>
             <TouchableOpacity style={styles.updateScoreButton} onPress={handleUpdateScore}>
-              <Text style={styles.buttonText}>Save</Text>
+              <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.buttonText}>Close</Text>
+              <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -238,7 +240,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 20,
+    fontSize: ms(20),
     color: '#EA1D25',
     marginLeft: 10,
   },
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 14,
+    fontSize: ms(14),
     color: '#8F8DAA',
   },
   fieldContainer: {
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
   },
   fieldText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 14,
+    fontSize: ms(14),
     color: '#8F8DAA',
     marginLeft: 5,
   },
@@ -282,14 +284,14 @@ const styles = StyleSheet.create({
   },
   teamName: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 16,
+    fontSize: ms(16),
     color: '#333243',
     flex: 1,
     marginLeft: 10,
   },
   scoreText: {
     fontFamily: 'Outfit-Bold',
-    fontSize: 18,
+    fontSize: ms(18),
     color: '#333243',
   },
   vsContainer: {
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
   },
   vsText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 14,
+    fontSize: ms(14),
     color: '#BAB8CB',
     marginRight: 10,
     marginBottom: 3
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 15,
+    fontSize: ms(15),
     color: '#2871FF',
     textDecorationLine: 'underline',
     marginRight: 5
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: ms(20),
     fontFamily: 'Outfit-Bold',
     marginBottom: 4
   },
@@ -351,7 +353,7 @@ const styles = StyleSheet.create({
   },
   teamNameScoreInput: {
     fontFamily: 'Outfit-Regular',
-    fontSize: 16
+    fontSize: ms(16)
   },
   scoreInput: {
     width: 50,
@@ -362,7 +364,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     textAlign: 'center',
     fontFamily: 'Outfit-Regular',
-    fontSize: 16
+    fontSize: ms(16)
   },
   updateScoreButton: {
     backgroundColor: '#6ECC34',
@@ -380,7 +382,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Outfit-Bold',
     textAlign: 'center',
-    fontSize: 16
+    fontSize: ms(16)
   },
 });
 

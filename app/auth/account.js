@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput
+  TextInput,
+  SafeAreaView
 } from 'react-native';
 import { supabase } from '../../utils/supabase';
 import { Button } from '@rneui/base';
@@ -18,9 +17,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
-import { s, ms } from 'react-native-size-matters';
 
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -172,6 +169,7 @@ export default function Account({ session }) {
             <Text style={styles.dropdownItemText}>{item.name}</Text>
           </View>
         )}
+        keyboardAvoiding
       />
     );
   }, [teams, teamId]);
@@ -182,59 +180,55 @@ export default function Account({ session }) {
         style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
       >
-        <Ionicons name="menu" size={ms(30)} color="#EA1D25" />
+        <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.header}>My Account</Text>
-            <Text style={styles.inputLabel}>Your Email</Text>
-            <TextInput
-              label="Email"
-              value={session?.user?.email}
-              editable={false}
-              style={styles.input}
-              className='text-gray-300'
-            />
-            <Text style={styles.inputLabel}>Your Name</Text>
-            <TextInput
-              value={fullName || ''}
-              onChangeText={(text) => setFullName(text)}
-              autoCapitalize='words'
-              style={styles.input}
-            />
-            {profile && !profile.is_admin ?
-              (<View style={styles.dropdownContainer}>
-                <Text style={styles.dropdownLabel}>Your Team</Text>
-                {DropdownComponent}
-              </View>) : (<></>)
-            }
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <Text style={styles.header}>My Account</Text>
+          <Text style={styles.inputLabel}>Your Email</Text>
+          <TextInput
+            label="Email"
+            value={session?.user?.email}
+            editable={false}
+            style={styles.input}
+            className='text-gray-300'
+          />
+          <Text style={styles.inputLabel}>Your Name</Text>
+          <TextInput
+            value={fullName || ''}
+            onChangeText={(text) => setFullName(text)}
+            autoCapitalize='words'
+            style={styles.input}
+          />
+          {profile && !profile.is_admin ?
+            (<View style={styles.dropdownContainer}>
+              <Text style={styles.dropdownLabel}>Your Team</Text>
+              {DropdownComponent}
+            </View>) : (<></>)
+          }
 
-            <Button
-              title={loading ? 'Updating ...' : 'Update Profile'}
-              onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
-              disabled={loading}
-              buttonStyle={styles.primaryButton}
-              titleStyle={styles.buttonText}
-            />
-            <Button
-              title="Sign Out"
-              onPress={signOut}
-              buttonStyle={styles.secondaryButton}
-              titleStyle={[styles.buttonText, styles.secondaryButtonText]}
-            />
-            <Button
-              style={{ marginTop: 20 }}
-              title="Press to Test Notification"
-              onPress={async () => {
-                await sendPushNotification(expoPushToken);
-              }}
-            />
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          <Button
+            title={loading ? 'Updating ...' : 'Update Profile'}
+            onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
+            disabled={loading}
+            buttonStyle={styles.primaryButton}
+            titleStyle={styles.buttonText}
+          />
+          <Button
+            title="Sign Out"
+            onPress={signOut}
+            buttonStyle={styles.secondaryButton}
+            titleStyle={[styles.buttonText, styles.secondaryButtonText]}
+          />
+          <Button
+            style={{ marginTop: 20 }}
+            title="Press to Test Notification"
+            onPress={async () => {
+              await sendPushNotification(expoPushToken);
+            }}
+          />
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
@@ -252,38 +246,38 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: ms(28),
+    fontSize: 28,
     color: '#EA1D25',
     marginBottom: 30,
     textAlign: 'center',
   },
   inputLabel: {
-    fontSize: ms(16),
+    fontSize: 18,
     fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   input: {
-    height: ms(60),
+    height: 60,
     borderColor: '#8F8DAA',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 20,
     borderRadius: 100,
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(16)
+    fontSize: 18
   },
   dropdownContainer: {
-    marginBottom: ms(20),
+    marginBottom: 20,
   },
   dropdownLabel: {
-    fontSize: ms(16),
+    fontSize: 18,
     fontFamily: 'Outfit-Bold',
     color: '#333243',
     marginBottom: 5,
   },
   dropdown: {
-    height: ms(60),
+    height: 60,
     borderColor: '#8F8DAA',
     borderWidth: 1,
     borderRadius: 100,
@@ -295,7 +289,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     margin: 0,
     fontFamily: 'Outfit-Light',
-    fontSize: ms(16)
+    fontSize: 18
   },
   dropdownList: {
     borderColor: '#8F8DAA',
@@ -311,7 +305,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dropdownItemText: {
-    fontSize: ms(16),
+    fontSize: 18,
     fontFamily: 'Outfit-Regular',
     color: 'black',
     padding: 15
@@ -319,22 +313,22 @@ const styles = StyleSheet.create({
   dropdownPlaceholder: {
     color: 'black',
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(16),
+    fontSize: 18,
   },
   dropdownSelectedText: {
     color: 'black',
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(16),
+    fontSize: 18,
   },
   primaryButton: {
-    height: ms(60),
+    height: 60,
     backgroundColor: '#EA1D25',
-    paddingHorizontal: ms(20),
+    paddingHorizontal: 20,
     borderRadius: 100,
-    marginBottom: ms(10),
+    marginBottom: 10,
   },
   secondaryButton: {
-    height: ms(60),
+    height: 60,
     backgroundColor: '#fff',
     borderColor: '#EA1D25',
     borderWidth: 1,
@@ -343,7 +337,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
-    fontSize: ms(16),
+    fontSize: 18,
   },
   secondaryButtonText: {
     color: '#EA1D25',

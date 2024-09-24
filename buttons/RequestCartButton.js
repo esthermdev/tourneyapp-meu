@@ -11,7 +11,7 @@ import { s, ms } from 'react-native-size-matters';
 const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
-const locations = ['Field', 'Entrance', 'Command Center'];
+const locations = ['Field', 'Entrance', 'Tourney Central', 'Parking Lot 1 (Grass)', 'Parking Lot 2 (Pavement)'];
 
 const RequestCartButton = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);

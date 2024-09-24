@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 	dropdown: {
 		backgroundColor: 'white',
 		width: '60%',
-		maxHeight: '30%',
+		maxHeight: '50%',
 		borderRadius: 12,
 		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 2 },

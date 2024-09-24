@@ -10,9 +10,9 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TextInput
+  TextInput,
+  SafeAreaView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@rneui/themed';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
@@ -20,7 +20,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../../utils/supabase';
 import { usePushNotifications } from '../../hooks/usePushNotifications';
 import { ScrollView } from 'react-native-gesture-handler';
-import { s, vs, ms, } from 'react-native-size-matters';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -83,67 +82,64 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className='h-full' style={styles.container}>
-      <ScrollView>
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Ionicons name="menu" size={ms(30)} color="#EA1D25" />
-        </TouchableOpacity>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={100}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.content}>
-              <Text style={styles.header}>Welcome!</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setEmail}
-                  value={email}
-                  placeholder="email@address.com"
-                  placeholderTextColor='#cdd0d4'
-                  autoCapitalize='none'
-                  keyboardType="email-address"
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setPassword}
-                  value={password}
-                  placeholder="Password"
-                  placeholderTextColor='#cdd0d4'
-                  secureTextEntry
-                  autoCapitalize='none'
-                />
-              </View>
-              <View>
-                <Button
-                  title="Sign in"
-                  disabled={loading}
-                  onPress={() => signInWithEmail()}
-                  buttonStyle={styles.primaryButton}
-                  titleStyle={styles.buttonText}
-                />
-              </View>
-              <View>
-                <Text style={styles.signupText}>Not an existing user?</Text>
-                <Button
-                  title='Sign up'
-                  disabled={loading}
-                  onPress={() => signUpWithEmail()}
-                  buttonStyle={styles.secondaryButton}
-                  titleStyle={[styles.buttonText, styles.secondaryButtonText]}
-                />
-              </View>
+    <SafeAreaView className='h-full'>
+      <TouchableOpacity
+        style={styles.menuButton}
+        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+      >
+        <Ionicons name="menu" size={30} color="#EA1D25" />
+      </TouchableOpacity>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView style={styles.content}>
+            <Text style={styles.header}>Welcome!</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setEmail}
+                value={email}
+                placeholder="email@address.com"
+                placeholderTextColor='#cdd0d4'
+                autoCapitalize='none'
+                keyboardType="email-address"
+              />
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </ScrollView>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                placeholder="Password"
+                placeholderTextColor='#cdd0d4'
+                secureTextEntry
+                autoCapitalize='none'
+              />
+            </View>
+            <View>
+              <Button
+                title="Sign in"
+                disabled={loading}
+                onPress={() => signInWithEmail()}
+                buttonStyle={styles.primaryButton}
+                titleStyle={styles.buttonText}
+              />
+            </View>
+            <View>
+              <Text style={styles.signupText}>Not an existing user?</Text>
+              <Button
+                title='Sign up'
+                disabled={loading}
+                onPress={() => signUpWithEmail()}
+                buttonStyle={styles.secondaryButton}
+                titleStyle={[styles.buttonText, styles.secondaryButtonText]}
+              />
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -161,7 +157,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'Outfit-Bold',
-    fontSize: s(28),
+    fontSize: 28,
     color: '#EA1D25',
     marginBottom: 30,
     textAlign: 'center',
@@ -170,27 +166,27 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   input: {
-    height: ms(60),
+    height: 60,
     borderColor: '#8F8DAA',
     borderWidth: 1,
     paddingHorizontal: 22,
     borderRadius: 100,
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(18)
+    fontSize: 18
   },
   inputLabel: {
     fontFamily: 'Outfit-Medium',
     color: '#333243',
   },
   primaryButton: {
-    height: ms(60),
+    height: 60,
     backgroundColor: '#EA1D25',
     paddingHorizontal: 22,
     borderRadius: 100,
     marginBottom: 20,
   },
   secondaryButton: {
-    height: ms(60),
+    height: 60,
     backgroundColor: '#fff',
     borderColor: '#EA1D25',
     borderWidth: 1,
@@ -200,14 +196,14 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
-    fontSize: ms(18),
+    fontSize: 18,
   },
   secondaryButtonText: {
     color: '#EA1D25',
   },
   signupText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(16),
+    fontSize: 16,
     color: '#333243',
     marginBottom: 10,
     alignSelf: 'center'
