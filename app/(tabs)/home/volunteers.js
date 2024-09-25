@@ -49,7 +49,6 @@ const Volunteers = () => {
 				renderItem={renderItem}
 				keyExtractor={(item, index) => index.toString()}
 				numColumns={3}
-				contentContainerStyle={styles.listContainer}
 			/>
 		</View>
 	);
@@ -63,9 +62,10 @@ const styles = StyleSheet.create({
 	listContainer: {
 		paddingTop: 10,
 		paddingHorizontal: 10,
-		alignItems: 'center',
+		flexDirection: 'row',
 	},
 	itemContainer: {
+		flex: 1,
 		width: 100,
 		alignItems: 'center',
 		margin: 10

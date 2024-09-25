@@ -5,11 +5,10 @@ import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 import 'expo-dev-client';
-import { StatusBar } from 'react-native';
+import 'react-native-gesture-handler';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
-setTimeout(SplashScreen.hideAsync, 2000);
 
 const RootLayout = () => {
 	const [loaded, error] = useFonts({
@@ -36,7 +35,6 @@ const RootLayout = () => {
 
 	return (
 		<AuthProvider>
-			<StatusBar />
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<DrawerLayout />
 			</GestureHandlerRootView>

@@ -3,7 +3,7 @@ import { Text, View, Image, SafeAreaView, ScrollView } from 'react-native';
 import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
-import { ScaledSheet, s, vs, ms } from 'react-native-size-matters';
+import { ScaledSheet } from 'react-native-size-matters';
 
 export default function App() {
   return (
