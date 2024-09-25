@@ -17,16 +17,14 @@ export default function App() {
           />
         </View>
         <View style={styles.imageContainer}>
+          <Text maxFontSizeMultiplier={1.3} style={styles.welcomeText}>Welcome to</Text>
           <Image
-            source={images.lobsterPotLogo}
+            source={images.lpTitleLogo}
             resizeMode='contain'
             style={styles.mainImage}
           />
         </View>
         <View style={styles.textContainer}>
-          <Text maxFontSizeMultiplier={1.3} style={styles.welcomeText}>Welcome to</Text>
-          <Text maxFontSizeMultiplier={1.3} style={styles.titleText}>Lobster Pot</Text>
-          <Text maxFontSizeMultiplier={1.3} style={styles.yearText}>2024</Text>
           <CustomButtonWithIcon
             title='Continue'
             buttonStyles={styles.continueButton}
@@ -62,8 +60,8 @@ const styles = ScaledSheet.create({
     alignItems: 'center',
   },
   mainImage: {
-    width: '160@s',
-    height: '160@s',
+    width: '250@s',
+    height: '250@s',
     aspectRatio: 1,
   },
   textContainer: {
@@ -74,7 +72,7 @@ const styles = ScaledSheet.create({
   },
   welcomeText: {
     fontFamily: 'Outfit-Regular',
-    fontSize: '20@ms',
+    fontSize: '25@ms',
     textAlign: 'center',
   },
   titleText: {

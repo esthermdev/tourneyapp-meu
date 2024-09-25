@@ -1,0 +1,30 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Dev Account <Dev@cyyfyys-MacBook-Air.local>
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   app.json
+#	modified:   app/(tabs)/home/_layout.js
+#	modified:   app/(tabs)/home/index.js
+#	new file:   app/(tabs)/home/volunteers.js
+#	modified:   app/(tabs)/info/emergency.js
+#	modified:   app/(tabs)/info/vendors.js
+#	modified:   app/_layout.js
+#	modified:   app/index.js
+#	modified:   assets/images/adaptive-icon.png
+#	modified:   assets/images/icon.png
+#	modified:   assets/images/splash.png
+#	modified:   buttons/CustomButtonWithIcon.js
+#	modified:   buttons/HomeButtons.js
+#	modified:   buttons/MedicButton.js
+#	modified:   buttons/RequestCartButton.js
+#	new file:   buttons/VolunteersButton.js
+#	modified:   buttons/WaterRefillButton.js
+#	modified:   components/Header.js
+#	modified:   components/TabBar.js
+#

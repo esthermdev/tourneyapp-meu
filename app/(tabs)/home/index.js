@@ -10,6 +10,7 @@ import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
+import VolunteersButton from '../../../buttons/VolunteersButton';
 
 const Home = () => {
   const { user } = useAuth();
@@ -50,8 +51,7 @@ const Home = () => {
         <MedicButton />
         <WaterRefillButton buttonStyle={styles.button} />
         <RequestCartButton />
-        <TrainerNotification />
-        <CartNotification />
+        <VolunteersButton />
       </ScrollView>
       <View style={styles.donationButtonContainer}>
         <TouchableOpacity
@@ -61,6 +61,8 @@ const Home = () => {
           <Text maxFontSizeMultiplier={1} className='font-outfitsemibold text-center items-center' style={styles.donationText}>Donation</Text>
         </TouchableOpacity>
       </View>
+      <TrainerNotification />
+      <CartNotification />
     </View>
   )
 }
@@ -81,8 +83,8 @@ const styles = StyleSheet.create({
   },
   donationButtonContainer: {
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    padding: 20
+    paddingHorizontal: 15,
+    padding: 15
   },
   donationButton: {
     padding: 15,

@@ -4,6 +4,7 @@ import { ListItem, Avatar } from '@rneui/base';
 import CustomHeader from '../../../components/CustomHeader';
 import { supabase } from '../../../utils/supabase';
 import { ms } from 'react-native-size-matters';
+import { Link } from 'expo-router';
 
 const Vendors = () => {
 	const [vendors, setVendors] = useState([]);
@@ -16,8 +17,9 @@ const Vendors = () => {
 		const { data, error } = await supabase
 			.from('vendors')
 			.select(`
-				name, 
-        avatar_url
+				name,
+        avatar_url,
+				website
 			`);
 
 		if (error) {
@@ -32,6 +34,9 @@ const Vendors = () => {
 			<Avatar containerStyle={{ backgroundColor: 'purple' }} size={50} rounded title={item.name[0]} source={{ uri: item?.avatar_url }} />
 			<ListItem.Content>
 				<ListItem.Title className='font-outfitmedium' style={{ fontSize: ms(16) }}>{item.name}</ListItem.Title>
+				<ListItem.Subtitle>
+					<Link href={`${item.website}`}>Link</Link>
+				</ListItem.Subtitle>
 			</ListItem.Content>
 		</ListItem>
 	)

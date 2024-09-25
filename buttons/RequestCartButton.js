@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     borderRadius: 22,
-    minHeight: 140,
+    minHeight: 120,
     width: buttonWidth,
     backgroundColor: '#E9BD21',
   },
