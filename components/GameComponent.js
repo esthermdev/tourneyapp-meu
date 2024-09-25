@@ -72,15 +72,15 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.card}>
       <View style={styles.header}>
-        <Icon type='ionicon' name='location' size={14} color='#8F8DAA' containerStyle={styles.locationIcon} />
-        <Text className='font-outfitregular text-[#8F8DAA] mr-2' style={{ fontSize: ms(13) }} maxFontSizeMultiplier={1.2}>{ }
+        <Icon type='ionicon' name='location-sharp' size={14} color='#8F8DAA' style={styles.locationIcon} />
+        <Text style={styles.fieldTitle} maxFontSizeMultiplier={1.2}>{ }
           Field {item.field?.name || 'Number'}
         </Text>
       </View>
       <View style={styles.content}>
         <View style={styles.teamContainer}>
           <Avatar
-            size={75}
+            size={50}
             rounded
             source={{ uri: item.team1?.avatar_uri }}
             containerStyle={styles.avatarContainer}
@@ -94,7 +94,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
         </View>
         <View style={styles.teamContainer}>
           <Avatar
-            size={75}
+            size={50}
             rounded
             source={{ uri: item.team2?.avatar_uri }}
             containerStyle={styles.avatarContainer}
@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     backgroundColor: '#EA1D25',
-    padding: 15,
+    padding: 12,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: 20,
+    marginHorizontal: 12,
     marginBottom: 12
   },
   time: {
@@ -190,8 +190,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   card: {
-    height: 190,
-    borderRadius: 20,
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.12,
@@ -201,53 +200,55 @@ const styles = StyleSheet.create({
     borderColor: '#CBCAD8',
     marginTop: 0,
     marginBottom: 12,
-    marginHorizontal: 20,
-    padding: 20,
-    justifyContent: 'center'
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
+    alignSelf: 'center',
+    justifyContent: 'center'
   },
   locationIcon: {
     marginRight: 3,
+    marginTop: 3.2,
+    height: 12
+  },
+  fieldTitle: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(14),
+    color: '#8F8DAA'
   },
   content: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'top',
+    flex: 1,
+    marginTop: 5,
+    flexDirection: 'row'
+  },
+  avatarContainer: {
+    borderColor: '#EA1D25',
+    borderWidth: 1,
   },
   teamContainer: {
     flex: 1,
     alignItems: 'center',
   },
-  avatarContainer: {
-    borderColor: '#EA1D25',
-    borderWidth: 1,
+  scoreContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  score: {
+    fontSize: ms(28),
+    fontFamily: 'Outfit-SemiBold',
+  },
+  colon: {
+    fontSize: ms(28),
+    marginHorizontal: 5,
     marginBottom: 5,
+    fontFamily: 'Outfit-Medium',
   },
   teamName: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: ms(15),
-  },
-  scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 12
-  },
-  score: {
-    fontSize: ms(30),
-    fontFamily: 'Outfit-Medium',
-  },
-  colon: {
-    fontSize: ms(30),
-    marginHorizontal: 10,
-    marginBottom: 8,
-    fontFamily: 'Outfit-Medium',
+    fontSize: ms(16),
+    marginTop: 5
   },
   placeholderContainer: {
     flex: 1,

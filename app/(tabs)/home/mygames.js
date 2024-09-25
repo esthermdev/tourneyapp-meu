@@ -139,7 +139,7 @@ const MyGamesScreen = () => {
           </Text>
           <Ionicons name='checkmark-circle' size={15} color='#8F8DAA' />
         </TouchableOpacity>
-      ) : (
+      ) : profile.is_team_captain && !game.scores[0].is_finished ? (
         <TouchableOpacity
           style={styles.updateButton}
           onPress={() => openModal(game)}
@@ -147,7 +147,7 @@ const MyGamesScreen = () => {
           <Text maxFontSizeMultiplier={1.2} style={styles.updateButtonText}>Update Score</Text>
           <Ionicons name='create' size={15} color='#2871FF' />
         </TouchableOpacity>
-      )}
+      ) : (<></>)}
     </Card>
   );
 
@@ -185,6 +185,7 @@ const MyGamesScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle} maxFontSizeMultiplier={1.1}>Update Score</Text>
+            <Text style={styles.modalSubtitle} maxFontSizeMultiplier={1.1}>If needed, please check with the other team if there are any score discrepancies before submitting.</Text>
             <View style={styles.scoreInputContainer}>
               <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team1.name}</Text>
               <TextInput
@@ -192,6 +193,7 @@ const MyGamesScreen = () => {
                 value={team1Score}
                 onChangeText={setTeam1Score}
                 keyboardType="numeric"
+                maxLength={2}
               />
             </View>
             <View style={styles.scoreInputContainer}>
@@ -201,6 +203,7 @@ const MyGamesScreen = () => {
                 value={team2Score}
                 onChangeText={setTeam2Score}
                 keyboardType="numeric"
+                maxLength={2}
               />
             </View>
             <TouchableOpacity style={styles.updateScoreButton} onPress={handleUpdateScore}>
@@ -245,11 +248,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cardContainer: {
-    borderRadius: 20,
+    borderRadius: 12,
     marginTop: 0,
     marginHorizontal: 20,
     marginBottom: 12,
-    padding: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -313,7 +315,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#BAB8CB',
   },
   updateButton: {
-    marginTop: 12,
     alignItems: 'center',
     justifyContent: 'flex-end',
     flexDirection: 'row'
@@ -323,7 +324,8 @@ const styles = StyleSheet.create({
     fontSize: ms(15),
     color: '#2871FF',
     textDecorationLine: 'underline',
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 1
   },
   disabledButton: {
     opacity: 0.5,
@@ -344,6 +346,10 @@ const styles = StyleSheet.create({
     fontSize: ms(20),
     fontFamily: 'Outfit-Bold',
     marginBottom: 4
+  },
+  modalSubtitle: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(14)
   },
   scoreInputContainer: {
     flexDirection: 'row',

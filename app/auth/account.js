@@ -5,19 +5,17 @@ import {
   Text,
   Alert,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import { supabase } from '../../utils/supabase';
 import { Button } from '@rneui/base';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
-import { Dropdown } from 'react-native-element-dropdown';
 import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
+import SearchModal from '../../components/SearchModal';
 
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -47,6 +45,9 @@ export default function Account({ session }) {
   const [teamId, setTeamId] = useState(null);
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredTeams, setFilteredTeams] = useState([]);
 
   const navigation = useNavigation();
 
@@ -142,37 +143,28 @@ export default function Account({ session }) {
     }
   };
 
-  const DropdownComponent = useMemo(() => {
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const filtered = teams.filter(team =>
+      team.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredTeams(filtered);
+  };
+
+  const TeamSelector = useMemo(() => {
     return (
-      <Dropdown
+      <TouchableOpacity
         style={styles.dropdown}
-        selectedTextStyle={styles.dropdownSelectedText}
-        placeholderStyle={styles.dropdownPlaceholder}
-        containerStyle={styles.dropdownList}
-        activeColor='#FFEBEC'
-        renderRightIcon={() => (
-          <View>
-            <Ionicons name="caret-down" size={24} color="#333243" />
-          </View>
-        )}
-        data={teams}
-        labelField='name'
-        valueField='id'
-        placeholder='Select a team...'
-        value={teamId || null}
-        onChange={item => setTeamId(item.id)}
-        search
-        inputSearchStyle={styles.searchInput}
-        searchPlaceholder="Search..."
-        renderItem={item => (
-          <View>
-            <Text style={styles.dropdownItemText}>{item.name}</Text>
-          </View>
-        )}
-        keyboardAvoiding
-      />
+        onPress={() => setIsModalVisible(true)}
+      >
+        <Text style={styles.dropdownSelectedText}>
+          {teams.find(team => team.id === teamId)?.name || 'Select a team...'}
+        </Text>
+        <Ionicons name="caret-down" size={24} color="#333243" />
+      </TouchableOpacity>
     );
   }, [teams, teamId]);
+
 
   return (
     <SafeAreaView className='h-full' style={styles.container}>
@@ -182,53 +174,59 @@ export default function Account({ session }) {
       >
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.header}>My Account</Text>
-          <Text style={styles.inputLabel}>Your Email</Text>
-          <TextInput
-            label="Email"
-            value={session?.user?.email}
-            editable={false}
-            style={styles.input}
-            className='text-gray-300'
-          />
-          <Text style={styles.inputLabel}>Your Name</Text>
-          <TextInput
-            value={fullName || ''}
-            onChangeText={(text) => setFullName(text)}
-            autoCapitalize='words'
-            style={styles.input}
-          />
-          {profile && !profile.is_admin ?
-            (<View style={styles.dropdownContainer}>
-              <Text style={styles.dropdownLabel}>Your Team</Text>
-              {DropdownComponent}
-            </View>) : (<></>)
-          }
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.header}>My Account</Text>
+        <Text style={styles.inputLabel}>Your Email</Text>
+        <TextInput
+          label="Email"
+          value={session?.user?.email}
+          editable={false}
+          style={styles.input}
+          className='text-gray-300'
+        />
+        <Text style={styles.inputLabel}>Your Name</Text>
+        <TextInput
+          value={fullName || ''}
+          onChangeText={(text) => setFullName(text)}
+          autoCapitalize='words'
+          style={styles.input}
+        />
+        {profile && !profile.is_admin ?
+          (<View style={styles.dropdownContainer}>
+            <Text style={styles.dropdownLabel}>Your Team</Text>
+            {TeamSelector}
+          </View>) : (<></>)
+        }
 
-          <Button
-            title={loading ? 'Updating ...' : 'Update Profile'}
-            onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
-            disabled={loading}
-            buttonStyle={styles.primaryButton}
-            titleStyle={styles.buttonText}
-          />
-          <Button
-            title="Sign Out"
-            onPress={signOut}
-            buttonStyle={styles.secondaryButton}
-            titleStyle={[styles.buttonText, styles.secondaryButtonText]}
-          />
-          <Button
-            style={{ marginTop: 20 }}
-            title="Press to Test Notification"
-            onPress={async () => {
-              await sendPushNotification(expoPushToken);
-            }}
-          />
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        <Button
+          title={loading ? 'Updating ...' : 'Update Profile'}
+          onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
+          disabled={loading}
+          buttonStyle={styles.primaryButton}
+          titleStyle={styles.buttonText}
+        />
+        <Button
+          title="Sign Out"
+          onPress={signOut}
+          buttonStyle={styles.secondaryButton}
+          titleStyle={[styles.buttonText, styles.secondaryButtonText]}
+        />
+        <Button
+          style={{ marginTop: 20 }}
+          title="Press to Test Notification"
+          onPress={async () => {
+            await sendPushNotification(expoPushToken);
+          }}
+        />
+      </ScrollView>
+      <SearchModal
+        isVisible={isModalVisible}
+        teams={searchQuery ? filteredTeams : teams}
+        onClose={() => setIsModalVisible(false)}
+        onSelect={(id) => setTeamId(id)}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearch}
+      />
     </SafeAreaView>
   );
 };
@@ -278,18 +276,14 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderColor: '#8F8DAA',
     borderWidth: 1,
     borderRadius: 100,
     paddingHorizontal: 20,
     backgroundColor: 'white',
-  },
-  searchInput: {
-    borderColor: '#CBC9E1',
-    borderRadius: 12,
-    margin: 0,
-    fontFamily: 'Outfit-Light',
-    fontSize: 18
   },
   dropdownList: {
     borderColor: '#8F8DAA',
