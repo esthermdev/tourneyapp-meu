@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem, Avatar } from '@rneui/base';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '../../../utils/supabase';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { router } from 'expo-router';
 import { s, ms } from 'react-native-size-matters';
+import { SearchBar } from '@rneui/themed';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
   const [selectedDivision, setSelectedDivision] = useState('All');
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchTeams();
@@ -48,6 +51,11 @@ const Teams = () => {
     filteredTeams = teams.filter(team => team.pool.division === selectedDivision);
   };
 
+  // Apply search filter
+  filteredTeams = filteredTeams.filter(team =>
+    team.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const renderLabel = (team) => {
     switch (team.pool.division) {
       case 'MU':
@@ -67,22 +75,28 @@ const Teams = () => {
     }
   };
 
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+  };
+
   const renderItem = ({ item }) => (
-    <ListItem style={{ paddingHorizontal: 15 }} bottomDivider>
-      <Avatar
-        size={50}
-        rounded
-        source={{ uri: item?.avatar_uri }} // replace with actual avatar URLs if available
-        title={item.name[0]}
-        avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }} // use the first letter of the team name as the title if no image is available
-      />
-      <ListItem.Content style={{ gap: s(5) }}>
-        <ListItem.Title className='font-outfitbold' style={styles.teamName} maxFontSizeMultiplier={1.2}>{item.name}</ListItem.Title>
-        <View className='rounded-full px-[8] py-0.5' style={{ backgroundColor: item.color }}>
-          <ListItem.Subtitle className='font-outfitlight' maxFontSizeMultiplier={1.2} style={styles.division}>{renderLabel(item)}</ListItem.Subtitle>
-        </View>
-      </ListItem.Content>
-    </ListItem>
+    <TouchableOpacity onPress={() => router.push(`/teams/${item.id}?teamName=${item.name}`)}>
+      <ListItem style={{ paddingHorizontal: 15 }} bottomDivider>
+        <Avatar
+          size={50}
+          rounded
+          source={{ uri: item?.avatar_uri }} // replace with actual avatar URLs if available
+          title={item.name[0]}
+          avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }} // use the first letter of the team name as the title if no image is available
+        />
+        <ListItem.Content style={{ gap: s(5) }}>
+          <ListItem.Title className='font-outfitbold' style={styles.teamName} maxFontSizeMultiplier={1.2}>{item.name}</ListItem.Title>
+          <View className='rounded-full px-[8] py-0.5' style={{ backgroundColor: item.color }}>
+            <ListItem.Subtitle className='font-outfitlight' maxFontSizeMultiplier={1.2} style={styles.division}>{renderLabel(item)}</ListItem.Subtitle>
+          </View>
+        </ListItem.Content>
+      </ListItem>
+    </TouchableOpacity>
   );
 
   return (
@@ -90,6 +104,17 @@ const Teams = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header} maxFontSizeMultiplier={1}>Teams</Text>
       </View>
+      <SearchBar
+        placeholder="Search teams..."
+        onChangeText={handleSearch}
+        value={searchQuery}
+        containerStyle={styles.searchBarContainer}
+        inputContainerStyle={styles.searchBarInputContainer}
+        inputStyle={styles.searchBarInput}
+        round={true}
+        lightTheme={true}
+        clearIcon={{ color: '#86939e' }}
+      />
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5, padding: 15 }}>
         <Text maxFontSizeMultiplier={1.2} className='font-outfitlight text-gray-500 mt-0.3' style={styles.filterTitle}>Filters: </Text>
         <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('All')}>
@@ -164,5 +189,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Light',
     fontSize: ms(12),
     color: '#fff'
-  }
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderTopColor: 'transparent',
+    paddingHorizontal: 15,
+  },
+  searchBarInputContainer: {
+    backgroundColor: '#F0F0F0',
+  },
+  searchBarInput: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(14),
+  },
 });

@@ -6,6 +6,7 @@ import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 import 'expo-dev-client';
 import 'react-native-gesture-handler';
+import { StatusBar } from 'react-native';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();

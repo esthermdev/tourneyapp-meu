@@ -35,6 +35,8 @@ const Volunteers = () => {
 				size={ms(50)}
 				rounded
 				title={item.badge[0]}
+				source={{ uri: "data:image/png" }}
+				placeholderStyle={{ backgroundColor: 'transparent' }}
 			/>
 			<Text style={styles.badgeText}>{item.badge}</Text>
 			<Text style={styles.roleText}>{item.role}</Text>
