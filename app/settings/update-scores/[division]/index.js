@@ -3,13 +3,13 @@ import { Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { divisionConfig } from '../../../../utils/divisionUpdateScoreConfig';
+import { divisionUpdateScoreConfig } from '../../../../utils/divisionUpdateScoreConfig';
 import CustomAdminHeader from '../../../../components/CustomAdminHeader';
 import { capitalizeWords } from '../../../../utils/capitalizeWords';
 
 const DivisionScreen = () => {
 	const { division } = useLocalSearchParams();
-	const gameTypes = divisionConfig[division] || [];
+	const gameTypes = divisionUpdateScoreConfig[division] || [];
 
 	const renderItem = ({ item }) => (
 		<TouchableOpacity

@@ -10,7 +10,8 @@ import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
-import VolunteersButton from '../../../buttons/VolunteersButton';
+import VolunteersButton from '../../../buttons/CustomHomeButton';
+import CustomHomeButton from '../../../buttons/CustomHomeButton';
 
 const Home = () => {
   const { user } = useAuth();
@@ -36,22 +37,35 @@ const Home = () => {
           buttonStyle={{ backgroundColor: '#FA7930' }}
           handlePress={() => handlePress('mygames')}
         />
+        <CustomHomeButton
+          title='Report Spirit Scores'
+          color='#3CB043'
+          icon='hands-helping'
+          align='flex-start'
+          handlePress={() => router.push('https://docs.google.com/forms/d/16wUJRxu9JUVHVqNXIyrWex935ywue45AmLqrrgNjgtE/viewform?edit_requested=true')}
+        />
         <HomeButtons
           title='Watch Live'
           icon={icons.video}
           buttonStyle={{ backgroundColor: '#FF026C' }}
           handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
         />
+        <MedicButton />
+        <WaterRefillButton buttonStyle={styles.button} />
+        <RequestCartButton />
         <HomeButtons
           title='Field Map'
           icon={icons.map}
           buttonStyle={{ backgroundColor: '#B6C846' }}
           handlePress={() => router.push('/home/fieldmap')}
         />
-        <MedicButton />
-        <WaterRefillButton buttonStyle={styles.button} />
-        <RequestCartButton />
-        <VolunteersButton />
+        <CustomHomeButton
+          title='Meet our Volunteers!'
+          icon='people-carry'
+          color='purple'
+          align='center'
+          handlePress={() => router.push('home/volunteers')}
+        />
       </ScrollView>
       <View style={styles.donationButtonContainer}>
         <TouchableOpacity

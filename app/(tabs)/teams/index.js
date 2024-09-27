@@ -79,11 +79,11 @@ const Teams = () => {
     </TouchableOpacity>
   ), [renderLabel]);
 
-  const FilterButton = useCallback(({ title, color, division }) => (
-    <TouchableOpacity className={`bg-[${color}] rounded-full py-0.5 px-[8]`} onPress={() => setSelectedDivision(division)}>
+  const FilterButton = ({ title, color, division }) => (
+    <TouchableOpacity style={[styles.filterButton, { backgroundColor: color }]} onPress={() => setSelectedDivision(division)}>
       <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>{title}</Text>
     </TouchableOpacity>
-  ), []);
+  );
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -171,7 +171,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 5,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 10
+  },
+  filterButton: {
+    borderRadius: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
   },
   listContent: {
     paddingBottom: 20,
@@ -180,7 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent',
     borderTopColor: 'transparent',
-    paddingHorizontal: 15,
   },
   searchBarInputContainer: {
     backgroundColor: '#F0F0F0',

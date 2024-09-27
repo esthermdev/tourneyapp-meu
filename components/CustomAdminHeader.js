@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     fontFamily: 'Outfit-Bold',
-    fontSize: 28,
+    fontSize: 24,
     color: '#FF9821',
     textAlign: 'center',
   },

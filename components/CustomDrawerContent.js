@@ -14,7 +14,7 @@ const CustomDrawerContent = (props) => {
 
   const drawerItems = [
     { name: 'index', label: 'Welcome' },
-    { name: '(tabs)', label: 'Home', icon: 'home' },
+    { name: 'home', label: 'Home', icon: 'home' },
     { name: 'auth', label: 'My Account', icon: 'person' },
   ];
 
