@@ -7,27 +7,30 @@ import { formatDate } from '../utils/formatDate';
 import { formatTime } from '../utils/formatTime';
 import { ms, s } from 'react-native-size-matters';
 
-const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
+const GameComponent = ({ datetimeId, division, roundId, title }) => {
   const [games, setGames] = useState([]);
   const [roundInfo, setRoundInfo] = useState({ date: '', time: '' });
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    getGames(datetimeId, division, roundId, poolIds);
-  }, [datetimeId, division, roundId, poolIds]);
+    getGames(datetimeId, division, roundId);
+  }, [datetimeId, division, roundId]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getGames(datetimeId, division, roundId, poolIds).then(() => setRefreshing(false));
-  }, [datetimeId, division, roundId, poolIds]);
+    getGames(datetimeId, division, roundId).then(() => setRefreshing(false));
+  }, [datetimeId, division, roundId]);
 
-  const getGames = async (datetimeId, division, roundId, poolIds) => {
+  const getGames = async (datetimeId, division, roundId) => {
     let query = supabase
       .from('games')
       .select(`
         id,
-        pool_id,
+        pool:pool_id (
+          id,
+          name
+        ),
         round_id,
         datetime:datetime_id (
           id, date, time
@@ -46,11 +49,9 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
           name
         )
       `)
-      .eq('division', division).eq('round_id', roundId).eq('datetime_id', datetimeId)
-
-    if (poolIds) {
-      query = query.in('pool_id', poolIds)
-    }
+      .eq('division', division)
+      .eq('round_id', roundId)
+      .eq('datetime_id', datetimeId);
 
     const { data, error } = await query;
 
@@ -59,6 +60,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
     } else {
       const filteredGames = data.filter(game => game.team1 !== null || game.team2 !== null);
       setGames(filteredGames);
+
       if (filteredGames.length > 0) {
         setRoundInfo({
           date: formatDate(filteredGames[0].datetime.date),
@@ -71,7 +73,7 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
 
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.card}>
-      <View style={styles.header}>
+      <View style={styles.fieldInfoContainer}>
         <Icon type='ionicon' name='location-sharp' size={14} color='#8F8DAA' style={styles.locationIcon} />
         <Text style={styles.fieldTitle} maxFontSizeMultiplier={1.2}>{ }
           Field {item.field?.name || 'Number'}
@@ -102,6 +104,11 @@ const GameComponent = ({ datetimeId, division, roundId, poolIds, title }) => {
           <Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team2?.name}</Text>
         </View>
       </View>
+      {item.pool && item.pool.name && (
+        <Text style={styles.poolName} maxFontSizeMultiplier={1.2}>
+          Pool {item.pool.name}
+        </Text>
+      )}
     </Card>
   );
 
@@ -201,20 +208,25 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 12,
   },
-  header: {
+  fieldInfoContainer: {
+    flex: 1,
     flexDirection: 'row',
-    alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'center'
   },
   locationIcon: {
     marginRight: 3,
-    marginTop: 3.2,
-    height: 12
   },
   fieldTitle: {
     fontFamily: 'Outfit-Regular',
     fontSize: ms(14),
     color: '#8F8DAA'
+  },
+  poolName: {
+    fontFamily: 'Outfit-SemiBold',
+    fontSize: ms(12),
+    color: '#EA1D25',
+    textAlign: 'center'
   },
   content: {
     flex: 1,

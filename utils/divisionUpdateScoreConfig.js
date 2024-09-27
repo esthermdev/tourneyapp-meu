@@ -1,4 +1,4 @@
-export const divisionConfig = {
+export const divisionUpdateScoreConfig = {
 	men_upper: [
 		{
 			code: 'MU',

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, RefreshControl, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { StyleSheet, Text, View, RefreshControl, Keyboard, TouchableWithoutFeedback, FlatList, TouchableOpacity } from 'react-native';
 import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { router } from 'expo-router';
 import { s, ms } from 'react-native-size-matters';
 import { SearchBar } from '@rneui/themed';
@@ -14,84 +12,62 @@ const Teams = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetchTeams().then(() => setRefreshing(false));
-  }, []);
-
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     const { data, error } = await supabase
       .from('teams')
-      .select(
-        `id, 
-        name, 
-        pool:pool_id (
-          division
-        ),
-        avatar_uri, 
-        color`
-      );
+      .select(`id, name, pool:pool_id (division), avatar_uri, color`);
 
     if (error) {
       console.error('Error fetching teams:', error);
     } else {
-      const sortedTeams = data.sort((a, b) => a.name.localeCompare(b.name))
-      setTeams(sortedTeams);
+      setTeams(data.sort((a, b) => a.name.localeCompare(b.name)));
     }
-  };
+  }, []);
 
-  let filteredTeams;
-  if (selectedDivision === 'All') {
-    filteredTeams = teams;
-  } else {
-    filteredTeams = teams.filter(team => team.pool.division === selectedDivision);
-  };
+  useEffect(() => {
+    fetchTeams();
+  }, [fetchTeams]);
 
-  // Apply search filter
-  filteredTeams = filteredTeams.filter(team =>
-    team.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchTeams().then(() => setRefreshing(false));
+  }, [fetchTeams]);
 
-  const renderLabel = (team) => {
-    switch (team.pool.division) {
-      case 'MU':
-        return 'Men - Upper';
-      case 'ML':
-        return 'Men - Lower';
-      case 'MM':
-        return 'Men - Middle';
-      case 'WU':
-        return 'Women - Upper';
-      case 'WL':
-        return 'Women - Lower';
-      case 'X':
-        return 'Mixed';
-      default:
-        return team.pool.division; // fallback to the original division if it's not O, X, or W
-    }
-  };
-
-  const handleSearch = (text) => {
+  const handleSearch = useCallback((text) => {
     setSearchQuery(text);
-  };
+  }, []);
 
-  const dismissKeyboard = () => {
+  const dismissKeyboard = useCallback(() => {
     Keyboard.dismiss();
-  };
+  }, []);
 
-  const renderItem = ({ item }) => (
+  const filteredTeams = useMemo(() => {
+    return teams
+      .filter(team => selectedDivision === 'All' || team.pool.division === selectedDivision)
+      .filter(team => team.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [teams, selectedDivision, searchQuery]);
+
+  const renderLabel = useCallback((team) => {
+    switch (team.pool.division) {
+      case 'MU': return 'Men - Upper';
+      case 'ML': return 'Men - Lower';
+      case 'MM': return 'Men - Middle';
+      case 'WU': return 'Women - Upper';
+      case 'WL': return 'Women - Lower';
+      case 'X': return 'Mixed';
+      default: return team.pool.division;
+    }
+  }, []);
+
+  const renderItem = useCallback(({ item }) => (
     <TouchableOpacity onPress={() => router.push(`/teams/${item.id}?teamName=${item.name}`)}>
       <ListItem style={{ paddingHorizontal: 15 }} bottomDivider>
         <Avatar
           size={50}
           rounded
-          source={{ uri: item?.avatar_uri }} // replace with actual avatar URLs if available
+          source={{ uri: item?.avatar_uri }}
           title={item.name[0]}
-          avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }} // use the first letter of the team name as the title if no image is available
+          avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }}
         />
         <ListItem.Content style={{ gap: s(5) }}>
           <ListItem.Title className='font-outfitbold' style={styles.teamName} maxFontSizeMultiplier={1.2}>{item.name}</ListItem.Title>
@@ -101,7 +77,13 @@ const Teams = () => {
         </ListItem.Content>
       </ListItem>
     </TouchableOpacity>
-  );
+  ), [renderLabel]);
+
+  const FilterButton = useCallback(({ title, color, division }) => (
+    <TouchableOpacity className={`bg-[${color}] rounded-full py-0.5 px-[8]`} onPress={() => setSelectedDivision(division)}>
+      <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>{title}</Text>
+    </TouchableOpacity>
+  ), []);
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -125,40 +107,25 @@ const Teams = () => {
         />
         <View style={styles.filterContainer}>
           <Text maxFontSizeMultiplier={1.2} className='font-outfitlight text-gray-500 mt-0.3' style={styles.filterTitle}>Filters: </Text>
-          <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('All')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MU')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Upper</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#0AB359] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MM')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Middle</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#efaa34] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('ML')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Lower</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#FF026C] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WU')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Upper</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#BD41F2] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WL')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Lower</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className='bg-[#f77732] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('X')}>
-            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Mixed</Text>
-          </TouchableOpacity>
+          <FilterButton title="All" color="#917120" division="All" />
+          <FilterButton title="Men - Upper" color="#2871FF" division="MU" />
+          <FilterButton title="Men - Middle" color="#0AB359" division="MM" />
+          <FilterButton title="Men - Lower" color="#efaa34" division="ML" />
+          <FilterButton title="Women - Upper" color="#FF026C" division="WU" />
+          <FilterButton title="Women - Lower" color="#BD41F2" division="WL" />
+          <FilterButton title="Mixed" color="#f77732" division="X" />
         </View>
-        <FlashList
+        <FlatList
+          data={filteredTeams}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={['#EA1D25']} // This sets the color of the refresh spinner
+              colors={['#EA1D25']}
             />
           }
-          data={filteredTeams}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          estimatedItemSize={100}
           contentContainerStyle={styles.listContent}
         />
       </View>
@@ -166,7 +133,7 @@ const Teams = () => {
   );
 };
 
-export default Teams;
+export default React.memo(Teams);
 
 const styles = StyleSheet.create({
   container: {
@@ -188,9 +155,9 @@ const styles = StyleSheet.create({
     fontSize: ms(16),
   },
   division: {
-    color: 'white', // white text
-    fontSize: ms(10), // text size
-    textAlign: 'center', // center the text 
+    color: 'white',
+    fontSize: ms(10),
+    textAlign: 'center',
   },
   filterTitle: {
     fontSize: ms(12)
@@ -207,7 +174,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   listContent: {
-    paddingBottom: 20, // Add some padding at the bottom of the list
+    paddingBottom: 20,
   },
   searchBarContainer: {
     backgroundColor: 'transparent',

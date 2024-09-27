@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import DivisionButton from '../../../buttons/DivisionButton';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
+import { divisionScheduleConfig } from '../../../utils/divisionScheduleConfig';
 
 const ScheduleScreen = () => {
   return (
@@ -12,48 +13,16 @@ const ScheduleScreen = () => {
       </View>
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.buttonContainer}>
-          <DivisionButton
-            title='Men - Upper'
-            route='schedule/men_upper'
-            color='#2871FF'
-            disabled={false}
-            icon='people-group'
-          />
-          <DivisionButton
-            title='Men - Middle'
-            route='schedule/men_lower'
-            color='#0AB359'
-            disabled={true}
-            icon='people-group'
-          />
-          <DivisionButton
-            title='Men - Lower'
-            route='schedule/men_middle'
-            color='#F2A541'
-            disabled={true}
-            icon='people-group'
-          />
-          <DivisionButton
-            title='Women - Upper'
-            route='schedule/women_upper'
-            color='#FF026C'
-            disabled={true}
-            icon='people-group'
-          />
-          <DivisionButton
-            title='Women - Lower'
-            route='schedule/women_lower'
-            color='#BD41F2'
-            disabled={true}
-            icon='people-group'
-          />
-          <DivisionButton
-            title='Mixed'
-            route='schedule/mixed'
-            color='#FF7429'
-            disabled={true}
-            icon='people-group'
-          />
+          {Object.entries(divisionScheduleConfig).map(([key, division]) => (
+            <DivisionButton
+              key={key}
+              title={division.title}
+              route={`/schedule/${key}`}
+              color={division.color}
+              icon={division.icon}
+              disabled={division.disabled}
+            />
+          ))}
         </ScrollView>
       </View>
     </View>

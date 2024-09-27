@@ -1,24 +1,28 @@
+// components/ScheduleList.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { ms } from 'react-native-size-matters';
-
-const scheduleOptions = [
-  { title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
-  { title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
-  { title: '3rd to 7th Place', route: '3-7place', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
-  { title: '9th Place', route: '9place', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
-  { title: '11th to 15th Place', route: '11-15place', icon: 'award', iconColor: '#B0A00F', bgColor: '#B0A00F1A' },
-];
+import { divisionScheduleConfig } from '../utils/divisionScheduleConfig';
 
 const ScheduleList = ({ division }) => {
   const router = useRouter();
+  const config = divisionScheduleConfig[division];
+
+  if (!config) {
+    return null; // or some error component
+  }
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={[styles.optionButton, { backgroundColor: item.bgColor }]}
-      onPress={() => router.push(`/schedule/${division}/${item.route}`)}
+      onPress={() => router.push({
+        pathname: `schedule/${division}/${item.route}`,
+        params: {
+          code: item.code,
+        }
+      })}
       activeOpacity={0.6}
     >
       <FontAwesome6 name={item.icon} size={22} color={item.iconColor} style={styles.icon} />
@@ -30,9 +34,9 @@ const ScheduleList = ({ division }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={scheduleOptions}
+        data={config.scheduleOptions}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.route}
       />
     </View>
   );

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 
 const GamesSchedule = () => {
@@ -6,8 +6,8 @@ const GamesSchedule = () => {
   return (
     <View style={styles.container}>
       <Stack>
-        <Stack.Screen name='index' options={{ title: 'Schedule', headerShown: false }} />
-        <Stack.Screen name='men_upper' options={{ title: 'Open', headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="[division]" options={{ headerShown: false }} />
       </Stack>
     </View>
   );
