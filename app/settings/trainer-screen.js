@@ -12,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 const TrainerManagementScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <CustomAdminHeader title="Trainer Management" />
+      <CustomAdminHeader title="Trainer Management" route='settings' />
       <Tab.Navigator
         screenOptions={{
           tabBarLabelStyle: styles.tabLabel,
@@ -102,7 +102,7 @@ const TrainerAvailabilityScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#333243',
   },
   tabBar: {
     backgroundColor: '#ffffff',
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   screenContainer: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#333243',
   },
   trainerList: {
     padding: 10,

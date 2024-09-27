@@ -1,37 +1,40 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import CustomAdminHeader from '../../../components/CustomAdminHeader';
+
+const divisions = [
+  { id: 'men_upper', title: 'Men - Upper' },
+  { id: 'men_middle', title: 'Men - Middle' },
+  { id: 'men_lower', title: 'Men - Lower' },
+  { id: 'women_upper', title: 'Women - Upper' },
+  { id: 'women_lower', title: 'Women - Lower' },
+  { id: 'mixed', title: 'Mixed' },
+];
 
 const UpdateScoresScreen = () => {
-  const divisions = [
-    { title: 'Men - Upper', route: 'settings/update-scores/men_upper', icon: 'people' },
-    // { title: 'Open Division', route: 'settings/admin/update-scores/open', icon: 'people-outline' },
-    // Add more divisions as needed
-  ];
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.divisionButton}
+      onPress={() => router.push(`/settings/update-scores/${item.id}`)}
+    >
+      <MaterialIcons name="groups" size={24} color="#fff" />
+      <Text maxFontSizeMultiplier={1.2} style={styles.divisionText}>{item.title}</Text>
+      <MaterialIcons name="arrow-right" size={24} color="#fff" />
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back-circle" size={30} color="#FFA000" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Update Scores</Text>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.subHeader}>Select a Division</Text>
-        {divisions.map((division, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.divisionButton}
-            onPress={() => router.push(division.route)}
-          >
-            <Ionicons name={division.icon} size={24} color="#1E2A3A" style={styles.icon} />
-            <Text style={styles.divisionText}>{division.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <CustomAdminHeader title="Update Scores" route='settings' />
+      <FlatList
+        data={divisions}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.content}
+      />
     </SafeAreaView>
   );
 };
@@ -41,46 +44,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1E2A3A',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#34495E',
-  },
-  backButton: {
-    marginRight: 15,
-  },
-  headerTitle: {
-    fontFamily: 'Outfit-Bold',
-    fontSize: 28,
-    color: '#FFFFFF',
-  },
   content: {
     padding: 20,
   },
-  subHeader: {
-    fontSize: 20,
-    fontFamily: 'Outfit-Medium',
-    marginBottom: 20,
-    color: '#FFFFFF',
-  },
   divisionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFA000',
+    backgroundColor: '#FF9821',
     padding: 20,
     borderRadius: 10,
     marginBottom: 15,
-  },
-  icon: {
-    marginRight: 15,
+    flexDirection: 'row'
   },
   divisionText: {
-    color: '#1E2A3A',
+    flex: 1,
+    marginHorizontal: 10,
+    color: '#fff',
     fontFamily: 'Outfit-SemiBold',
     fontSize: 18,
+    textAlign: 'left',
   },
 });
 

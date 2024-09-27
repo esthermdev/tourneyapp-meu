@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { StatusBar, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { supabase } from '../../utils/supabase';
 import CustomAdminHeader from '../../components/CustomAdminHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -32,7 +32,7 @@ const AnnouncementScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomAdminHeader title="Send Announcement" />
+      <CustomAdminHeader title="Send Announcement" route='settings' />
       <View style={styles.content}>
         <Text style={styles.label}>Title</Text>
         <TextInput
@@ -60,7 +60,7 @@ const AnnouncementScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#333243',
   },
   content: {
     padding: 20,
@@ -69,10 +69,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Outfit-Medium',
     marginBottom: 5,
+    color: '#fff'
   },
   input: {
     borderWidth: 1,
-    borderColor: '#CBCAD8',
+    borderColor: '#fff',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,

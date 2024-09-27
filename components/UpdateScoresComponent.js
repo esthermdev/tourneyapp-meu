@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../utils/supabase';
-import { Card, Avatar } from '@rneui/base';
+import { Card } from '@rneui/base';
 import { formatTime } from '../utils/formatTime';
 import { FlatList } from 'react-native-gesture-handler';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import CustomAdminHeader from '../components/CustomAdminHeader';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 	const [games, setGames] = useState([]);
@@ -243,19 +241,19 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 		<Card containerStyle={styles.cardContainer}>
 			<View style={styles.cardHeader}>
 				<View style={styles.teamsContainer}>
-					<Text style={styles.teamName}>{item.team1?.name}</Text>
-					<Text style={styles.scoreText}>{item.scores[0]?.team1_score || '0'}</Text>
+					<Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team1?.name}</Text>
+					<Text style={styles.scoreText} maxFontSizeMultiplier={1.1}>{item.scores[0]?.team1_score || '0'}</Text>
 				</View>
 				<View style={styles.teamsContainer}>
-					<Text style={styles.teamName}>{item.team2?.name}</Text>
-					<Text style={styles.scoreText}>{item.scores[0]?.team2_score || '0'}</Text>
+					<Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team2?.name}</Text>
+					<Text style={styles.scoreText} maxFontSizeMultiplier={1.1}>{item.scores[0]?.team2_score || '0'}</Text>
 				</View>
 			</View>
 			<View style={styles.cardFooter}>
-				<Text style={styles.fieldText}>{formatTime(item.datetime?.time)} - Wainright {item.field?.name || 'Number'}</Text>
-				<Text style={styles.statusText}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
+				<Text style={styles.fieldText} maxFontSizeMultiplier={1.1}>{formatTime(item.datetime?.time)} - Wainright {item.field?.name || 'Number'}</Text>
+				<Text style={styles.statusText} maxFontSizeMultiplier={1.1}>{item.scores[0]?.is_finished ? 'Final' : 'In Progress'}</Text>
 				<TouchableOpacity onPress={() => openModal(item)}>
-					<FontAwesome name="pencil-square" size={22} color="#EA1D25" />
+					<MaterialIcons name="edit-square" size={24} color="#EA1D25" />
 				</TouchableOpacity>
 			</View>
 		</Card>
@@ -273,8 +271,7 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 	);
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<CustomAdminHeader title={title} />
+		<View style={styles.container}>
 			{isLoading ? (
 				<Text style={styles.loadingText}>Loading...</Text>
 			) : games.length > 0 ? (
@@ -308,27 +305,27 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 			>
 				<View style={styles.modalOverlay}>
 					<View style={styles.modalContent}>
-						<Text style={styles.modalTitle}>Update Game</Text>
+						<Text maxFontSizeMultiplier={1.1} style={styles.modalTitle}>Update Score</Text>
 						{currentGame && (
 							<>
 								<View style={styles.modalTeamContainer}>
-									<Avatar rounded source={{ uri: currentGame.team1.avatar_uri }} size={40} />
-									<Text style={styles.modalTeamName}>{currentGame.team1.name}</Text>
+									<Text maxFontSizeMultiplier={1.2} style={styles.modalTeamName}>{currentGame.team1.name}</Text>
 									<TextInput
 										style={styles.scoreInput}
 										value={team1Score}
 										onChangeText={setTeam1Score}
 										keyboardType='numeric'
+										maxLength={2}
 									/>
 								</View>
 								<View style={styles.modalTeamContainer}>
-									<Avatar rounded source={{ uri: currentGame.team2.avatar_uri }} size={40} />
-									<Text style={styles.modalTeamName}>{currentGame.team2.name}</Text>
+									<Text maxFontSizeMultiplier={1.2} style={styles.modalTeamName}>{currentGame.team2.name}</Text>
 									<TextInput
 										style={styles.scoreInput}
 										value={team2Score}
 										onChangeText={setTeam2Score}
 										keyboardType='numeric'
+										maxLength={2}
 									/>
 								</View>
 							</>
@@ -354,14 +351,14 @@ const UpdateScoresComponent = ({ roundId, poolId, title, division }) => {
 					</View>
 				</View>
 			</Modal>
-		</SafeAreaView>
+		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: '#333243',
 	},
 	listContentContainer: {
 		padding: 10,
@@ -479,13 +476,13 @@ const styles = StyleSheet.create({
 	modalTitle: {
 		fontSize: 20,
 		fontFamily: 'Outfit-Bold',
-		marginBottom: 15,
 		textAlign: 'center',
+		marginBottom: 17
 	},
 	modalTeamContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 15,
+		marginBottom: 8
 	},
 	modalTeamName: {
 		flex: 1,
@@ -494,33 +491,34 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	scoreInput: {
-		borderWidth: 1,
-		borderRadius: 5,
-		padding: 5,
-		width: 50,
+		borderWidth: 0.5,
+		borderRadius: 8,
+		paddingVertical: 8,
+		paddingHorizontal: 12,
+		width: 48,
 		textAlign: 'center',
 		fontFamily: 'Outfit-Regular',
-		fontSize: 18,
+		fontSize: 16,
 	},
 	submitButton: {
-		backgroundColor: '#2871FF',
+		backgroundColor: '#6ECC34',
 		padding: 10,
-		borderRadius: 5,
-		marginTop: 10,
+		borderRadius: 100,
 		alignItems: 'center',
+		marginTop: 9
 	},
 	finishButton: {
-		backgroundColor: '#4CAF50',
+		backgroundColor: '#2871FF',
 		padding: 10,
-		borderRadius: 5,
-		marginTop: 10,
+		borderRadius: 100,
+		marginTop: 8,
 		alignItems: 'center',
 	},
 	closeButton: {
-		backgroundColor: 'gray',
+		backgroundColor: '#EA1D25',
 		padding: 10,
-		borderRadius: 5,
-		marginTop: 10,
+		borderRadius: 100,
+		marginTop: 8,
 		alignItems: 'center',
 	},
 });

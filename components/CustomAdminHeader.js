@@ -1,17 +1,20 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const CustomAdminHeader = ({ title }) => {
+const CustomAdminHeader = ({ title, route }) => {
   const router = useRouter();
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.navigate('settings')}>
-        <Ionicons name="arrow-back-circle" size={30} color="#EA1D25" />
+      <TouchableOpacity style={styles.backButton} onPress={() => router.navigate(route)}>
+        <Ionicons name="arrow-back" size={30} color="#FF9821" />
       </TouchableOpacity>
-      <Text style={styles.headerTitle}>{title}</Text>
+      <Text maxFontSizeMultiplier={1} style={styles.headerTitle}>{title}</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.navigate('settings')}>
+        <Ionicons name="home" size={30} color="#FF9821" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -23,15 +26,15 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#D9D9D9',
-  },
-  backButton: {
-    marginRight: 15,
+    borderBottomColor: '#8F8DAA',
+    backgroundColor: '#1E2A3A'
   },
   headerTitle: {
+    flex: 1,
     fontFamily: 'Outfit-Bold',
     fontSize: 28,
-    color: '#EA1D25',
+    color: '#FF9821',
+    textAlign: 'center',
   },
 });
 

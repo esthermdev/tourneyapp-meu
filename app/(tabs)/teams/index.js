@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, RefreshControl, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
@@ -79,6 +79,10 @@ const Teams = () => {
     setSearchQuery(text);
   };
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => router.push(`/teams/${item.id}?teamName=${item.name}`)}>
       <ListItem style={{ paddingHorizontal: 15 }} bottomDivider>
@@ -100,59 +104,65 @@ const Teams = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header} maxFontSizeMultiplier={1}>Teams</Text>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header} maxFontSizeMultiplier={1}>Teams</Text>
+        </View>
+        <SearchBar
+          placeholder="Search teams..."
+          onChangeText={handleSearch}
+          value={searchQuery}
+          containerStyle={styles.searchBarContainer}
+          inputContainerStyle={styles.searchBarInputContainer}
+          inputStyle={styles.searchBarInput}
+          round={true}
+          lightTheme={true}
+          clearIcon={{ color: '#86939e' }}
+          searchIcon={{ color: '#86939e' }}
+          onSubmitEditing={dismissKeyboard}
+          returnKeyType="done"
+        />
+        <View style={styles.filterContainer}>
+          <Text maxFontSizeMultiplier={1.2} className='font-outfitlight text-gray-500 mt-0.3' style={styles.filterTitle}>Filters: </Text>
+          <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('All')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>All</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MU')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Upper</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#0AB359] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MM')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Middle</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#efaa34] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('ML')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Lower</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#FF026C] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WU')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Upper</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#BD41F2] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WL')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Lower</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-[#f77732] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('X')}>
+            <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Mixed</Text>
+          </TouchableOpacity>
+        </View>
+        <FlashList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#EA1D25']} // This sets the color of the refresh spinner
+            />
+          }
+          data={filteredTeams}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          estimatedItemSize={100}
+          contentContainerStyle={styles.listContent}
+        />
       </View>
-      <SearchBar
-        placeholder="Search teams..."
-        onChangeText={handleSearch}
-        value={searchQuery}
-        containerStyle={styles.searchBarContainer}
-        inputContainerStyle={styles.searchBarInputContainer}
-        inputStyle={styles.searchBarInput}
-        round={true}
-        lightTheme={true}
-        clearIcon={{ color: '#86939e' }}
-      />
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5, padding: 15 }}>
-        <Text maxFontSizeMultiplier={1.2} className='font-outfitlight text-gray-500 mt-0.3' style={styles.filterTitle}>Filters: </Text>
-        <TouchableOpacity className='bg-[#917120] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('All')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>All</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#2871FF] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MU')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Upper</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#0AB359] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('MM')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Middle</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#efaa34] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('ML')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Men - Lower</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#FF026C] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WU')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Upper</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#BD41F2] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('WL')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Women - Lower</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className='bg-[#f77732] rounded-full py-0.5 px-[8]' onPress={() => setSelectedDivision('X')}>
-          <Text maxFontSizeMultiplier={1.2} style={styles.filterByText}>Mixed</Text>
-        </TouchableOpacity>
-      </View>
-      <FlashList
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#EA1D25']} // This sets the color of the refresh spinner
-          />
-        }
-        data={filteredTeams}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        estimatedItemSize={100}
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -190,6 +200,15 @@ const styles = StyleSheet.create({
     fontSize: ms(12),
     color: '#fff'
   },
+  filterContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 5,
+    padding: 15,
+  },
+  listContent: {
+    paddingBottom: 20, // Add some padding at the bottom of the list
+  },
   searchBarContainer: {
     backgroundColor: 'transparent',
     borderBottomColor: 'transparent',
@@ -201,6 +220,6 @@ const styles = StyleSheet.create({
   },
   searchBarInput: {
     fontFamily: 'Outfit-Regular',
-    fontSize: ms(14),
+    fontSize: ms(16),
   },
 });

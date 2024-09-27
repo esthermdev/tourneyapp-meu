@@ -36,6 +36,7 @@ const RootLayout = () => {
 
 	return (
 		<AuthProvider>
+			<StatusBar barStyle='#fff' backgroundColor='#000' />
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<DrawerLayout />
 			</GestureHandlerRootView>

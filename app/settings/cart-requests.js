@@ -12,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 const DriverManagementScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <CustomAdminHeader title="Driver Management" />
+      <CustomAdminHeader title="Driver Management" route='settings' />
       <Tab.Navigator
         screenOptions={{
           tabBarLabelStyle: styles.tabLabel,
@@ -192,7 +192,7 @@ const DriverAvailabilityScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#333243',
   },
   tabBar: {
     backgroundColor: '#ffffff',

@@ -1,15 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,jsx,ts,tsx}", 
-    "./components/**/*.{js,jsx,ts,tsx}", 
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
     "./buttons/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     extend: {
       colors: {
         primary: '#EA1D25',
-        secondary: '#020202',
+        secondary: '#333243',
       },
       fontFamily: {
         outfitthin: ["Outfit-Thin", "sans-serif"],

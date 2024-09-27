@@ -1,34 +1,56 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StatusBar, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useNavigation } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerActions } from '@react-navigation/native';
 
 const AdminOption = ({ title, icon, onPress, disabled }) => (
   <TouchableOpacity style={styles.optionButton} disabled={disabled} onPress={onPress}>
-    <Ionicons name={icon} size={40} color="#FFFFFF" />
-    <Text style={styles.optionText}>{title}</Text>
+    <Text>{icon}</Text>
+    <Text maxFontSizeMultiplier={1} style={styles.optionText}>{title}</Text>
   </TouchableOpacity>
 );
 
 const AdminScreen = () => {
   const adminOptions = [
-    { title: 'Update Scores', icon: 'bar-chart', route: 'settings/update-scores', disabled: false },
-    { title: 'Trainers List', icon: 'clipboard', route: 'settings/trainer-screen', disabled: false },
-    { title: 'Cart Requests', icon: 'car', route: 'settings/cart-requests', disabled: false },
-    { title: 'Send Public Announcement', icon: 'megaphone', route: 'settings/send-announcement', disabled: false },
+    {
+      title: 'Update Scores',
+      icon: <MaterialIcons name='scoreboard' size={52} color="#FFFFFF" />,
+      route: 'settings/update-scores',
+      disabled: false
+    },
+    {
+      title: 'Trainers List',
+      icon: <MaterialIcons name="sports" size={52} color="#FFFFFF" />,
+      route: 'settings/trainer-screen',
+      disabled: false
+    },
+    {
+      title: 'Cart Requests',
+      icon: <MaterialIcons name="directions-car" size={52} color="#FFFFFF" />,
+      route: 'settings/cart-requests',
+      disabled: false
+    },
+    {
+      title: 'Send Public Announcement',
+      icon: <MaterialIcons name="campaign" size={52} color="#FFFFFF" />,
+      route: 'settings/send-announcement',
+      disabled: false
+    },
   ];
 
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle='#fff' />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
           <Ionicons name='menu' size={25} color='orange' />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Admin Dashboard</Text>
+        <Text maxFontSizeMultiplier={1.2} style={styles.headerTitle}>Admin Dashboard</Text>
       </View>
       <Text style={styles.subtitle}>What do you need?</Text>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -84,7 +106,7 @@ const styles = StyleSheet.create({
   optionButton: {
     width: '45%',
     aspectRatio: 1,
-    backgroundColor: '#FFA000',
+    backgroundColor: '#EA1D25',
     borderRadius: 15,
     padding: 20,
     justifyContent: 'center',
