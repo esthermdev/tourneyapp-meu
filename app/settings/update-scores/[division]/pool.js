@@ -11,7 +11,8 @@ const Tab = createMaterialTopTabNavigator();
 
 const PoolPlay = () => {
 	const { title, pools, code, division } = useLocalSearchParams();
-	const poolsArray = pools ? pools.split(',') : [];
+	const poolsArray = pools ? JSON.parse(pools) : [];
+
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -37,9 +38,9 @@ const PoolPlay = () => {
 			>
 				{poolsArray.map((pool, index) => (
 					<Tab.Screen
-						key={pool}
-						name={pool}
-						children={() => <UpdateScoresComponent poolId={index + 1} title={title} division={code} />}
+						key={pool.id}
+						name={pool.name}
+						children={() => <UpdateScoresComponent poolId={pool.id} title={pool.name} division={code} />}
 					/>
 				))}
 			</Tab.Navigator>

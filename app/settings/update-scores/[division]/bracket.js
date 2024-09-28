@@ -39,7 +39,7 @@ const BracketPlay = () => {
 					<Tab.Screen
 						key={round.id}
 						name={round.name}
-						children={() => <UpdateScoresComponent roundId={round.id} title={round.name} division={code} />}
+						children={() => <UpdateScoresComponent roundId={round.id} title={round.title} division={code} />}
 					/>
 				))}
 			</Tab.Navigator>

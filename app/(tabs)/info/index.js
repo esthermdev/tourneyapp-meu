@@ -12,6 +12,7 @@ const InfoScreen = () => {
 		{ title: 'Rules', route: 'rules-sotg' },
 		{ title: 'Vendors', route: 'vendors' },
 		{ title: 'Emergency', route: 'emergency' },
+		{ title: 'Refund Policy', route: 'refund-policy' },
 		{ title: 'Credits', route: 'credits' },
 	];
 

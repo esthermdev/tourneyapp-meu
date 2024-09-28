@@ -17,7 +17,7 @@ const CustomHomeButton = ({ handlePress, align, disabled, title, icon, color }) 
       {!disabled ? (
         <FontAwesome5 name={icon} size={25} color='#fff' />
       ) : <></>}
-      <Text maxFontSizeMultiplier={1.1} style={styles.text}>{title}</Text>
+      <Text maxFontSizeMultiplier={1.1} style={[styles.text, { textAlign: align }]}>{title}</Text>
     </TouchableOpacity>
   )
 }

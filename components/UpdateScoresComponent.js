@@ -375,13 +375,13 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		textAlign: 'center',
 		marginBottom: 10,
-		color: '#333',
+		color: '#fff',
 	},
 	placeholderSubText: {
 		fontFamily: 'Outfit-Regular',
 		fontSize: 16,
 		textAlign: 'center',
-		color: '#666',
+		color: '#ff1',
 	},
 	loadingText: {
 		fontFamily: 'Outfit-Regular',

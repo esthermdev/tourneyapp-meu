@@ -19,7 +19,7 @@ const DivisionScreen = () => {
 				params: {
 					code: item.code,
 					title: item.title,
-					pools: item.pools,
+					pools: JSON.stringify(item.pools),
 					rounds: JSON.stringify(item.rounds),
 				}
 			})}

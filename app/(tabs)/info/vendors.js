@@ -18,6 +18,7 @@ const Vendors = () => {
 			.from('vendors')
 			.select(`
 				name,
+				avatar_url,
 				website
 			`);
 
@@ -30,7 +31,7 @@ const Vendors = () => {
 
 	const renderItem = ({ item }) => (
 		<ListItem key={item.id} bottomDivider>
-			<Avatar containerStyle={{ backgroundColor: 'purple' }} size={50} rounded title={item?.name[0]} />
+			<Avatar containerStyle={{ backgroundColor: '#fff' }} size={50} rounded title={item?.name[0]} source={{ uri: item?.avatar_url }} />
 			<ListItem.Content>
 				<ListItem.Title className='font-outfitmedium' style={{ fontSize: ms(16) }}>{item.name}</ListItem.Title>
 				<ListItem.Subtitle>

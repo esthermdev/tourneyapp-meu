@@ -65,9 +65,9 @@ const Teams = () => {
         <Avatar
           size={50}
           rounded
-          source={{ uri: item?.avatar_uri }}
           title={item.name[0]}
-          avatarStyle={{ borderColor: 'lightgray', borderWidth: 1, resizeMode: 'contain' }}
+          source={{ uri: item.avatar_uri }}
+          containerStyle={{ backgroundColor: 'blue' }}
         />
         <ListItem.Content style={{ gap: s(5) }}>
           <ListItem.Title className='font-outfitbold' style={styles.teamName} maxFontSizeMultiplier={1.2}>{item.name}</ListItem.Title>
