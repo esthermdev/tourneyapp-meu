@@ -20,6 +20,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../../utils/supabase';
 import { usePushNotifications } from '../../hooks/usePushNotifications';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useAuth } from '../../context/AuthProvider';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -34,11 +35,58 @@ AppState.addEventListener('change', (state) => {
 });
 
 export default function LoginScreen() {
+  const { getProfile } = useAuth();
+  const { expoPushToken } = usePushNotifications();
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
-  const { expoPushToken } = usePushNotifications();
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+
+  async function handleResetPassword() {
+    if (!resetEmail) {
+      Alert.alert('Error', 'Please enter your email address.');
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: 'tourneyapp-meu://auth/reset-password',
+    });
+
+    if (error) {
+      Alert.alert('Error found', error.message);
+    } else {
+      Alert.alert('Success', 'Check your email for password reset instructions.');
+      setShowResetPassword(false);
+    }
+  }
+
+  if (showResetPassword) {
+    return (
+      <View style={styles.resetContainer}>
+        <Text style={styles.resetHeader}>Reset Password</Text>
+        <TextInput
+          style={styles.resetInput}
+          onChangeText={setResetEmail}
+          value={resetEmail}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <Button
+          title="Send Reset Instructions"
+          onPress={handleResetPassword}
+          buttonStyle={styles.primaryButton}
+          titleStyle={styles.buttonText}
+        />
+        <TouchableOpacity onPress={() => setShowResetPassword(false)}>
+          <Text style={styles.linkText}>Back to Login</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   async function signInWithEmail() {
     setLoading(true)
@@ -61,23 +109,13 @@ export default function LoginScreen() {
     }
 
     if (error) {
-      Alert.alert('Insert email and password to sign in.', error.message)
+      Alert.alert('Insert email and password to sign in.')
     } else {
+      await getProfile(data.user.id);
       router.push('(tabs)/home');
       console.log('Logging in user: ', data)
     };
 
-    setLoading(false);
-  };
-
-  async function signUpWithEmail() {
-    setLoading(true)
-    const { error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert('Insert email and password to sign up.', error.message);
     setLoading(false);
   };
 
@@ -126,13 +164,16 @@ export default function LoginScreen() {
                 buttonStyle={styles.primaryButton}
                 titleStyle={styles.buttonText}
               />
+              <TouchableOpacity onPress={() => setShowResetPassword(true)}>
+                <Text style={styles.linkText}>Forgot Password?</Text>
+              </TouchableOpacity>
             </View>
             <View>
               <Text style={styles.signupText}>Not an existing user?</Text>
               <Button
                 title='Sign up'
                 disabled={loading}
-                onPress={() => signUpWithEmail()}
+                onPress={() => router.push('auth/signup')}
                 buttonStyle={styles.secondaryButton}
                 titleStyle={[styles.buttonText, styles.secondaryButtonText]}
               />
@@ -146,7 +187,14 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff'
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  resetContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 25,
+    paddingVertical: 40
   },
   menuButton: {
     marginTop: 20,
@@ -162,6 +210,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: 'center',
   },
+  resetHeader: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: 28,
+    color: '#EA1D25',
+    marginVertical: 30,
+    textAlign: 'center',
+  },
   inputContainer: {
     marginBottom: 12,
   },
@@ -174,6 +229,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Regular',
     fontSize: 18
   },
+  resetInput: {
+    height: 60,
+    borderColor: '#8F8DAA',
+    borderWidth: 1,
+    paddingHorizontal: 22,
+    borderRadius: 100,
+    fontFamily: 'Outfit-Regular',
+    fontSize: 18,
+    marginBottom: 12
+  },
   inputLabel: {
     fontFamily: 'Outfit-Medium',
     color: '#333243',
@@ -183,7 +248,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#EA1D25',
     paddingHorizontal: 22,
     borderRadius: 100,
-    marginBottom: 20,
+    marginBottom: 10
+  },
+  linkText: {
+    color: '#2871FF',
+    textAlign: 'center',
+    fontSize: 16,
+    marginBottom: 25,
+    fontFamily: 'Outfit-Regular'
   },
   secondaryButton: {
     height: 60,
@@ -192,7 +264,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 22,
     borderRadius: 100,
-    marginTop: 10,
   },
   buttonText: {
     fontFamily: 'Outfit-SemiBold',
@@ -205,7 +276,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Regular',
     fontSize: 16,
     color: '#333243',
-    marginBottom: 10,
+    marginBottom: 15,
     alignSelf: 'center'
   },
 });

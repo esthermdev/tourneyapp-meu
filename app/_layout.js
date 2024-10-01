@@ -2,16 +2,44 @@ import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DrawerLayout from '../components/DrawerLayout';
 import { useFonts } from 'expo-font';
-import { SplashScreen } from 'expo-router';
+import { SplashScreen, useRouter } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 import 'expo-dev-client';
 import 'react-native-gesture-handler';
-import { StatusBar } from 'react-native';
+import { StatusBar, Linking } from 'react-native';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
+	const router = useRouter();
+
+	useEffect(() => {
+		const handleDeepLink = ({ url }) => {
+			console.log('Received deep link:', url);
+			if (url.path === 'auth/reset-password') {
+				router.push({
+					pathname: '/auth/reset-password',
+					params: url.queryParams
+				});
+			}
+		};
+
+		Linking.addEventListener('url', handleDeepLink);
+
+		// Check for initial URL
+		Linking.getInitialURL().then(url => {
+			if (url) {
+				console.log('Initial URL:', url);
+				handleDeepLink({ url });
+			}
+		});
+
+		return () => {
+			Linking.removeEventListener('url', handleDeepLink);
+		};
+	}, [router]);
+
 	const [loaded, error] = useFonts({
 		"Outfit-Black": require("../assets/fonts/Outfit-Black.ttf"),
 		"Outfit-Bold": require("../assets/fonts/Outfit-Bold.ttf"),

@@ -19,7 +19,7 @@ const Header = () => {
 						source={images.logoW}
 						style={styles.logo}
 					/>
-					<TouchableOpacity style={styles.button} onPress={() => router.push('auth/account')}>
+					<TouchableOpacity style={styles.button} onPress={() => router.push('auth')}>
 						<Ionicons name='person'
 							size={ms(25)}
 							color='#EA1D25'

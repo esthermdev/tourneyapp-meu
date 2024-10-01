@@ -44,7 +44,8 @@
       [
         "expo-updates",
         {
-          "username": "esmdev"
+          "username": "esmdev",
+          "origin": "tourneyapp-meu://"
         }
       ]
     ],

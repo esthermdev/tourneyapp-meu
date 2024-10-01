@@ -139,6 +139,8 @@ const DriverAvailabilityScreen = () => {
     }
   };
 
+  console.log(drivers)
+
   const toggleAvailability = async (driverId, currentAvailability) => {
     try {
       const { error } = await supabase
@@ -154,6 +156,7 @@ const DriverAvailabilityScreen = () => {
           ? { ...driver, is_available: !currentAvailability }
           : driver
       ));
+
     } catch (error) {
       console.error('Error updating driver availability:', error);
     }

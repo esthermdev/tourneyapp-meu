@@ -1,41 +1,51 @@
 import { useContext, createContext, useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
-import { Alert } from 'react-native';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [session, setSession] = useState(null);
-	const [profile, setProfile] = useState([]);
+	const [profile, setProfile] = useState(null);
+	const [loading, setLoading] = useState(true);
+	console.log(session)
 
-	async function getProfile() {
-		if (session && session.user) {
+	const getProfile = async (userId) => {
+		try {
 			const { data, error } = await supabase
 				.from('profiles')
-				.select(`*`)
-				.eq('id', session.user.id)
-				.single()
+				.select('*')
+				.eq('id', userId)
 
-			if (error) {
-				Alert.alert(error.message)
-			} else {
-				setProfile(data);
-			}
+			if (error) throw error;
+			setProfile(data);
+			return data;
+		} catch (error) {
+			console.error('Error fetching profile:', error.message);
+			return null;
 		}
-	}
+	};
 
 	useEffect(() => {
-		const session = supabase.auth.getSession().then(() => {
-			setSession(session)
-			setUser(session ? session.user : null);
+		supabase.auth.getSession().then(({ data: { session } }) => {
+			setSession(session);
+			setUser(session?.user ?? null);
+			if (session?.user) {
+				getProfile(session.user.id);
+			}
+			setLoading(false);
 		});
 
-		const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+		const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+			console.log(`Supabase auth event: ${event}`);
 			setSession(session);
-			setUser(session ? session.user : null);
-			if (session) getProfile();
-			console.log('Auth state change session:', session);
+			setUser(session?.user ?? null);
+			if (session?.user) {
+				await getProfile(session.user.id);
+			} else {
+				setProfile(null);
+			}
+			setLoading(false);
 		});
 
 		return () => {
@@ -43,15 +53,16 @@ export const AuthProvider = ({ children }) => {
 		};
 	}, []);
 
-	useEffect(() => {
-    if (session) getProfile()
-  }, [session]);
+	const value = {
+		user,
+		session,
+		profile,
+		loading,
+		getProfile,
+		setProfile,
+	};
 
-	return (
-		<AuthContext.Provider value={{ user, session, profile, setProfile }}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

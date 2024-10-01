@@ -66,7 +66,7 @@ const Teams = () => {
           size={50}
           rounded
           title={item.name[0]}
-          source={{ uri: item.avatar_uri }}
+          source={{ uri: item?.avatar_uri || null }}
           containerStyle={{ backgroundColor: 'blue' }}
         />
         <ListItem.Content style={{ gap: s(5) }}>

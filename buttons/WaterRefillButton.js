@@ -141,7 +141,7 @@ const WaterRefillButton = () => {
                   <TouchableOpacity style={styles.cancelButton} onPress={closeModal}>
                     <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Cancel</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.confirmButton} onPress={requestWater} disabled>
+                  <TouchableOpacity style={styles.confirmButton} onPress={requestWater}>
                     <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>Confirm</Text>
                   </TouchableOpacity>
                 </View>

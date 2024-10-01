@@ -10,7 +10,7 @@ import { ms } from 'react-native-size-matters'
 
 const CustomDrawerContent = (props) => {
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
 
   const drawerItems = [
     { name: 'index', label: 'Welcome' },
@@ -36,7 +36,7 @@ const CustomDrawerContent = (props) => {
           />
         ))}
       </DrawerContentScrollView>
-      {profile && profile.is_admin ? (
+      {profile && profile[0].is_admin ? (
         <View style={styles.bottomDrawerSection}>
           <DrawerItem
             label="Admin"

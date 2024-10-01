@@ -7,6 +7,7 @@ interface CartRequest {
   from_field_number: number | null;
   to_field_number: number | null;
   status: string;
+  passenger_count: number;
 }
 
 interface WebhookPayload {
@@ -56,7 +57,7 @@ Deno.serve(async (req) => {
         cartRequest.from_field_number ? ` ${cartRequest.from_field_number}` : ""
       } To: ${cartRequest.to_location}${
         cartRequest.to_field_number ? ` ${cartRequest.to_field_number}` : ""
-      }`,
+      } - Passengers: ${cartRequest.passenger_count}`,
       data: {
         requestId: cartRequest.id,
         expirationTime: expirationTime,
@@ -65,10 +66,11 @@ Deno.serve(async (req) => {
       contentAvailable: true,
     };
 
-    const messages = volunteers.map((volunteer) => ({
-      to: volunteer.expo_push_token,
+    const tokens = volunteers.map((volunteer) => volunteer.expo_push_token);
+    const message = {
+      to: tokens,
       ...notification,
-    }));
+    };
 
     const res = await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
@@ -76,7 +78,7 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${Deno.env.get("EXPO_ACCESS_TOKEN")}`,
       },
-      body: JSON.stringify(messages),
+      body: JSON.stringify(message),
     }).then((res) => res.json());
 
     setTimeout(async () => {
@@ -107,7 +109,8 @@ Deno.serve(async (req) => {
             to: volunteers.map((v) => v.expo_push_token),
             content: {
               title: "Cart Request Expired",
-              body: "A cart request has expired and been removed.",
+              body:
+                `A cart request for ${cartRequest.passenger_count} passenger(s) has expired and been removed.`,
             },
             data: {
               type: "cart_request_expired",

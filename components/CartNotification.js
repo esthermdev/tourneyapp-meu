@@ -3,6 +3,7 @@ import { Text, View, Alert } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { usePushNotifications } from '../hooks/usePushNotifications';
 import * as Notifications from "expo-notifications";
+import { Button } from '@rneui/base';
 
 export default function CartNotification() {
   const { expoPushToken, notification, responseListener } = usePushNotifications();
@@ -11,7 +12,7 @@ export default function CartNotification() {
     if (notification) {
       responseListener.current = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
     }
-  }, [])
+  }, [notification])
 
   const handleNotificationResponse = async (response) => {
     console.log("Notification response received:", response);
@@ -112,6 +113,34 @@ export default function CartNotification() {
     });
   };
 
+  // In a separate test script or component
+  const sendTestNotification = async (expoPushToken) => {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Test Notification',
+      body: 'This is a test notification',
+      data: { type: 'test' },
+    };
+
+    try {
+      const response = await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'Accept-encoding',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
+      const result = await response.json();
+      console.log('Test notification result:', result);
+    } catch (error) {
+      console.error('Error sending test notification:', error);
+    }
+  };
+
+  console.log("Notification payload:", notification);
+
   return (
     <View style={{ display: 'none', alignItems: 'center', justifyContent: 'space-around' }}>
       <Text>CART token: {expoPushToken ? expoPushToken.data : 'No token'}</Text>
@@ -119,6 +148,7 @@ export default function CartNotification() {
         <Text>Title: {notification ? notification.request.content.title : 'No notification'} </Text>
         <Text>Body: {notification ? notification.request.content.body : 'No notification'}</Text>
         <Text>Data: {notification ? JSON.stringify(notification.request.content.data) : 'No data'}</Text>
+        <Button title='Test notification' onPress={() => sendTestNotification(expoPushToken)} />
       </View>
     </View>
   );

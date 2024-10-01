@@ -51,9 +51,41 @@ export default function Account({ session }) {
 
   const navigation = useNavigation();
 
+  // Updated useEffect hook
   useEffect(() => {
+    if (session?.user?.id) {
+      getProfile(session.user.id);
+    }
     fetchTeams();
-  }, []);
+  }, [session]);
+
+  // New getProfile function
+  const getProfile = async (userId) => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+
+      if (error) {
+        throw error;
+      }
+
+      setProfile(data);
+      setFullName(data[0].full_name || '');
+      setTeamId(data[0].team_id || null);
+      setAvatarUrl(data[0].avatar_url || '');
+      setExpoPushToken(data[0].expo_push_token || '');
+
+      console.log('This is my profile:', data[0])
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      Alert.alert('Error', 'Failed to fetch profile');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchTeams = async () => {
     const { data, error } = await supabase
@@ -66,17 +98,6 @@ export default function Account({ session }) {
       setTeams(data);
     }
   };
-
-  useEffect(() => {
-    setLoading(true);
-    if (session) {
-      setExpoPushToken(profile?.expo_push_token);
-      setTeamId(profile?.team_id ?? null);
-      setFullName(profile?.full_name ?? '');
-      setAvatarUrl(profile?.avatar_url ?? '');
-    };
-    setLoading(false);
-  }, [session]);
 
   async function updateProfile({ full_name, team_id, avatar_url }) {
     try {
@@ -124,7 +145,6 @@ export default function Account({ session }) {
     }
   };
 
-  // When user signs out
   const signOut = async () => {
     const { error: updateError } = await supabase
       .from('profiles')
@@ -135,7 +155,6 @@ export default function Account({ session }) {
       throw updateError;
     }
 
-    // Then, sign out
     const { error: signOutError } = await supabase.auth.signOut();
 
     if (signOutError) {
@@ -158,13 +177,12 @@ export default function Account({ session }) {
         onPress={() => setIsModalVisible(true)}
       >
         <Text style={styles.dropdownSelectedText}>
-          {teams.find(team => team.id === teamId)?.name || 'Select a team...'}
+          {teamId === null ? 'None (non-player)' : (teams.find(team => team.id === teamId)?.name || 'Select a team...')}
         </Text>
         <Ionicons name="caret-down" size={24} color="#333243" />
       </TouchableOpacity>
     );
   }, [teams, teamId]);
-
 
   return (
     <SafeAreaView className='h-full' style={styles.container}>
@@ -191,13 +209,10 @@ export default function Account({ session }) {
           autoCapitalize='words'
           style={styles.input}
         />
-        {profile && !profile.is_admin ?
-          (<View style={styles.dropdownContainer}>
-            <Text style={styles.dropdownLabel}>Your Team</Text>
-            {TeamSelector}
-          </View>) : (<></>)
-        }
-
+        <View style={styles.dropdownContainer}>
+          <Text style={styles.dropdownLabel}>Your Team</Text>
+          {TeamSelector}
+        </View>
         <Button
           title={loading ? 'Updating ...' : 'Update Profile'}
           onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
@@ -226,6 +241,8 @@ export default function Account({ session }) {
         onSelect={(id) => setTeamId(id)}
         searchQuery={searchQuery}
         onSearchChange={handleSearch}
+        showNoneOption={true}
+        onSelectNone={() => setTeamId(null)}
       />
     </SafeAreaView>
   );

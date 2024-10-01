@@ -21,6 +21,7 @@ const RequestCartButton = () => {
   const [toFieldNumber, setToFieldNumber] = useState('');
   const [fields, setFields] = useState([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [passengerCount, setPassengerCount] = useState(1);
 
   const { expoPushToken } = usePushNotifications();
 
@@ -48,6 +49,7 @@ const RequestCartButton = () => {
           to_location: toLocation,
           from_field_number: fromLocation === 'Field' ? parseInt(fromFieldNumber) : null,
           to_field_number: toLocation === 'Field' ? parseInt(toFieldNumber) : null,
+          passenger_count: passengerCount,
           status: 'pending',
           requester_token: expoPushToken.data
         })
@@ -69,6 +71,23 @@ const RequestCartButton = () => {
       Alert.alert('Error', 'Failed to submit cart request');
       setIsButtonDisabled(false);
     }
+  };
+
+  const PassengerCountInput = ({ value, onValueChange }) => {
+    const increment = () => onValueChange(Math.min(value + 1, 10));
+    const decrement = () => onValueChange(Math.max(value - 1, 1));
+
+    return (
+      <View style={styles.passengerCountContainer}>
+        <TouchableOpacity onPress={decrement} style={styles.passengerCountButton}>
+          <Ionicons name="remove" size={24} color="#EA1D25" />
+        </TouchableOpacity>
+        <Text style={styles.passengerCountText}>{value}</Text>
+        <TouchableOpacity onPress={increment} style={styles.passengerCountButton}>
+          <Ionicons name="add" size={24} color="#EA1D25" />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   return (
@@ -107,6 +126,13 @@ const RequestCartButton = () => {
                 Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
               </Text>
             </ScrollView>
+
+            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>Number of Passengers:</Text>
+            <PassengerCountInput
+              value={passengerCount}
+              onValueChange={setPassengerCount}
+            />
+
             <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>From:</Text>
             <Dropdown
               label="From Location"
@@ -141,7 +167,7 @@ const RequestCartButton = () => {
               />
             )}
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart} disabled>
+            <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart}>
               <Text style={styles.submitButtonText} maxFontSizeMultiplier={1.2}>Request Cart</Text>
             </TouchableOpacity>
           </View>
@@ -159,8 +185,7 @@ const styles = StyleSheet.create({
   labelHeader: {
     fontFamily: 'Outfit-Bold',
     fontSize: ms(16),
-    marginTop: s(20),
-    marginBottom: 8
+    marginVertical: 8
   },
   buttonStyle: {
     flex: 1,
@@ -210,7 +235,25 @@ const styles = StyleSheet.create({
     fontSize: ms(15),
     color: '#666',
     marginVertical: 10,
-  }
+  },
+  passengerCountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  passengerCountButton: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 20,
+    width: 35,
+    height: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  passengerCountText: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: ms(18),
+    marginHorizontal: 20,
+  },
 });
 
 export default RequestCartButton;

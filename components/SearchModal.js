@@ -1,9 +1,19 @@
-// components/SearchModal.js
-
 import React from 'react';
 import { Modal, View, TextInput, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const SearchModal = ({ isVisible, teams, onClose, onSelect, searchQuery, onSearchChange }) => {
+const SearchModal = ({ isVisible, teams, onClose, onSelect, searchQuery, onSearchChange, showNoneOption, onSelectNone }) => {
+    const renderItem = ({ item }) => (
+        <TouchableOpacity
+            style={styles.teamItem}
+            onPress={() => {
+                onSelect(item.id);
+                onClose();
+            }}
+        >
+            <Text style={styles.teamItemText}>{item.name}</Text>
+        </TouchableOpacity>
+    );
+
     return (
         <Modal
             visible={isVisible}
@@ -19,20 +29,21 @@ const SearchModal = ({ isVisible, teams, onClose, onSelect, searchQuery, onSearc
                         value={searchQuery}
                         onChangeText={onSearchChange}
                     />
+                    {showNoneOption && (
+                        <TouchableOpacity
+                            style={styles.teamItem}
+                            onPress={() => {
+                                onSelectNone();
+                                onClose();
+                            }}
+                        >
+                            <Text style={styles.teamItemText}>None (non-player)</Text>
+                        </TouchableOpacity>
+                    )}
                     <FlatList
                         data={teams}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={styles.teamItem}
-                                onPress={() => {
-                                    onSelect(item.id);
-                                    onClose();
-                                }}
-                            >
-                                <Text style={styles.teamItemText}>{item.name}</Text>
-                            </TouchableOpacity>
-                        )}
+                        renderItem={renderItem}
                     />
                     <TouchableOpacity
                         style={styles.closeButton}
