@@ -7,24 +7,31 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={images.logoW}
-            resizeMode='contain'
-            style={styles.logo}
-          />
+        <View style={styles.contentContainer}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={images.logoW}
+              resizeMode='contain'
+              style={styles.logo}
+            />
+          </View>
+          <View style={styles.centerContainer}>
+            <Text maxFontSizeMultiplier={1.3} style={styles.welcomeText}>Welcome to</Text>
+            <Image
+              source={images.lpTitleLogo}
+              resizeMode='contain'
+              style={styles.mainImage}
+            />
+          </View>
         </View>
-        <View style={styles.imageContainer}>
-          <Text maxFontSizeMultiplier={1.3} style={styles.welcomeText}>Welcome to</Text>
+        <View style={styles.bottomContainer}>
           <Image
-            source={images.lpTitleLogo}
-            resizeMode='contain'
-            style={styles.mainImage}
+            source={images.bgWelcome}
+            resizeMode='cover'
+            style={styles.backgroundImage}
           />
-        </View>
-        <View style={styles.textContainer}>
           <CustomButtonWithIcon
             title='Continue'
             buttonStyles={styles.continueButton}
@@ -32,7 +39,7 @@ export default function App() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -45,45 +52,47 @@ const styles = ScaledSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
+  contentContainer: {
+    flex: 1
+  },
   logoContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '20@vs'
+    justifyContent: 'center',
+    marginTop: '20@vs',
   },
   logo: {
     width: '90@ms0.2',
     height: '90@ms0.2',
   },
-  imageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  centerContainer: {
+    flex: 2,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   mainImage: {
     width: '250@s',
     height: '250@s',
     aspectRatio: 1,
   },
-  textContainer: {
-    flex: 1,
-    alignItems: 'center',
-    margin: '25@s',
-    gap: '20@vs'
-  },
   welcomeText: {
     fontFamily: 'Outfit-Regular',
     fontSize: '25@ms',
     textAlign: 'center',
   },
-  titleText: {
-    fontFamily: 'Outfit-Bold',
-    fontSize: '38@ms',
-    textAlign: 'center',
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '30%', // Adjust this value to control the height of the bottom container
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  yearText: {
-    fontFamily: 'Outfit-Bold',
-    fontSize: '25@ms',
-    textAlign: 'center',
+  backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   continueButton: {
     flexDirection: 'row',
@@ -93,6 +102,7 @@ const styles = ScaledSheet.create({
     borderRadius: 100,
     paddingHorizontal: 25,
     paddingVertical: 22,
-    width: '100%',
+    width: '85%', // Adjust as needed
+    zIndex: 10, // Ensures the button is above the background image
   },
 });
