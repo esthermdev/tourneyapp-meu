@@ -20,7 +20,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
 
-const MedicButton = ({ buttonStyle }) => {
+const MedicButton = () => {
   const [isRequesting, setIsRequesting] = useState(false);
   const [selected, setSelected] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
@@ -113,7 +113,7 @@ const MedicButton = ({ buttonStyle }) => {
           resizeMode='contain'
           style={{ width: 25, height: 25 }}
         />
-        <Text maxFontSizeMultiplier={1.1} style={styles.text}>
+        <Text maxFontSizeMultiplier={1} style={styles.text}>
           {isRequesting ? 'Medic Requested' : 'Medic'}
         </Text>
       </TouchableOpacity>
@@ -196,10 +196,10 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     minHeight: 120,
     width: buttonWidth,
-    backgroundColor: '#2956b7',
+    backgroundColor: '#E3242B',
   },
   text: {
-    fontSize: ms(18),
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#fff'
   },

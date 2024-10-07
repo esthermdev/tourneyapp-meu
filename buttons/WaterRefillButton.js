@@ -97,7 +97,7 @@ const WaterRefillButton = () => {
         disabled={isRequesting}
       >
         <Ionicons name="water" size={27} color="#FFF" />
-        <Text maxFontSizeMultiplier={1.1} style={styles.text}>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
+        <Text maxFontSizeMultiplier={1} style={styles.text}>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
       </TouchableOpacity>
 
       <Modal
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3DC5C5',
   },
   text: {
-    fontSize: ms(18),
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#fff'
   },

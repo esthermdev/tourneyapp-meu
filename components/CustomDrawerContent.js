@@ -1,16 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, AppState } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Image } from '@rneui/base';
 import { images } from '../constants';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import Ionicon from '@expo/vector-icons/Ionicons';
 import { useAuth } from '../context/AuthProvider';
 import { ms } from 'react-native-size-matters'
 
 const CustomDrawerContent = (props) => {
-  const router = useRouter();
-  const { profile, user } = useAuth();
+  const { profile } = useAuth();
 
   const drawerItems = [
     { name: 'index', label: 'Welcome' },
@@ -36,7 +34,7 @@ const CustomDrawerContent = (props) => {
           />
         ))}
       </DrawerContentScrollView>
-      {profile && profile[0].is_admin ? (
+      {profile && profile.is_admin ? (
         <View style={styles.bottomDrawerSection}>
           <DrawerItem
             label="Admin"
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
   },
   drawerItemLabelStyle: {
     fontFamily: 'Outfit-Medium',
-    fontSize: ms(18, 0.3),
+    fontSize: ms(16, 0.3),
     color: '#000'
   },
   settingsLabelStyle: {

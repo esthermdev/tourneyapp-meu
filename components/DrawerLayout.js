@@ -1,6 +1,5 @@
 import { Drawer } from 'expo-router/drawer';
 import CustomDrawerContent from '../components/CustomDrawerContent';
-import Ionicon from '@expo/vector-icons/Ionicons';
 
 const DrawerLayout = () => {
 
@@ -14,36 +13,6 @@ const DrawerLayout = () => {
 			}}
 			drawerContent={(props) => <CustomDrawerContent {...props} />}
 		>
-			<Drawer.Screen
-				name='index'
-				options={{
-					headerShown: false,
-					drawerLabel: 'Welcome',
-				}}
-			/>
-			<Drawer.Screen
-				name='(tabs)'
-				options={{
-					headerShown: false,
-					drawerLabel: 'Home',
-					drawerIcon: () => <Ionicon name='home' />
-				}}
-			/>
-			<Drawer.Screen
-				name='auth'
-				options={{
-					headerShown: false,
-					drawerLabel: 'My Account',
-					drawerIcon: () => <Ionicon name='person' />
-				}}
-			/>
-			<Drawer.Screen
-				name="settings"
-				options={{
-					drawerLabel: () => null,
-					drawerItemStyle: { display: 'none' }
-				}}
-			/>
 		</Drawer>
 	);
 };

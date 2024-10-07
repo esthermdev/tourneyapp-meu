@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   StyleSheet,
@@ -18,7 +18,6 @@ import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../../utils/supabase';
 import { ScrollView } from 'react-native-gesture-handler';
-import SearchModal from '../../components/SearchModal';
 import { validateEmail } from '../../utils/validateEmail';
 
 export default function SignupScreen() {
@@ -26,44 +25,15 @@ export default function SignupScreen() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [teams, setTeams] = useState([]);
-  const [teamId, setTeamId] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredTeams, setFilteredTeams] = useState([]);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
-  const fetchTeams = async () => {
-    const { data, error } = await supabase
-      .from('teams')
-      .select('id, name');
-
-    if (error) {
-      console.error('Error fetching teams:', error);
-    } else {
-      setTeams(data);
-    }
-  };
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filtered = teams.filter(team =>
-      team.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredTeams(filtered);
-  };
 
   async function signUpWithEmail() {
     if (!validateEmail(email)) {
       Alert.alert('Invalid Email', 'Please enter a valid email address.');
       return;
     }
-    console.log('Signing up with:', { email, password, fullName, teamId });
+    console.log('Signing up with:', { email, password, fullName });
 
     setLoading(true)
     const { data, error } = await supabase.auth.signUp({
@@ -72,9 +42,8 @@ export default function SignupScreen() {
       options: {
         data: {
           full_name: fullName,
-          team_id: teamId,
         },
-        emailRedirectTo: 'tourneyapp-meu://auth',
+        emailRedirectTo: 'tourneyapp-meu://auth'
       }
     });
 
@@ -82,12 +51,12 @@ export default function SignupScreen() {
       Alert.alert('Error', error.message);
     } else if (data.user) {
       Alert.alert(
-        'Confirmation Email Sent',
-        'Please check your email to confirm your account.',
+        'Confirm Your Email',
+        'Please check your email for a confirmation link to complete your registration.',
         [
           {
             text: 'OK',
-            onPress: () => router.push('/')  // Navigate back to the login screen
+            onPress: () => router.push('/auth')  // Navigate back to the login screen
           }
         ]
       );
@@ -143,15 +112,6 @@ export default function SignupScreen() {
                 autoCapitalize='none'
               />
             </View>
-            <TouchableOpacity
-              style={styles.teamSelector}
-              onPress={() => setIsModalVisible(true)}
-            >
-              <Text style={styles.teamSelectorText}>
-                {teamId === null ? 'Select a team...' : (teams.find(team => team.id === teamId)?.name || 'Select a team...')}
-              </Text>
-              <Ionicons name="caret-down" size={24} color="#333243" />
-            </TouchableOpacity>
             <View>
               <Button
                 title="Sign up"
@@ -173,16 +133,6 @@ export default function SignupScreen() {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      <SearchModal
-        isVisible={isModalVisible}
-        teams={searchQuery ? filteredTeams : teams}
-        onClose={() => setIsModalVisible(false)}
-        onSelect={(id) => setTeamId(id)}
-        searchQuery={searchQuery}
-        onSearchChange={handleSearch}
-        showNoneOption={true}
-        onSelectNone={() => setTeamId(null)}
-      />
     </SafeAreaView>
   );
 };

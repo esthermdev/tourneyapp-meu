@@ -6,16 +6,16 @@ import {
   Alert,
   TouchableOpacity,
   TextInput,
-  SafeAreaView,
+  AppState
 } from 'react-native';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '../utils/supabase';
+import { useAuth } from '../context/AuthProvider';
 import { Button } from '@rneui/base';
 import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
-import { useAuth } from '../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
-import SearchModal from '../../components/SearchModal';
+import SearchModal from '../components/SearchModal';
 
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -38,12 +38,14 @@ async function sendPushNotification(expoPushToken) {
 }
 
 export default function Account({ session }) {
-  const { profile, setProfile } = useAuth();
+  const { profile, getProfile } = useAuth()
+
   const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState(null);
   const [fullName, setFullName] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,41 +53,24 @@ export default function Account({ session }) {
 
   const navigation = useNavigation();
 
-  // Updated useEffect hook
   useEffect(() => {
-    if (session?.user?.id) {
-      getProfile(session.user.id);
+    if (session?.user) {
+      getProfile(session?.user?.id)
     }
-    fetchTeams();
+    fetchTeams()
+    setLoading(false)
   }, [session]);
 
-  // New getProfile function
-  const getProfile = async (userId) => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-
-      if (error) {
-        throw error;
-      }
-
-      setProfile(data);
-      setFullName(data[0].full_name || '');
-      setTeamId(data[0].team_id || null);
-      setAvatarUrl(data[0].avatar_url || '');
-      setExpoPushToken(data[0].expo_push_token || '');
-
-      console.log('This is my profile:', data[0])
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      Alert.alert('Error', 'Failed to fetch profile');
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (profile) {
+      setFullName(profile.full_name || '');
+      setTeamId(profile.team_id || null);
+      setIsAdmin(profile.is_admin || false);
+      setAvatarUrl(profile.avatar_url || '');
+      setExpoPushToken(profile?.expo_push_token)
     }
-  };
+  }, [profile]);
+
 
   const fetchTeams = async () => {
     const { data, error } = await supabase
@@ -117,7 +102,9 @@ export default function Account({ session }) {
       if (error) {
         throw error
       } else {
-        setProfile(updates);
+        setFullName(profile?.full_name);
+        setTeamId(profile?.team_id);
+        getProfile(session?.user?.id)
       }
 
     } catch (error) {
@@ -185,7 +172,7 @@ export default function Account({ session }) {
   }, [teams, teamId]);
 
   return (
-    <SafeAreaView className='h-full' style={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.menuButton}
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -215,7 +202,11 @@ export default function Account({ session }) {
         </View>
         <Button
           title={loading ? 'Updating ...' : 'Update Profile'}
-          onPress={() => updateProfile({ full_name: fullName, team_id: teamId, avatar_url: avatarUrl })}
+          onPress={() => updateProfile({
+            full_name: fullName,
+            team_id: teamId,
+          })
+          }
           disabled={loading}
           buttonStyle={styles.primaryButton}
           titleStyle={styles.buttonText}
@@ -244,7 +235,7 @@ export default function Account({ session }) {
         showNoneOption={true}
         onSelectNone={() => setTeamId(null)}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

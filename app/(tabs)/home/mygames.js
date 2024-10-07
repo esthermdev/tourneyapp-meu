@@ -8,9 +8,22 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
 
+const Placeholder = () => (
+  <View style={styles.placeholderContainer}>
+    <Ionicons name="people-outline" size={ms(60)} color="#EA1D25" />
+    <Text style={styles.placeholderTitle}>No Team Selected</Text>
+    <Text style={styles.placeholderText}>
+      To view games, please choose a team on your account page.
+    </Text>
+    <Text style={styles.placeholderSubText}>
+      If you're not a player, that's okay! You can still explore other sections of the app.
+    </Text>
+  </View>
+);
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
+
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
@@ -139,7 +152,7 @@ const MyGamesScreen = () => {
           </Text>
           <Ionicons name='checkmark-circle' size={15} color='#8F8DAA' />
         </TouchableOpacity>
-      ) : profile.is_team_captain && !game.scores[0].is_finished ? (
+      ) : profile?.is_team_captain && !game.scores[0].is_finished ? (
         <TouchableOpacity
           style={styles.updateButton}
           onPress={() => openModal(game)}
@@ -161,21 +174,25 @@ const MyGamesScreen = () => {
   return (
     <View style={styles.container}>
       <CustomHeader title='My Games' route='home' />
-      <SectionList
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#EA1D25']} // This sets the color of the refresh spinner
-          />
-        }
-        sections={games}
-        keyExtractor={(item, index) => item.id.toString() + index}
-        renderItem={({ item }) => (
-          <GameCard game={item} openModal={openModal} />
-        )}
-        renderSectionHeader={renderSectionHeader}
-      />
+      {profile && profile.team_id ? (
+        <SectionList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#EA1D25']}
+            />
+          }
+          sections={games}
+          keyExtractor={(item, index) => item.id.toString() + index}
+          renderItem={({ item }) => (
+            <GameCard game={item} openModal={openModal} />
+          )}
+          renderSectionHeader={renderSectionHeader}
+        />
+      ) : (
+        <Placeholder />
+      )}
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -389,6 +406,33 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Bold',
     textAlign: 'center',
     fontSize: ms(16)
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  placeholderTitle: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: ms(24),
+    color: '#EA1D25',
+    marginTop: 20,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  placeholderText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(18),
+    color: '#333243',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  placeholderSubText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(16),
+    color: '#8F8DAA',
+    textAlign: 'center',
   },
 });
 

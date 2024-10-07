@@ -17,7 +17,7 @@ const CustomHomeButton = ({ handlePress, align, disabled, title, icon, color }) 
       {!disabled ? (
         <FontAwesome5 name={icon} size={25} color='#fff' />
       ) : <></>}
-      <Text maxFontSizeMultiplier={1.1} style={[styles.text, { textAlign: align }]}>{title}</Text>
+      <Text maxFontSizeMultiplier={1} style={[styles.text, { textAlign: align }]}>{title}</Text>
     </TouchableOpacity>
   )
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'left',
-    fontSize: ms(18),
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#fff'
   }

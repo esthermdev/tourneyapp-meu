@@ -9,16 +9,25 @@ export default function CartNotification() {
   const { expoPushToken, notification, responseListener } = usePushNotifications();
 
   useEffect(() => {
-    if (notification) {
-      responseListener.current = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
-    }
-  }, [notification])
+    let isMounted = true;
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      if (isMounted) {
+        handleNotificationResponse(response);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
+  }, []);
 
   const handleNotificationResponse = async (response) => {
     console.log("Notification response received:", response);
     const { notification: { request: { content: { data } } } } = response;
 
     if (data.type === 'new_cart_request' && data.requestId) {
+      let alertShown = false;
       try {
         // Check if the request still exists and is pending
         const { data: requestData, error } = await supabase
@@ -30,21 +39,26 @@ export default function CartNotification() {
         if (error) throw error;
 
         if (!requestData || requestData.status !== 'pending') {
-          Alert.alert(
-            "Request Expired",
-            "This cart request is no longer available. It may have expired or been accepted by another driver.",
-            [{ text: "OK" }]
-          );
+          if (!alertShown) {
+            alertShown = true;
+            Alert.alert(
+              "Request Expired",
+              "This cart request is no longer available. It may have expired or been accepted by another driver.",
+              [{ text: "OK" }]
+            );
+          }
         } else {
-          // The request is still valid, show acceptance dialog
-          Alert.alert(
-            "Cart Request",
-            "Do you want to accept this cart request?",
-            [
-              { text: "Ignore", style: "cancel" },
-              { text: "Accept", style: "default", onPress: () => acceptCartRequest(data.requestId) }
-            ]
-          );
+          if (!alertShown) {
+            alertShown = true;
+            Alert.alert(
+              "Cart Request",
+              "Do you want to accept this cart request?",
+              [
+                { text: "Ignore", style: "cancel" },
+                { text: "Accept", style: "default", onPress: () => acceptCartRequest(data.requestId) }
+              ]
+            );
+          }
         }
       } catch (error) {
         console.error("Error checking cart request status:", error);
@@ -73,7 +87,7 @@ export default function CartNotification() {
         })
         .eq('id', requestId)
         .eq('status', 'pending')
-        .select();
+        .select()
 
       if (error) throw error;
 
@@ -138,8 +152,6 @@ export default function CartNotification() {
       console.error('Error sending test notification:', error);
     }
   };
-
-  console.log("Notification payload:", notification);
 
   return (
     <View style={{ display: 'none', alignItems: 'center', justifyContent: 'space-around' }}>

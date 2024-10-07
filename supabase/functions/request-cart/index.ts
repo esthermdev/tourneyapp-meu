@@ -8,6 +8,7 @@ interface CartRequest {
   to_field_number: number | null;
   status: string;
   passenger_count: number;
+  special_request: string;
 }
 
 interface WebhookPayload {
@@ -36,19 +37,19 @@ Deno.serve(async (req) => {
     });
   }
 
-  const { data: volunteers, error } = await supabase
+  const { data: drivers, error } = await supabase
     .from("profiles")
     .select("id, expo_push_token")
-    .eq("is_volunteer", true)
+    .eq("is_driver", true)
     .eq("is_available", true)
     .eq("is_logged_in", true);
 
   if (error) {
-    console.error("Error fetching volunteers:", error);
-    throw new Error("Failed to fetch volunteers");
+    console.error("Error fetching drivers:", error);
+    throw new Error("Failed to fetch drivers");
   }
 
-  if (volunteers && volunteers.length > 0) {
+  if (drivers && drivers.length > 0) {
     const expirationTime = Date.now() + NOTIFICATION_TTL * 1000;
     const notification = {
       sound: "default",
@@ -57,7 +58,7 @@ Deno.serve(async (req) => {
         cartRequest.from_field_number ? ` ${cartRequest.from_field_number}` : ""
       } To: ${cartRequest.to_location}${
         cartRequest.to_field_number ? ` ${cartRequest.to_field_number}` : ""
-      } - Passengers: ${cartRequest.passenger_count}`,
+      } - Passengers: ${cartRequest.passenger_count} - Special Requests: ${cartRequest.special_request}`,
       data: {
         requestId: cartRequest.id,
         expirationTime: expirationTime,
@@ -66,7 +67,7 @@ Deno.serve(async (req) => {
       contentAvailable: true,
     };
 
-    const tokens = volunteers.map((volunteer) => volunteer.expo_push_token);
+    const tokens = drivers.map((driver) => driver.expo_push_token);
     const message = {
       to: tokens,
       ...notification,
@@ -106,7 +107,7 @@ Deno.serve(async (req) => {
           );
         } else {
           const silentNotification = {
-            to: volunteers.map((v) => v.expo_push_token),
+            to: drivers.map((v) => v.expo_push_token),
             content: {
               title: "Cart Request Expired",
               body:

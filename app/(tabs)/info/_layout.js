@@ -10,6 +10,7 @@ const InfoLayout = () => {
 			<Stack.Screen name="emergency" options={{ headerShown: false }} />
 			<Stack.Screen name="credits" options={{ headerShown: false }} />
 			<Stack.Screen name="refund-policy" options={{ headerShown: false }} />
+			<Stack.Screen name="feedback" options={{ headerShown: false }} />
 		</Stack>
 	);
 };

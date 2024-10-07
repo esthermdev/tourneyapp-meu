@@ -14,6 +14,7 @@ const InfoScreen = () => {
 		{ title: 'Emergency', route: 'emergency' },
 		{ title: 'Refund Policy', route: 'refund-policy' },
 		{ title: 'Credits', route: 'credits' },
+		{ title: 'Report Feedback', route: 'feedback' },
 	];
 
 	const renderInfoItem = (item, index) => (
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		paddingVertical: 25,
+		paddingVertical: 20,
 		borderBottomWidth: 1,
 		borderBottomColor: '#D9D9D9',
 	},

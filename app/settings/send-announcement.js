@@ -49,7 +49,7 @@ const AnnouncementScreen = () => {
           placeholder="Enter announcement message"
           multiline
         />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Send</Text>
         </TouchableOpacity>
       </View>

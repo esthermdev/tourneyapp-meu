@@ -71,9 +71,17 @@ const CartRequestsList = () => {
           From: {item.from_location}
           {'\n'}
           To: {item.to_location}
+          {'\n'}
+          Number of passengers: {item.passenger_count}
         </Text>
       </View>
       <View style={styles.cardContent}>
+        <View style={styles.infoRow}>
+          <Text style={styles.labelText}>Special Request:</Text>
+          <Text style={styles.valueText}>
+            {item?.special_request}
+          </Text>
+        </View>
         <View style={styles.infoRow}>
           <Text style={styles.labelText}>ID:</Text>
           <Text style={styles.valueText}>
@@ -129,7 +137,7 @@ const DriverAvailabilityScreen = () => {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('is_volunteer', true)
+        .eq('is_driver', true)
         .order('full_name');
 
       if (error) throw error;

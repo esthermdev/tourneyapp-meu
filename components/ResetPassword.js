@@ -1,51 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, StyleSheet, View, Text, TextInput } from 'react-native';
 import { Button } from '@rneui/themed';
-import { supabase } from '../../utils/supabase';
-import { Linking } from 'react-native';
-import { useLocalSearchParams, useRouter, useSegments } from 'expo-router';
+import { supabase } from '../utils/supabase';
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const params = useLocalSearchParams();
-  const router = useRouter();
-  const segments = useSegments();
-  const { code } = useLocalSearchParams();
-
-  console.log('Current route segments:', segments);
-  console.log('Received params:', params);
-  console.log(code)
-
-  useEffect(() => {
-    if (code) {
-      verifyPasswordResetCode(code);
-    }
-  }, [code]);
-
-  const verifyPasswordResetCode = async (code) => {
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: code,
-        type: 'recovery',
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      console.log('Password reset code verified successfully');
-    } catch (error) {
-      console.error('Error verifying password reset code:', error);
-      Alert.alert('Error', 'Invalid or expired reset link. Please request a new one.');
-      router.replace('/');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   async function handleResetPassword() {
     if (newPassword !== confirmPassword) {

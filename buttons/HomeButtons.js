@@ -18,7 +18,7 @@ const HomeButtons = ({ title, icon, buttonStyle, handlePress, disabled }) => {
         resizeMode='contain'
         style={{ width: 25, height: 25 }}
       />
-      <Text maxFontSizeMultiplier={1.1} style={styles.text}>{title}</Text>
+      <Text maxFontSizeMultiplier={1} style={styles.text}>{title}</Text>
     </TouchableOpacity>
   )
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     width: buttonWidth,
   },
   text: {
-    fontSize: ms(18),
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#fff'
   }

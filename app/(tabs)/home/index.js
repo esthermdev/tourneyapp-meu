@@ -34,12 +34,12 @@ const Home = () => {
         <HomeButtons
           title='My Games'
           icon={icons.frisbee}
-          buttonStyle={{ backgroundColor: '#FA7930' }}
+          buttonStyle={{ backgroundColor: '#FF026C' }}
           handlePress={() => handlePress('mygames')}
         />
         <CustomHomeButton
           title='Report Spirit Scores'
-          color='#3CB043'
+          color='#41A603'
           icon='hands-helping'
           align='flex-start'
           handlePress={() => router.push('https://docs.google.com/forms/d/16wUJRxu9JUVHVqNXIyrWex935ywue45AmLqrrgNjgtE/viewform?edit_requested=true')}
@@ -47,23 +47,22 @@ const Home = () => {
         <HomeButtons
           title='Watch Live'
           icon={icons.video}
-          buttonStyle={{ backgroundColor: '#FF026C' }}
+          buttonStyle={{ backgroundColor: '#FFA700' }}
           handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
         />
-        <MedicButton />
-        <WaterRefillButton buttonStyle={styles.button} />
-        <RequestCartButton />
         <HomeButtons
           title='Field Map'
           icon={icons.map}
           buttonStyle={{ backgroundColor: '#B6C846' }}
           handlePress={() => router.push('/home/fieldmap')}
         />
+        <RequestCartButton />
+        <MedicButton />
+        <WaterRefillButton buttonStyle={styles.button} />
         <CustomHomeButton
           title='Meet our Volunteers!'
           icon='people-carry'
-          color='purple'
-          align='center'
+          color='#8660D6'
           handlePress={() => router.push('home/volunteers')}
         />
       </ScrollView>

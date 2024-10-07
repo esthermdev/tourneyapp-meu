@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Alert, View, Modal, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  StyleSheet,
+  Text,
+  Alert,
+  View,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Platform,
+  Dimensions
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { supabase } from '../utils/supabase';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dropdown from '../components/CustomDropdownComponent';
 import { usePushNotifications } from '../hooks/usePushNotifications';
-import { Dimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { s, ms } from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
+const modalHeight = height * 0.8; // 80% of screen height
 
 const locations = ['Field', 'Tourney Central', 'Lot 1', 'Lot 2'];
 
@@ -22,6 +35,7 @@ const RequestCartButton = () => {
   const [fields, setFields] = useState([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [passengerCount, setPassengerCount] = useState(1);
+  const [specialRequest, setSpecialRequest] = useState('');
 
   const { expoPushToken } = usePushNotifications();
 
@@ -39,6 +53,7 @@ const RequestCartButton = () => {
   };
 
   const handleRequestCart = async () => {
+
     try {
       setIsButtonDisabled(true);
 
@@ -50,6 +65,7 @@ const RequestCartButton = () => {
           from_field_number: fromLocation === 'Field' ? parseInt(fromFieldNumber) : null,
           to_field_number: toLocation === 'Field' ? parseInt(toFieldNumber) : null,
           passenger_count: passengerCount,
+          special_request: specialRequest,
           status: 'pending',
           requester_token: expoPushToken.data
         })
@@ -74,7 +90,7 @@ const RequestCartButton = () => {
   };
 
   const PassengerCountInput = ({ value, onValueChange }) => {
-    const increment = () => onValueChange(Math.min(value + 1, 10));
+    const increment = () => onValueChange(Math.min(value + 1, 6));
     const decrement = () => onValueChange(Math.max(value - 1, 1));
 
     return (
@@ -90,9 +106,30 @@ const RequestCartButton = () => {
     );
   };
 
+  const isFormValid = () => {
+    if (!fromLocation || !toLocation) return false;
+    if (fromLocation === 'Field' && !fromFieldNumber) return false;
+    if (toLocation === 'Field' && !toFieldNumber) return false;
+    if (fromLocation === toLocation && fromFieldNumber === toFieldNumber) return false;
+    return true;
+  };
+
+  const resetInputs = () => {
+    setFromLocation('');
+    setToLocation('');
+    setFromFieldNumber('');
+    setToFieldNumber('');
+    setPassengerCount(1);
+    setSpecialRequest('');
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    resetInputs();
+  };
+
   return (
     <View>
-
       <TouchableOpacity
         style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
         className="bg-[#E9BD21]"
@@ -100,7 +137,7 @@ const RequestCartButton = () => {
         disabled={isButtonDisabled}
       >
         <Ionicons name="car" size={30} color="#FFF" />
-        <Text maxFontSizeMultiplier={1.1} style={styles.text}>
+        <Text maxFontSizeMultiplier={1} style={styles.text}>
           {isButtonDisabled ? 'Request Pending...' : 'Request Cart'}
         </Text>
       </TouchableOpacity>
@@ -109,76 +146,107 @@ const RequestCartButton = () => {
         visible={isModalVisible}
         transparent={true}
         animationType="slide"
+        onRequestClose={handleCloseModal}
       >
-        <View style={styles.modalContainer}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.modalContainer}
+        >
           <View style={styles.modalContent}>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
               <Ionicons name="close" size={20} color="#8F8DAA" />
             </TouchableOpacity>
-            <ScrollView showsVerticalScrollIndicator>
-              <Text style={styles.noteText} maxFontSizeMultiplier={1.2}>
-                Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
-                {'\n\n'}
-                • If you're in a group, please submit only one request.{'\n'}
-                • Allow up to 5 minutes for a driver to reach you.{'\n'}
-                • If no driver arrives after 5 minutes, feel free to submit another request.
-                {'\n\n'}
-                Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
-              </Text>
-            </ScrollView>
+            <KeyboardAwareScrollView
+              enableOnAndroid={true}
+              enableAutomaticScroll={Platform.OS === 'ios'}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.scrollViewContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View>
+                  <Text style={styles.noteText} maxFontSizeMultiplier={1.2}>
+                    Note: Our volunteer drivers are dedicated to assisting you as quickly as possible. To help us serve everyone efficiently:
+                    {'\n\n'}
+                    • If you're in a group, please submit only one request.{'\n'}
+                    • Allow up to 5 minutes for a driver to reach you.{'\n'}
+                    • If no driver arrives after 5 minutes, feel free to submit another request.
+                    {'\n\n'}
+                    Thank you for your patience and understanding as we work to accommodate everyone's transportation needs.
+                  </Text>
 
-            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>Number of Passengers:</Text>
-            <PassengerCountInput
-              value={passengerCount}
-              onValueChange={setPassengerCount}
-            />
+                  <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>Number of Passengers:</Text>
+                  <PassengerCountInput
+                    value={passengerCount}
+                    onValueChange={setPassengerCount}
+                  />
 
-            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>From:</Text>
-            <Dropdown
-              label="From Location"
-              data={locations}
-              onSelect={(item) => setFromLocation(item)}
-              selectedValue={fromLocation}
-            />
+                  <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>From:</Text>
+                  <Dropdown
+                    label="From Location"
+                    data={locations}
+                    onSelect={(item) => setFromLocation(item)}
+                    selectedValue={fromLocation}
+                  />
 
-            {fromLocation === 'Field' && (
-              <Dropdown
-                label="From Field Number"
-                data={fields}
-                onSelect={(item) => setFromFieldNumber(item)}
-                selectedValue={fromFieldNumber}
-              />
-            )}
+                  {fromLocation === 'Field' && (
+                    <Dropdown
+                      label="From Field Number"
+                      data={fields}
+                      onSelect={(item) => setFromFieldNumber(item)}
+                      selectedValue={fromFieldNumber}
+                    />
+                  )}
 
-            <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>To:</Text>
-            <Dropdown
-              label="To Location"
-              data={locations}
-              onSelect={(item) => setToLocation(item)}
-              selectedValue={toLocation}
-            />
+                  <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>To:</Text>
+                  <Dropdown
+                    label="To Location"
+                    data={locations}
+                    onSelect={(item) => setToLocation(item)}
+                    selectedValue={toLocation}
+                  />
 
-            {toLocation === 'Field' && (
-              <Dropdown
-                label="To Field Number"
-                data={fields}
-                onSelect={(item) => setToFieldNumber(item)}
-                selectedValue={toFieldNumber}
-              />
-            )}
+                  {toLocation === 'Field' && (
+                    <Dropdown
+                      label="To Field Number"
+                      data={fields}
+                      onSelect={(item) => setToFieldNumber(item)}
+                      selectedValue={toFieldNumber}
+                    />
+                  )}
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleRequestCart}>
-              <Text style={styles.submitButtonText} maxFontSizeMultiplier={1.2}>Request Cart</Text>
-            </TouchableOpacity>
+                  <Text style={styles.labelHeader} maxFontSizeMultiplier={1.2}>Special Request:</Text>
+                  <TextInput
+                    style={styles.specialRequestInput}
+                    placeholder="e.g., Wheelchair needed, carrying large items..."
+                    value={specialRequest}
+                    onChangeText={setSpecialRequest}
+                    multiline
+                    numberOfLines={3}
+                    maxLength={200}
+                  />
+
+                  <TouchableOpacity
+                    style={[styles.submitButton, !isFormValid() && styles.disabledSubmitButton]}
+                    onPress={handleRequestCart}
+                    disabled={!isFormValid()}
+                  >
+                    <Text style={styles.submitButtonText} maxFontSizeMultiplier={1.2}>Request Cart</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAwareScrollView>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
-
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  disabledSubmitButton: {
+    backgroundColor: '#ccc',
+  },
   disabledButton: {
     opacity: 0.5,
   },
@@ -195,10 +263,10 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     minHeight: 120,
     width: buttonWidth,
-    backgroundColor: '#E9BD21',
+    backgroundColor: '#808080',
   },
   text: {
-    fontSize: ms(18),
+    fontSize: ms(16),
     fontFamily: 'Outfit-Bold',
     color: '#fff'
   },
@@ -212,11 +280,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    width: '80%',
-    height: '80%',
+    width: '90%',
+    height: modalHeight,
+    overflow: 'hidden'
+  },
+  noteText: {
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(14),
+    color: '#666',
   },
   closeButton: {
     alignSelf: 'flex-end',
+    zIndex: 1,
   },
   submitButton: {
     backgroundColor: '#EA1D25',
@@ -229,12 +304,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Outfit-Bold',
     fontSize: ms(16)
-  },
-  noteText: {
-    fontFamily: 'Outfit-Regular',
-    fontSize: ms(15),
-    color: '#666',
-    marginVertical: 10,
   },
   passengerCountContainer: {
     flexDirection: 'row',
@@ -253,6 +322,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Bold',
     fontSize: ms(18),
     marginHorizontal: 20,
+  },
+  specialRequestInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    fontFamily: 'Outfit-Regular',
+    fontSize: ms(14),
+    textAlignVertical: 'top',
   },
 });
 

@@ -8,14 +8,31 @@ export const AuthProvider = ({ children }) => {
 	const [session, setSession] = useState(null);
 	const [profile, setProfile] = useState(null);
 	const [loading, setLoading] = useState(true);
-	console.log(session)
+
+	// const loginWithToken = async ({ access_token, refresh_token }) => {
+	// 	const signIn = async () => {
+	// 		await supabase.auth.setSession({
+	// 			access_token,
+	// 			refresh_token,
+	// 		});
+
+	// 		return await supabase.auth.refreshSession();
+	// 	};
+
+	// 	const {
+	// 		data: { user: supabaseUser },
+	// 	} = await signIn();
+
+	// 	setUser(supabaseUser);
+	// };
 
 	const getProfile = async (userId) => {
 		try {
 			const { data, error } = await supabase
 				.from('profiles')
-				.select('*')
+				.select('*, is_admin')
 				.eq('id', userId)
+				.single();
 
 			if (error) throw error;
 			setProfile(data);
@@ -29,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 	useEffect(() => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			setSession(session);
-			setUser(session?.user ?? null);
+			setUser(session?.user)
 			if (session?.user) {
 				getProfile(session.user.id);
 			}
@@ -39,13 +56,12 @@ export const AuthProvider = ({ children }) => {
 		const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
 			console.log(`Supabase auth event: ${event}`);
 			setSession(session);
-			setUser(session?.user ?? null);
+			setUser(session?.user)
 			if (session?.user) {
 				await getProfile(session.user.id);
 			} else {
 				setProfile(null);
 			}
-			setLoading(false);
 		});
 
 		return () => {

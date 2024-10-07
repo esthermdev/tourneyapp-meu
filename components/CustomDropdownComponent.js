@@ -22,7 +22,7 @@ export const Dropdown = ({ label, data, onSelect, selectedValue }) => {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity style={styles.button} onPress={toggleDropdown}>
-				<Text style={styles.buttonText}>
+				<Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>
 					{selectedValue || label}
 				</Text>
 				<Ionicons name={visible ? "caret-up" : "caret-down"} size={20} color="#333" />
