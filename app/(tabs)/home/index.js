@@ -10,11 +10,12 @@ import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
-import VolunteersButton from '../../../buttons/CustomHomeButton';
+import { useButtonState } from '../../../context/ButtonStateContext';
 import CustomHomeButton from '../../../buttons/CustomHomeButton';
 
 const Home = () => {
   const { user } = useAuth();
+  const { buttonStates } = useButtonState();
 
   const handlePress = (screen) => {
     if (!user) {
@@ -42,13 +43,13 @@ const Home = () => {
           color='#41A603'
           icon='hands-helping'
           align='flex-start'
-          handlePress={() => router.push('https://docs.google.com/forms/d/16wUJRxu9JUVHVqNXIyrWex935ywue45AmLqrrgNjgtE/viewform?edit_requested=true')}
+          handlePress={() => router.push('https://docs.google.com/forms/d/15NrrAtvd2mt_RGdpkTYDTYHGXHP0RTiIJEI0GXFwfp4/viewform?edit_requested=true')}
         />
         <HomeButtons
           title='Watch Live'
           icon={icons.video}
           buttonStyle={{ backgroundColor: '#FFA700' }}
-          handlePress={() => router.push('https://www.youtube.com/channel/UCUY1pzGlosJcOY_7prcQRtA')}
+          handlePress={() => router.push('https://www.youtube.com/@maineultimate/streams')}
         />
         <HomeButtons
           title='Field Map'
@@ -56,9 +57,9 @@ const Home = () => {
           buttonStyle={{ backgroundColor: '#B6C846' }}
           handlePress={() => router.push('/home/fieldmap')}
         />
-        <RequestCartButton />
-        <MedicButton />
-        <WaterRefillButton buttonStyle={styles.button} />
+        <RequestCartButton disabled={!buttonStates.requestCart} />
+        <MedicButton disabled={!buttonStates.medic} />
+        <WaterRefillButton disabled={!buttonStates.waterRefill} />
         <CustomHomeButton
           title='Meet our Volunteers!'
           icon='people-carry'

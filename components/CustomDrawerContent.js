@@ -1,4 +1,5 @@
-import { View, StyleSheet, AppState } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Image } from '@rneui/base';
 import { images } from '../constants';
@@ -10,11 +11,37 @@ import { ms } from 'react-native-size-matters'
 const CustomDrawerContent = (props) => {
   const { profile } = useAuth();
 
-  const drawerItems = [
+  const drawerItems = useMemo(() => [
     { name: 'index', label: 'Welcome' },
     { name: 'home', label: 'Home', icon: 'home' },
     { name: 'auth', label: 'My Account', icon: 'person' },
-  ];
+  ], []);
+
+  const renderDrawerItem = (item) => (
+    <DrawerItem
+      key={item.name}
+      style={styles.drawerItemStyle}
+      labelStyle={styles.drawerItemLabelStyle}
+      label={item.label}
+      onPress={() => props.navigation.navigate(item.name)}
+      icon={item.icon ? () => <Ionicon name={item.icon} size={ms(25)} color={'#EA1D25'} /> : undefined}
+    />
+  );
+
+  const renderAdminSection = () => {
+    if (!profile?.is_admin) return null;
+
+    return (
+      <View style={styles.bottomDrawerSection}>
+        <DrawerItem
+          label="Admin"
+          labelStyle={styles.settingsLabelStyle}
+          onPress={() => router.push('/settings')}
+          icon={({ color, size }) => <Ionicon name='settings' size={size} color={color} />}
+        />
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -22,31 +49,10 @@ const CustomDrawerContent = (props) => {
         <View style={styles.logoContainer}>
           <Image source={images.lpTitleLogo} style={{ width: 200, height: 200 }} />
         </View>
-        <View style={styles.divider}></View>
-        {drawerItems.map((item) => (
-          <DrawerItem
-            style={styles.drawerItemStyle}
-            labelStyle={styles.drawerItemLabelStyle}
-            key={item.name}
-            label={item.label}
-            onPress={() => props.navigation.navigate(item.name)}
-            icon={item.icon ? () => <Ionicon name={item.icon} size={ms(25)} color={'#EA1D25'} /> : undefined}
-          />
-        ))}
+        <View style={styles.divider} />
+        {drawerItems.map(renderDrawerItem)}
       </DrawerContentScrollView>
-      {profile && profile.is_admin ? (
-        <View style={styles.bottomDrawerSection}>
-          <DrawerItem
-            label="Admin"
-            labelStyle={styles.settingsLabelStyle}
-            onPress={() => router.push('/settings')}
-            icon={({ color, size }) => <Ionicon name='settings' size={size} color={color} />}
-          />
-        </View>
-      ) : (
-        <View></View>
-      )
-      }
+      {renderAdminSection()}
     </View>
   );
 };

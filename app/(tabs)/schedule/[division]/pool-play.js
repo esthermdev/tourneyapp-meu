@@ -32,6 +32,9 @@ export default function PoolPlay() {
                 <Tab.Screen name="Round3" options={{ title: 'R3' }}>
                     {() => <GameComponent roundId={1} datetimeId={3} division={code} title="Round 3" />}
                 </Tab.Screen>
+                <Tab.Screen name="Round4" options={{ title: 'R4' }}>
+                    {() => <GameComponent roundId={1} datetimeId={4} division={code} title="Round 4" />}
+                </Tab.Screen>
             </Tab.Navigator>
         </View>
     );

@@ -40,41 +40,60 @@ const TrainersList = () => {
     });
   };
 
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return '#28D4C0'; // Cyan for pending
+      case 'confirmed':
+        return '#59DE07'; // Green for confirmed
+      case 'resolved':
+        return '#00B0FB'; // Green for confirmed
+      default:
+        return '#D828FF'; // Grey for unknown status
+    }
+  };
+
   const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'High': return '#FF285C';
-      case 'Medium': return '#FA7930';
-      case 'Low': return '#2871FF';
-      default: return '#6D28FF';
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return '#FF0000'; // Red for high priority
+      case 'medium':
+        return '#FFA500'; // Orange for medium priority
+      case 'low':
+        return '#008000'; // Green for low priority
+      default:
+        return '#FFA500'; // Orange as default
     }
   };
 
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
-      <View style={styles.cardHeader}>
-        <Ionicons name="medical" size={24} color="#EA1D25" />
-        <Text style={styles.fieldText}>Field {item.field_number}</Text>
-      </View>
       <View style={styles.cardContent}>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Status:</Text>
-          <Text style={[styles.valueText, { color: item.status === 'pending' ? '#FA7930' : '#4CAF50' }]}>
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Text>
+        <View style={[styles.statusIndicator, { backgroundColor: '#188F00' }]}>
+          <Ionicons name="grid" size={24} color="white" />
+          <Text style={styles.fieldNumber} maxFontSizeMultiplier={1}>Field {item.field_number}</Text>
         </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Priority:</Text>
-          <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(item.priority_level) }]}>
-            <Text style={styles.priorityText}>{item.priority_level || 'N/A'}</Text>
+        <View style={styles.infoContainer}>
+          <View style={styles.infoRow}>
+            <Text style={styles.labelText} maxFontSizeMultiplier={1}>Status:</Text>
+            <Text style={[styles.valueText, { color: getStatusColor(item.status) }]} maxFontSizeMultiplier={1}>
+              {item.status}
+            </Text>
           </View>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Trainer:</Text>
-          <Text style={styles.valueText}>{item.trainer ? item.trainer.full_name : 'Unassigned'}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Created:</Text>
-          <Text style={styles.valueText}>{formatDate(item.created_at)}</Text>
+          <View style={styles.infoRow}>
+            <Text style={styles.labelText} maxFontSizeMultiplier={1}>Priority:</Text>
+            <View style={[styles.priorityBadge, { backgroundColor: getPriorityColor(item.priority_level) }]}>
+              <Text style={styles.priorityText} maxFontSizeMultiplier={1}>{item.priority_level}</Text>
+            </View>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.labelText} maxFontSizeMultiplier={1}>Trainer:</Text>
+            <Text style={styles.valueText} maxFontSizeMultiplier={1}>{item.trainer ? item.trainer.full_name : 'Unassigned'}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.labelText} maxFontSizeMultiplier={1}>Created:</Text>
+            <Text style={styles.valueText} maxFontSizeMultiplier={1}>{formatDate(item.created_at)}</Text>
+          </View>
         </View>
       </View>
     </Card>
@@ -106,70 +125,76 @@ const TrainersList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#333243',
+    backgroundColor: '#292D3E',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#292D3E',
   },
   loadingText: {
     marginTop: 10,
     fontSize: 16,
     fontFamily: 'Outfit-Regular',
-    color: '#666',
+    color: '#B0B0B0',
   },
   cardContainer: {
     borderRadius: 10,
-    padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    padding: 10,
+    marginHorizontal: 16,
+    marginVertical: 8,
+    backgroundColor: '#1F1F2F',
+    borderWidth: 0,
   },
   listContainer: {
-    paddingBottom: 15
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  fieldText: {
-    fontSize: 18,
-    fontFamily: 'Outfit-Bold',
-    color: '#333243',
-    marginLeft: 10,
+    paddingVertical: 15,
   },
   cardContent: {
-    marginLeft: 34,
+    flexDirection: 'row',
+    height: 120,
+  },
+  statusIndicator: {
+    width: '20%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 3
+  },
+  fieldNumber: {
+    color: 'white',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16,
+    marginTop: 8,
+  },
+  infoContainer: {
+    flex: 1,
+    padding: 12,
+    justifyContent: 'space-between',
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
   },
   labelText: {
-    fontSize: 14,
-    fontFamily: 'Outfit-Medium',
-    color: '#8F8DAA',
+    fontSize: 16,
+    fontFamily: 'Outfit-Regular',
+    color: '#B0B0B0',
   },
   valueText: {
-    fontSize: 14,
-    fontFamily: 'Outfit-SemiBold',
-    color: '#333243',
+    fontSize: 16,
+    fontFamily: 'Outfit-Bold',
+    color: 'white',
   },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 12,
+    borderRadius: 20,
   },
   priorityText: {
     color: 'white',
-    fontSize: 12,
-    fontFamily: 'Outfit-Medium',
+    fontSize: 14,
+    fontFamily: 'Outfit-Regular',
   },
 });
 

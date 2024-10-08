@@ -5,6 +5,7 @@ import { router, useNavigation } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerActions } from '@react-navigation/native';
+import { useButtonState } from '../../context/ButtonStateContext';
 
 const AdminOption = ({ title, icon, onPress, disabled }) => (
   <TouchableOpacity style={styles.optionButton} disabled={disabled} onPress={onPress}>
@@ -14,6 +15,9 @@ const AdminOption = ({ title, icon, onPress, disabled }) => (
 );
 
 const AdminScreen = () => {
+  const { buttonStates, toggleButtonState } = useButtonState();
+  const navigation = useNavigation();
+
   const adminOptions = [
     {
       title: 'Update Scores',
@@ -39,13 +43,23 @@ const AdminScreen = () => {
       route: 'settings/send-announcement',
       disabled: false
     },
+    {
+      title: buttonStates.requestCart && buttonStates.waterRefill && buttonStates.medic
+        ? 'Disable Home Buttons'
+        : 'Enable Home Buttons',
+      icon: <MaterialIcons name="touch-app" size={52} color="#FFFFFF" />,
+      onPress: () => {
+        toggleButtonState('requestCart');
+        toggleButtonState('waterRefill');
+        toggleButtonState('medic');
+      },
+      disabled: false
+    },
   ];
-
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle='#fff' />
+      <StatusBar barStyle='#fff' backgroundColor={'#333243'} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
           <Ionicons name='menu' size={25} color='orange' />
@@ -60,7 +74,7 @@ const AdminScreen = () => {
             title={option.title}
             icon={option.icon}
             disabled={option.disabled}
-            onPress={() => router.push(option.route)}
+            onPress={option.onPress || (() => router.push(option.route))}
           />
         ))}
       </ScrollView>
@@ -71,7 +85,7 @@ const AdminScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1E2A3A',
+    backgroundColor: '#333243',
   },
   header: {
     flexDirection: 'row',

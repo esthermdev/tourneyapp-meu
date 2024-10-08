@@ -5,6 +5,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
 
 const StandingsScreen = () => {
+  const divisions = [
+    { title: 'Men - Upper', route: 'men_upper', color: '#2871FF', disabled: false },
+    { title: 'Women - Upper', route: 'women_upper', color: '#FF026C', disabled: false },
+    { title: 'Men - Middle', route: 'men_middle', color: '#0AB359', disabled: true },
+    { title: 'Women - Lower', route: 'women_lower', color: '#BD41F2', disabled: true },
+    { title: 'Men - Lower', route: 'men_lower', color: '#F2A541', disabled: true },
+    { title: 'Mixed', route: 'mixed', color: '#FF7429', disabled: true },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -12,48 +21,16 @@ const StandingsScreen = () => {
       </View>
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.buttonContainer}>
-          <DivisionButton
-            title='Men - Upper'
-            route='standings/men_upper'
-            color='#2871FF'
-            disabled={false}
-            icon='ranking-star'
-          />
-          <DivisionButton
-            title='Men - Middle'
-            route='standings/men_lower'
-            color='#0AB359'
-            disabled={true}
-            icon='ranking-star'
-          />
-          <DivisionButton
-            title='Men - Lower'
-            route='standings/men_middle'
-            color='#F2A541'
-            disabled={true}
-            icon='ranking-star'
-          />
-          <DivisionButton
-            title='Women - Upper'
-            route='standings/women_upper'
-            color='#FF026C'
-            disabled={true}
-            icon='ranking-star'
-          />
-          <DivisionButton
-            title='Women - Lower'
-            route='standings/women_lower'
-            color='#BD41F2'
-            disabled={true}
-            icon='ranking-star'
-          />
-          <DivisionButton
-            title='Mixed'
-            route='standings/mixed'
-            color='#FF7429'
-            disabled={true}
-            icon='ranking-star'
-          />
+          {divisions.map((division, index) => (
+            <DivisionButton
+              key={index}
+              title={division.title}
+              route={`standings/${division.route}`}
+              color={division.color}
+              disabled={division.disabled}
+              icon='ranking-star'
+            />
+          ))}
         </ScrollView>
       </View>
     </View>

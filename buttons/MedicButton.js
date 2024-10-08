@@ -20,7 +20,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
 
-const MedicButton = () => {
+const MedicButton = ({ disabled }) => {
   const [isRequesting, setIsRequesting] = useState(false);
   const [selected, setSelected] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
@@ -106,7 +106,7 @@ const MedicButton = () => {
       <TouchableOpacity
         style={[styles.buttonStyle, isRequesting && styles.disabledButton]}
         onPress={showPicker}
-        disabled={isRequesting}
+        disabled={isRequesting || disabled}
       >
         <Image
           source={icons.medic}

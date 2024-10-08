@@ -10,7 +10,7 @@ export default function DivisionScheduleIndex() {
 
 	return (
 		<View style={styles.container}>
-			<CustomHeader title={capitalizeWords(division.replace('_', ' '))} route='schedule' />
+			<CustomHeader title={capitalizeWords(division.replace('_', ' - '))} route='schedule' />
 			<ScheduleList division={division} />
 		</View>
 	);

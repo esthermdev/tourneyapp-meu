@@ -46,7 +46,7 @@ const DivisionScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#1E2A3A',
+		backgroundColor: '#333243',
 	},
 	content: {
 		padding: 20,

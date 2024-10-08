@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase'; // Adjust the import path as needed
 import TrainersList from '../../components/TrainersList'; // Import the existing TrainersList component
 import CustomAdminHeader from '../../components/CustomAdminHeader';
+import { ms } from 'react-native-size-matters';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,9 +16,21 @@ const TrainerManagementScreen = () => {
       <CustomAdminHeader title="Trainer Management" route='settings' />
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: styles.tabLabel,
-          tabBarStyle: styles.tabBar,
-          tabBarIndicatorStyle: styles.tabIndicator,
+          tabBarActiveTintColor: '#EA1D25',
+          tabBarInactiveTintColor: '#8F8DAA',
+          tabBarLabelStyle: {
+            fontFamily: 'Outfit-Semibold',
+            fontSize: ms(12),
+          },
+          tabBarStyle: {
+            backgroundColor: '#262537',
+            borderBottomWidth: 1,
+            borderBottomColor: '#8F8DAA',
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: '#EA1D25',
+            height: 3,
+          },
         }}
       >
         <Tab.Screen name="Requests" component={TrainersList} />
@@ -74,15 +87,15 @@ const TrainerAvailabilityScreen = () => {
       <View style={styles.trainerInfo}>
         <Text style={styles.trainerName}>{item.full_name}</Text>
         <Text style={[styles.availabilityText,
-        { color: item.is_available ? '#4CAF50' : '#FF5252' }]}>
+        { color: item.is_available ? '#59DE07' : '#EA1D25' }]}>
           {item.is_available ? 'Available' : 'Unavailable'}
         </Text>
       </View>
       <Switch
         value={item.is_available}
         onValueChange={() => toggleAvailability(item.id, item.is_available)}
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={item.is_available ? "#f5dd4b" : "#f4f3f4"}
+        trackColor={{ false: "#fff", true: "whitesmoke" }}
+        thumbColor={item.is_available ? "#59DE07" : "#828282"}
       />
     </View>
   );
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1F1F2F',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -141,7 +154,7 @@ const styles = StyleSheet.create({
   trainerName: {
     fontFamily: 'Outfit-SemiBold',
     fontSize: 16,
-    color: '#333243',
+    color: '#fff',
   },
   availabilityText: {
     fontFamily: 'Outfit-Medium',

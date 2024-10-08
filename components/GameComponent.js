@@ -51,7 +51,8 @@ const GameComponent = ({ datetimeId, division, roundId, title }) => {
       `)
       .eq('division', division)
       .eq('round_id', roundId)
-      .eq('datetime_id', datetimeId);
+      .eq('datetime_id', datetimeId)
+      .order('pool_id')
 
     const { data, error } = await query;
 

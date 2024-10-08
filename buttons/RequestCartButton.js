@@ -26,7 +26,7 @@ const modalHeight = height * 0.8; // 80% of screen height
 
 const locations = ['Field', 'Tourney Central', 'Lot 1', 'Lot 2'];
 
-const RequestCartButton = () => {
+const RequestCartButton = ({ disabled }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [fromLocation, setFromLocation] = useState('');
   const [toLocation, setToLocation] = useState('');
@@ -67,7 +67,7 @@ const RequestCartButton = () => {
           passenger_count: passengerCount,
           special_request: specialRequest,
           status: 'pending',
-          requester_token: expoPushToken.data
+          requester_token: expoPushToken?.data
         })
         .select()
         .single();
@@ -134,7 +134,7 @@ const RequestCartButton = () => {
         style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
         className="bg-[#E9BD21]"
         onPress={() => !isButtonDisabled && setIsModalVisible(true)}
-        disabled={isButtonDisabled}
+        disabled={isButtonDisabled || disabled}
       >
         <Ionicons name="car" size={30} color="#FFF" />
         <Text maxFontSizeMultiplier={1} style={styles.text}>

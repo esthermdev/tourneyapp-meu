@@ -6,6 +6,8 @@ import { Card } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import CustomAdminHeader from '../../components/CustomAdminHeader';
 import { supabase } from '../../utils/supabase';
+import { CardDivider } from '@rneui/base/dist/Card/Card.Divider';
+import { ms } from 'react-native-size-matters';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,9 +17,21 @@ const DriverManagementScreen = () => {
       <CustomAdminHeader title="Driver Management" route='settings' />
       <Tab.Navigator
         screenOptions={{
-          tabBarLabelStyle: styles.tabLabel,
-          tabBarStyle: styles.tabBar,
-          tabBarIndicatorStyle: styles.tabIndicator,
+          tabBarActiveTintColor: '#EA1D25',
+          tabBarInactiveTintColor: '#8F8DAA',
+          tabBarLabelStyle: {
+            fontFamily: 'Outfit-Semibold',
+            fontSize: ms(12),
+          },
+          tabBarStyle: {
+            backgroundColor: '#262537',
+            borderBottomWidth: 1,
+            borderBottomColor: '#8F8DAA',
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: '#EA1D25',
+            height: 3,
+          },
         }}
       >
         <Tab.Screen name="Requests" component={CartRequestsList} />
@@ -63,41 +77,60 @@ const CartRequestsList = () => {
     });
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'expired':
+        return styles.statusExpired;
+      case 'pending':
+        return styles.statusPending;
+      case 'confirmed':
+        return styles.statusConfirmed;
+      default:
+        return {};
+    }
+  };
+
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
-      <View style={styles.cardHeader}>
-        <Ionicons name="car" size={24} color="#EA1D25" />
-        <Text style={styles.requestText}>
-          From: {item.from_location}
-          {'\n'}
-          To: {item.to_location}
-          {'\n'}
-          Number of passengers: {item.passenger_count}
+      <View style={styles.locationContainer}>
+        <View style={[styles.locationTextContainer, { backgroundColor: '#FF9821' }]}>
+          <Text maxFontSizeMultiplier={1} style={styles.locationText}>{item.from_location.toUpperCase()} {item?.from_field_number}</Text>
+        </View>
+        <Ionicons name="arrow-forward" size={24} color="#FFFFFF" style={styles.arrowIcon} />
+        <View style={[styles.locationTextContainer, { backgroundColor: '#EA1D25' }]}>
+          <Text maxFontSizeMultiplier={1} style={styles.locationText}>{item.to_location.toUpperCase()} {item?.to_field_number}</Text>
+        </View>
+      </View>
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={[styles.infoLabel, { color: '#fff' }]}>Number of Passengers:</Text>
+        <Text maxFontSizeMultiplier={1} style={[styles.infoValue, { backgroundColor: '#000', paddingHorizontal: 16, paddingVertical: 5, borderRadius: 100 }]}>{item.passenger_count}</Text>
+      </View>
+
+      <CardDivider />
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>Special Request:</Text>
+        <View style={{ flex: 1 }}>
+          <Text maxFontSizeMultiplier={1} style={[styles.infoValue, { color: '#FFB46B', textAlign: 'right' }]}>{item.special_request || 'None'}</Text>
+        </View>
+      </View>
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>ID:</Text>
+        <Text maxFontSizeMultiplier={1} style={styles.infoValue}>{item.id}</Text>
+      </View>
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>Status:</Text>
+        <Text maxFontSizeMultiplier={1} style={[styles.infoValue, getStatusColor(item.status)]}>
+          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
         </Text>
       </View>
-      <View style={styles.cardContent}>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Special Request:</Text>
-          <Text style={styles.valueText}>
-            {item?.special_request}
-          </Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>ID:</Text>
-          <Text style={styles.valueText}>
-            {item.id}
-          </Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Status:</Text>
-          <Text style={[styles.valueText, { color: item.status === 'pending' ? '#FA7930' : '#4CAF50' }]}>
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.labelText}>Created:</Text>
-          <Text style={styles.valueText}>{formatDate(item.created_at)}</Text>
-        </View>
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>Created:</Text>
+        <Text maxFontSizeMultiplier={1} style={styles.infoValue}>{formatDate(item.created_at)}</Text>
       </View>
     </Card>
   );
@@ -147,8 +180,6 @@ const DriverAvailabilityScreen = () => {
     }
   };
 
-  console.log(drivers)
-
   const toggleAvailability = async (driverId, currentAvailability) => {
     try {
       const { error } = await supabase
@@ -158,7 +189,6 @@ const DriverAvailabilityScreen = () => {
 
       if (error) throw error;
 
-      // Update local state
       setDrivers(drivers.map(driver =>
         driver.id === driverId
           ? { ...driver, is_available: !currentAvailability }
@@ -175,15 +205,15 @@ const DriverAvailabilityScreen = () => {
       <View style={styles.driverInfo}>
         <Text style={styles.driverName}>{item.full_name}</Text>
         <Text style={[styles.availabilityText,
-        { color: item.is_available ? '#4CAF50' : '#FF5252' }]}>
+        { color: item.is_available ? '#59DE07' : '#EA1D25' }]}>
           {item.is_available ? 'Available' : 'Unavailable'}
         </Text>
       </View>
       <Switch
         value={item.is_available}
         onValueChange={() => toggleAvailability(item.id, item.is_available)}
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={item.is_available ? "#f5dd4b" : "#f4f3f4"}
+        trackColor={{ false: "#fff", true: "whitesmoke" }}
+        thumbColor={item.is_available ? "#59DE07" : "#828282"}
       />
     </View>
   );
@@ -227,64 +257,74 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   listContainer: {
-    paddingBottom: 10
+    paddingVertical: 10,
   },
   cardContainer: {
-    borderRadius: 11,
-    padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderColor: '#1F1F2F',
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: '#1F1F2F',
+    marginHorizontal: 15,
+    marginVertical: 10,
   },
-  cardHeader: {
+  locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
+    marginBottom: 15,
   },
-  requestText: {
-    fontFamily: 'Outfit-SemiBold',
+  locationTextContainer: {
+    flex: 1,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5
+  },
+  locationText: {
+    textAlign: 'center',
+    fontFamily: 'Outfit-Bold',
     fontSize: 16,
-    color: '#333243',
-    marginLeft: 10,
+    color: '#FFFFFF',
   },
-  cardContent: {
-    marginLeft: 34,
+  arrowIcon: {
+    marginHorizontal: 10,
   },
   infoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  labelText: {
+  infoLabel: {
     fontFamily: 'Outfit-Medium',
-    fontSize: 14,
+    fontSize: 16,
     color: '#8F8DAA',
   },
-  valueText: {
+  infoValue: {
     fontFamily: 'Outfit-SemiBold',
-    fontSize: 14,
-    color: '#333243',
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  statusExpired: {
+    color: '#F9200C',
+  },
+  statusPending: {
+    color: '#D828FF',
+  },
+  statusConfirmed: {
+    color: '#BACF16',
   },
   driverList: {
-    paddingBottom: 10,
+    paddingVertical: 10,
   },
   driverItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1F1F2F',
     padding: 15,
-    marginTop: 15,
+    marginVertical: 5,
     marginHorizontal: 15,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
   driverInfo: {
     flex: 1,
@@ -292,7 +332,7 @@ const styles = StyleSheet.create({
   driverName: {
     fontFamily: 'Outfit-SemiBold',
     fontSize: 16,
-    color: '#333243',
+    color: '#FFFFFF',
   },
   availabilityText: {
     fontFamily: 'Outfit-Medium',
