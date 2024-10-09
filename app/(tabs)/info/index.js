@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		flex: 1,
-		paddingHorizontal: 25,
+		paddingHorizontal: 15,
 	},
 	infoItem: {
 		flexDirection: 'row',

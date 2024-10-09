@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { StyleSheet, Text, View, FlatList, Switch } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Switch, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase'; // Adjust the import path as needed
 import TrainersList from '../../components/TrainersList'; // Import the existing TrainersList component
 import CustomAdminHeader from '../../components/CustomAdminHeader';
@@ -42,12 +41,9 @@ const TrainerManagementScreen = () => {
 
 const TrainerAvailabilityScreen = () => {
   const [trainers, setTrainers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetchTrainers();
-  }, []);
-
-  const fetchTrainers = async () => {
+  const fetchTrainers = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -60,7 +56,11 @@ const TrainerAvailabilityScreen = () => {
     } catch (error) {
       console.error('Error fetching trainers:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTrainers();
+  }, [fetchTrainers]);
 
   const toggleAvailability = async (trainerId, currentAvailability) => {
     try {
@@ -81,6 +81,12 @@ const TrainerAvailabilityScreen = () => {
       console.error('Error updating trainer availability:', error);
     }
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchTrainers();
+    setRefreshing(false);
+  }, [fetchTrainers]);
 
   const renderTrainerItem = ({ item }) => (
     <View style={styles.trainerItem}>
@@ -107,6 +113,14 @@ const TrainerAvailabilityScreen = () => {
         renderItem={renderTrainerItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.trainerList}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#EA1D25']}
+            tintColor="#EA1D25"
+          />
+        }
       />
     </View>
   );

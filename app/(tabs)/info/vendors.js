@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { ListItem, Avatar } from '@rneui/base';
 import CustomHeader from '../../../components/CustomHeader';
 import { supabase } from '../../../utils/supabase';
@@ -31,11 +31,17 @@ const Vendors = () => {
 
 	const renderItem = ({ item }) => (
 		<ListItem key={item.id} bottomDivider>
-			<Avatar containerStyle={{ backgroundColor: '#fff' }} size={50} rounded title={item?.name[0]} source={{ uri: item?.avatar_url }} />
+			<Avatar containerStyle={{ backgroundColor: '#fff', borderWidth: 1, borderColor: '#000' }} size={50} rounded title={item?.name[0]} source={{ uri: item?.avatar_url }} />
 			<ListItem.Content>
 				<ListItem.Title className='font-outfitmedium' style={{ fontSize: ms(16) }}>{item.name}</ListItem.Title>
 				<ListItem.Subtitle>
-					<Link href={`${item.website}`} style={{ color: 'blue' }}>Link</Link>
+					{item.website ? (
+						<Link href={item.website} style={{ color: 'blue' }}>
+							Link
+						</Link>
+					) : (
+						<Text style={{ color: 'gray' }}>Link</Text>
+					)}
 				</ListItem.Subtitle>
 			</ListItem.Content>
 		</ListItem>

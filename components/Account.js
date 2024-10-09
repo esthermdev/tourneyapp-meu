@@ -75,7 +75,9 @@ export default function Account({ session }) {
   const fetchTeams = async () => {
     const { data, error } = await supabase
       .from('teams')
-      .select('id, name');
+      .select('id, name, division')
+      .order('division', { ascending: true })
+      .order('name', { ascending: true });
 
     if (error) {
       console.error('Error fetching teams:', error);
@@ -152,7 +154,8 @@ export default function Account({ session }) {
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = teams.filter(team =>
-      team.name.toLowerCase().includes(query.toLowerCase())
+      team.name.toLowerCase().includes(query.toLowerCase()) ||
+      team.division.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredTeams(filtered);
   };
@@ -164,7 +167,7 @@ export default function Account({ session }) {
         onPress={() => setIsModalVisible(true)}
       >
         <Text style={styles.dropdownSelectedText}>
-          {teamId === null ? 'None (non-player)' : (teams.find(team => team.id === teamId)?.name || 'Select a team...')}
+          {teamId === null ? 'None (non-player)' : (teams.find(team => team.id === teamId)?.name + ' (' + teams.find(team => team.id === teamId)?.division + ')' || 'Select a team...')}
         </Text>
         <Ionicons name="caret-down" size={24} color="#333243" />
       </TouchableOpacity>

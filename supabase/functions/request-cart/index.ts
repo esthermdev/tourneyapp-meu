@@ -50,7 +50,6 @@ Deno.serve(async (req) => {
   }
 
   if (drivers && drivers.length > 0) {
-    const expirationTime = Date.now() + NOTIFICATION_TTL * 1000;
     const notification = {
       sound: "default",
       title: "New Cart Request",
@@ -61,7 +60,6 @@ Deno.serve(async (req) => {
       } - Passengers: ${cartRequest.passenger_count} - Special Requests: ${cartRequest.special_request}`,
       data: {
         requestId: cartRequest.id,
-        expirationTime: expirationTime,
         type: "new_cart_request",
       },
       contentAvailable: true,
@@ -81,56 +79,6 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify(message),
     }).then((res) => res.json());
-
-    setTimeout(async () => {
-      const { data: request, error: requestError } = await supabase
-        .from("cart_requests")
-        .select("status")
-        .eq("id", cartRequest.id)
-        .single();
-
-      if (requestError) {
-        console.error("Error checking request status:", requestError);
-        return;
-      }
-
-      if (request.status === "pending") {
-        const { error: updateError } = await supabase
-          .from("cart_requests")
-          .update({ status: "expired" })
-          .eq("id", cartRequest.id);
-
-        if (updateError) {
-          console.error(
-            "Error updating request status to timed_out:",
-            updateError,
-          );
-        } else {
-          const silentNotification = {
-            to: drivers.map((v) => v.expo_push_token),
-            content: {
-              title: "Cart Request Expired",
-              body:
-                `A cart request for ${cartRequest.passenger_count} passenger(s) has expired and been removed.`,
-            },
-            data: {
-              type: "cart_request_expired",
-              requestId: cartRequest.id,
-            },
-            contentAvailable: true,
-          };
-
-          await fetch("https://exp.host/--/api/v2/push/send", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Deno.env.get("EXPO_ACCESS_TOKEN")}`,
-            },
-            body: JSON.stringify(silentNotification),
-          });
-        }
-      }
-    }, NOTIFICATION_TTL * 1000);
 
     return new Response(JSON.stringify(res), {
       headers: { "Content-Type": "application/json" },

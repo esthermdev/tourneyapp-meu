@@ -8,10 +8,10 @@ const StandingsScreen = () => {
   const divisions = [
     { title: 'Men - Upper', route: 'men_upper', color: '#2871FF', disabled: false },
     { title: 'Women - Upper', route: 'women_upper', color: '#FF026C', disabled: false },
-    { title: 'Men - Middle', route: 'men_middle', color: '#0AB359', disabled: true },
-    { title: 'Women - Lower', route: 'women_lower', color: '#BD41F2', disabled: true },
-    { title: 'Men - Lower', route: 'men_lower', color: '#F2A541', disabled: true },
-    { title: 'Mixed', route: 'mixed', color: '#FF7429', disabled: true },
+    { title: 'Men - Middle', route: 'men_middle', color: '#0AB359', disabled: false },
+    { title: 'Women - Lower', route: 'women_lower', color: '#BD41F2', disabled: false },
+    { title: 'Men - Lower', route: 'men_lower', color: '#F2A541', disabled: false },
+    { title: 'Mixed', route: 'mixed', color: '#FF7429', disabled: false },
   ];
 
   return (

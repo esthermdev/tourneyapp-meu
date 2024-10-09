@@ -19,7 +19,7 @@ const { width } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 
 const WaterRefillButton = ({ disabled }) => {
-  const [isRequesting, setIsRequesting] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [fields, setFields] = useState([]);
   const [isPickerVisible, setIsPickerVisible] = useState(false);
@@ -47,11 +47,9 @@ const WaterRefillButton = ({ disabled }) => {
   };
 
   const requestWater = async () => {
-    if (isRequesting || !selectedField) return;
-
-    setIsRequesting(true);
 
     try {
+      setIsButtonDisabled(true);
       // Create a single medical request
       const { data: newRequest, error: insertError } = await supabase
         .from('water_refill')
@@ -76,11 +74,14 @@ const WaterRefillButton = ({ disabled }) => {
 
       Alert.alert('Refill of water jugs requested', 'Water is on the way');
 
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 30000);
+
     } catch (error) {
       console.error('Error requesting water jub refills:', error);
       Alert.alert('Error', 'Failed to request water jug refill');
     } finally {
-      setIsRequesting(false);
       hidePicker();
     }
   };
@@ -92,12 +93,12 @@ const WaterRefillButton = ({ disabled }) => {
   return (
     <View>
       <TouchableOpacity
-        style={[styles.buttonStyle, isRequesting && styles.disabledButton]}
+        style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
         onPress={showPicker}
-        disabled={isRequesting || disabled}
+        disabled={isButtonDisabled || disabled}
       >
         <Ionicons name="water" size={27} color="#FFF" />
-        <Text maxFontSizeMultiplier={1} style={styles.text}>{isRequesting ? 'Requesting Water' : 'Water'}</Text>
+        <Text maxFontSizeMultiplier={1} style={styles.text}>{isButtonDisabled ? 'Water Requested' : 'Water'}</Text>
       </TouchableOpacity>
 
       <Modal

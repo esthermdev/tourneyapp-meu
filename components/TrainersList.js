@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { Card } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '../utils/supabase'; // Adjust the import path as needed
+import { capitalizeWords } from '../utils/capitalizeWords';
+import { useAuth } from '../context/AuthProvider'; // Adjust the import path as needed
 
 const TrainersList = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { profile } = useAuth();
 
   useEffect(() => {
     fetchRequests();
+    const subscription = supabase
+      .channel('medical_requests')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'medical_requests' }, fetchRequests)
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchRequests = async () => {
@@ -17,7 +28,7 @@ const TrainersList = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('medical_requests')
-        .select('*, trainer:assigned_to(full_name)')
+        .select('*, trainer:profiles(full_name)')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -26,6 +37,34 @@ const TrainersList = () => {
       console.error('Error fetching requests:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const acceptRequest = async (requestId) => {
+    try {
+      const { data, error } = await supabase
+        .from('medical_requests')
+        .update({
+          status: 'confirmed',
+          assigned_to: profile.id,
+          trainer: profile.id
+        })
+        .eq('id', requestId)
+        .eq('status', 'pending')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        Alert.alert('Success', 'You have accepted the medical request.');
+        fetchRequests();
+      } else {
+        Alert.alert('Request Unavailable', 'This request has already been accepted by another trainer.');
+      }
+    } catch (error) {
+      console.error('Error accepting request:', error);
+      Alert.alert('Error', 'Failed to accept the request. Please try again.');
     }
   };
 
@@ -47,9 +86,9 @@ const TrainersList = () => {
       case 'confirmed':
         return '#59DE07'; // Green for confirmed
       case 'resolved':
-        return '#00B0FB'; // Green for confirmed
+        return '#00B0FB'; // Blue for resolved
       default:
-        return '#D828FF'; // Grey for unknown status
+        return '#D828FF'; // Purple for unknown status
     }
   };
 
@@ -69,7 +108,9 @@ const TrainersList = () => {
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.cardContent}>
-        <View style={[styles.statusIndicator, { backgroundColor: '#188F00' }]}>
+        <View style={[styles.statusIndicator,
+        { backgroundColor: item.status.toLowerCase() === 'pending' ? '#FF7900' : '#188F00' }
+        ]}>
           <Ionicons name="grid" size={24} color="white" />
           <Text style={styles.fieldNumber} maxFontSizeMultiplier={1}>Field {item.field_number}</Text>
         </View>
@@ -77,7 +118,7 @@ const TrainersList = () => {
           <View style={styles.infoRow}>
             <Text style={styles.labelText} maxFontSizeMultiplier={1}>Status:</Text>
             <Text style={[styles.valueText, { color: getStatusColor(item.status) }]} maxFontSizeMultiplier={1}>
-              {item.status}
+              {capitalizeWords(item.status)}
             </Text>
           </View>
           <View style={styles.infoRow}>
@@ -88,12 +129,26 @@ const TrainersList = () => {
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.labelText} maxFontSizeMultiplier={1}>Trainer:</Text>
-            <Text style={styles.valueText} maxFontSizeMultiplier={1}>{item.trainer ? item.trainer.full_name : 'Unassigned'}</Text>
+            <Text style={[styles.valueText, { color: '#FF00FF' }]} maxFontSizeMultiplier={1}>
+              {item.trainer ? item.trainer.full_name : 'Unassigned'}
+            </Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.labelText} maxFontSizeMultiplier={1}>Created:</Text>
             <Text style={styles.valueText} maxFontSizeMultiplier={1}>{formatDate(item.created_at)}</Text>
           </View>
+
+          <View>
+            {item.status === 'pending' && (
+              <TouchableOpacity
+                style={styles.acceptButton}
+                onPress={() => acceptRequest(item.id)}
+              >
+                <Text style={styles.acceptButtonText}>Accept</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
         </View>
       </View>
     </Card>
@@ -152,7 +207,6 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flexDirection: 'row',
-    height: 120,
   },
   statusIndicator: {
     width: '20%',
@@ -168,13 +222,14 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    padding: 12,
+    paddingHorizontal: 12,
     justifyContent: 'space-between',
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 5
   },
   labelText: {
     fontSize: 16,
@@ -195,6 +250,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontFamily: 'Outfit-Regular',
+  },
+  acceptButton: {
+    backgroundColor: '#4CAF50',
+    padding: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  acceptButtonText: {
+    fontFamily: 'Outfit-SemiBold',
+    fontSize: 18,
+    color: '#fff',
   },
 });
 

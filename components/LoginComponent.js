@@ -64,11 +64,10 @@ export default function LoginComponent() {
     }
 
     if (error) {
-      Alert.alert('Insert email and password to sign in.')
+      Alert.alert('Insert email and password to sign in.', 'Please ensure you have confirmed your email before this.');
     } else {
       await getProfile(data.user.id);
       router.push('(tabs)/home');
-      console.log(' user: ', data)
     };
 
     setLoading(false);
@@ -113,7 +112,7 @@ export default function LoginComponent() {
             </View>
             <View>
               <Button
-                title="Sign in"
+                title="Login"
                 disabled={loading}
                 onPress={() => signInWithEmail()}
                 buttonStyle={styles.primaryButton}

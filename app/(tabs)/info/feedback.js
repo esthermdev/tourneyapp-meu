@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  Linking,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -15,34 +14,39 @@ import {
 } from 'react-native';
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import { supabase } from '../../../utils/supabase'; // Make sure this path is correct
 
 const FeedbackScreen = () => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (subject.trim() === '' || message.trim() === '') {
       Alert.alert('Error', 'Please fill in both subject and message fields.');
       return;
     }
 
-    const emailSubject = encodeURIComponent(subject);
-    const emailBody = encodeURIComponent(message);
-    const mailtoLink = `mailto:support@maineultimateapp.org?subject=${emailSubject}&body=${emailBody}`;
+    setIsSubmitting(true);
 
-    Linking.canOpenURL(mailtoLink)
-      .then((supported) => {
-        if (!supported) {
-          Alert.alert('Error', 'Unable to open email client');
-        } else {
-          return Linking.openURL(mailtoLink);
-        }
-      })
-      .then(() => {
-        setSubject('');
-        setMessage('');
-      })
-      .catch((err) => console.error('An error occurred', err));
+    try {
+      const { data, error } = await supabase
+        .from('feedback')
+        .insert([
+          { subject, message }
+        ]);
+
+      if (error) throw error;
+
+      Alert.alert('Success', 'Your feedback has been submitted. Thank you!');
+      setSubject('');
+      setMessage('');
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      Alert.alert('Error', 'Failed to submit feedback. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -69,17 +73,19 @@ const FeedbackScreen = () => {
               placeholder="Enter your feedback or report a bug"
               multiline
             />
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit Feedback</Text>
+            <TouchableOpacity
+              style={[styles.submitButton, isSubmitting && styles.disabledButton]}
+              onPress={handleSubmit}
+              disabled={isSubmitting}
+            >
+              <Text style={styles.submitButtonText}>
+                {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+              </Text>
             </TouchableOpacity>
 
             <Text style={styles.noteHeader}>Note for Account Reset:</Text>
             <Text style={styles.noteText}>
-              If you'd like to create a new account, format your email as follows:{'\n\n'}
-              Subject: Reset account{'\n'}
-              Reason: {'{state your reason why}'}{'\n'}
-              Email: {'{your email}'}{'\n\n'}
-              You will receive a reply from support confirming that you will be able to create a new account on the app then proceed to do so.
+              If you'd like to create a new account, please include "Reset account" in your subject line and provide the reason and your email in the message body.
             </Text>
           </View>
         </ScrollView>
@@ -123,6 +129,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: 'center',
     marginBottom: 20,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
   },
   submitButtonText: {
     color: '#fff',

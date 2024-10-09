@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   donationButtonContainer: {
     backgroundColor: '#fff',
-    paddingHorizontal: 15,
+    paddingHorizontal: 25,
     padding: 15
   },
   donationButton: {

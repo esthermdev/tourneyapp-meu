@@ -3,92 +3,32 @@ import { Text, View, Alert } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { usePushNotifications } from '../hooks/usePushNotifications';
 import { useAuth } from '../context/AuthProvider';
+import * as Notifications from 'expo-notifications';
+import { router } from 'expo-router';
 
 export default function RequestTrainerNotification() {
   const { expoPushToken, notification } = usePushNotifications();
-  const { profile } = useAuth();
-  const [trainers, setTrainers] = useState([]);
 
   useEffect(() => {
-    fetchTrainers();
+    let isMounted = true;
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      if (isMounted) {
+        handleNotificationResponse(response);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.remove();
+    };
   }, []);
 
-  const fetchTrainers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('is_medical_staff', true)
-        .order('full_name');
+  const handleNotificationResponse = (response) => {
+    const { notification: { request: { content: { data } } } } = response;
 
-      if (error) throw error;
-      setTrainers(data);
-    } catch (error) {
-      console.error('Error fetching trainers:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (notification) {
-      const data = notification.request.content.data;
-      const title = notification.request.content.title;
-      if (data.requestId && title === 'Requesting Trainer') {
-        Alert.alert(
-          'Medical Trainer Needed',
-          `${notification.request.content.body}`,
-          [
-            { text: 'Cancel', style: 'cancel', onPress: () => console.log('Request denied.') },
-            { text: 'Confirm', style: 'default', onPress: () => respondToMedicalRequest(data.requestId) },
-          ]
-        )
-      }
-    }
-  }, [notification]);
-
-  const respondToMedicalRequest = async (requestId) => {
-    console.log('Attempting to respond to request ID:', requestId);
-
-    try {
-      const { error } = await supabase
-        .from('medical_requests')
-        .update({
-          status: 'confirmed',
-          updated_at: new Date().toISOString(),
-          assigned_to: profile.id,
-          trainer: profile.full_name
-        })
-        .eq('id', requestId)
-        .eq('status', 'pending')
-        .select()
-
-      if (error) throw error;
-
-    } catch (error) {
-      console.error('Error in respondToMedicalRequest:', error);
-      Alert.alert('Error', error.message || 'An unexpected error occurred');
-    } finally {
-      toggleAvailability(profile.id, true)
-    }
-  };
-
-  const toggleAvailability = async (trainerId, currentAvailability) => {
-
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_available: !currentAvailability })
-        .eq('id', trainerId);
-
-      if (error) throw error;
-
-      // Update local state
-      setTrainers(trainers.map(trainer =>
-        trainer.id === trainerId
-          ? { ...trainer, is_available: !currentAvailability }
-          : trainer
-      ));
-    } catch (error) {
-      console.error('Error updating trainer availability:', error);
+    if (data.type === "new_medic_request" && data.requestId) {
+      // Navigate to the Trainer Management Screen
+      router.push('/settings/trainer-screen');
     }
   };
 

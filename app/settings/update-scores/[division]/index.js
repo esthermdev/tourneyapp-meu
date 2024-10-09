@@ -32,7 +32,7 @@ const DivisionScreen = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<CustomAdminHeader title={`${capitalizeWords(division.replace('_', ' '))}`} route={'settings/update-scores'} />
+			<CustomAdminHeader title={`${capitalizeWords(division.replace('_', ' - '))}`} route={'settings/update-scores'} />
 			<FlatList
 				data={gameTypes}
 				renderItem={renderItem}

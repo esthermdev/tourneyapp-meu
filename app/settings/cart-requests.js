@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { StyleSheet, View, Text, FlatList, Switch, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Switch, ActivityIndicator, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import CustomAdminHeader from '../../components/CustomAdminHeader';
 import { supabase } from '../../utils/supabase';
 import { CardDivider } from '@rneui/base/dist/Card/Card.Divider';
+import { capitalizeWords } from '../../utils/capitalizeWords';
 import { ms } from 'react-native-size-matters';
+import { useAuth } from '../../context/AuthProvider';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -44,12 +46,9 @@ const DriverManagementScreen = () => {
 const CartRequestsList = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { profile } = useAuth();
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
+  const fetchRequests = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -64,7 +63,21 @@ const CartRequestsList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchRequests();
+
+    // Set up real-time subscription
+    const subscription = supabase
+      .channel('cart_requests_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'cart_requests' }, fetchRequests)
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [fetchRequests]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -90,6 +103,67 @@ const CartRequestsList = () => {
     }
   };
 
+  const handleAcceptRequest = async (requestId) => {
+    try {
+
+      const { data: requestData, error: fetchError } = await supabase
+        .from('cart_requests')
+        .select('requester_token')
+        .eq('id', requestId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      const { data, error } = await supabase
+        .from('cart_requests')
+        .update({
+          status: 'confirmed',
+          driver: profile.full_name,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', requestId)
+        .eq('status', 'pending')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        Alert.alert('Success', 'You have accepted the cart request.');
+        fetchRequests(); // Refresh the list
+        if (requestData.requester_token) {
+          await sendPushNotification(requestData.requester_token, 'Cart Request Accepted', 'A driver has accepted your cart request and is on their way.');
+        }
+      } else {
+        Alert.alert('Info', 'This request is no longer available.');
+      }
+    } catch (error) {
+      console.error('Error accepting cart request:', error);
+      Alert.alert('Error', 'Failed to accept the cart request. It may have already been accepted by another driver.');
+    }
+  };
+
+
+  const sendPushNotification = async (expoPushToken, title, body) => {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: title,
+      body: body,
+      data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  };
+
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.cardContainer}>
       <View style={styles.locationContainer}>
@@ -105,6 +179,11 @@ const CartRequestsList = () => {
       <View style={styles.infoRow}>
         <Text maxFontSizeMultiplier={1} style={[styles.infoLabel, { color: '#fff' }]}>Number of Passengers:</Text>
         <Text maxFontSizeMultiplier={1} style={[styles.infoValue, { backgroundColor: '#000', paddingHorizontal: 16, paddingVertical: 5, borderRadius: 100 }]}>{item.passenger_count}</Text>
+      </View>
+
+      <View style={styles.infoRow}>
+        <Text maxFontSizeMultiplier={1} style={[styles.infoLabel, { color: '#fff' }]}>Driver:</Text>
+        <Text maxFontSizeMultiplier={1} style={styles.infoValue}>{item.driver}</Text>
       </View>
 
       <CardDivider />
@@ -124,7 +203,7 @@ const CartRequestsList = () => {
       <View style={styles.infoRow}>
         <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>Status:</Text>
         <Text maxFontSizeMultiplier={1} style={[styles.infoValue, getStatusColor(item.status)]}>
-          {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+          {capitalizeWords(item.status)}
         </Text>
       </View>
 
@@ -132,6 +211,15 @@ const CartRequestsList = () => {
         <Text maxFontSizeMultiplier={1} style={styles.infoLabel}>Created:</Text>
         <Text maxFontSizeMultiplier={1} style={styles.infoValue}>{formatDate(item.created_at)}</Text>
       </View>
+
+      {item.status === 'pending' && (
+        <TouchableOpacity
+          style={styles.acceptButton}
+          onPress={() => handleAcceptRequest(item.id)}
+        >
+          <Text style={styles.acceptButtonText}>Accept Request</Text>
+        </TouchableOpacity>
+      )}
     </Card>
   );
 
@@ -160,10 +248,7 @@ const CartRequestsList = () => {
 
 const DriverAvailabilityScreen = () => {
   const [drivers, setDrivers] = useState([]);
-
-  useEffect(() => {
-    fetchDrivers();
-  }, []);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchDrivers = async () => {
     try {
@@ -179,6 +264,10 @@ const DriverAvailabilityScreen = () => {
       console.error('Error fetching drivers:', error);
     }
   };
+
+  useEffect(() => {
+    fetchDrivers();
+  }, [fetchDrivers]);
 
   const toggleAvailability = async (driverId, currentAvailability) => {
     try {
@@ -199,6 +288,12 @@ const DriverAvailabilityScreen = () => {
       console.error('Error updating driver availability:', error);
     }
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchDrivers();
+    setRefreshing(false);
+  }, [fetchDrivers]);
 
   const renderDriverItem = ({ item }) => (
     <View style={styles.driverItem}>
@@ -225,6 +320,14 @@ const DriverAvailabilityScreen = () => {
         renderItem={renderDriverItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.driverList}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#EA1D25']}
+            tintColor="#EA1D25"
+          />
+        }
       />
     </View>
   );
@@ -295,7 +398,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   infoLabel: {
-    fontFamily: 'Outfit-Medium',
+    fontFamily: 'Outfit-Regular',
     fontSize: 16,
     color: '#8F8DAA',
   },
@@ -338,6 +441,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Outfit-Medium',
     fontSize: 14,
     marginTop: 5,
+  },
+  acceptButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  acceptButtonText: {
+    color: 'white',
+    fontFamily: 'Outfit-Bold',
+    fontSize: 16,
   },
 });
 

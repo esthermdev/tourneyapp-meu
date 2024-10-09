@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerActions } from '@react-navigation/native';
 import { useButtonState } from '../../context/ButtonStateContext';
+import { useAuth } from '../../context/AuthProvider';
 
 const AdminOption = ({ title, icon, onPress, disabled }) => (
   <TouchableOpacity style={styles.optionButton} disabled={disabled} onPress={onPress}>
@@ -15,8 +16,10 @@ const AdminOption = ({ title, icon, onPress, disabled }) => (
 );
 
 const AdminScreen = () => {
+  const { user } = useAuth();
   const { buttonStates, toggleButtonState } = useButtonState();
   const navigation = useNavigation();
+  const AUTHORIZED_USER_ID = '6bc8adb7-94df-4867-8a58-28482249ae81';
 
   const adminOptions = [
     {
@@ -43,10 +46,13 @@ const AdminScreen = () => {
       route: 'settings/send-announcement',
       disabled: false
     },
-    {
+  ];
+
+  if (user && user.id === AUTHORIZED_USER_ID) {
+    adminOptions.push({
       title: buttonStates.requestCart && buttonStates.waterRefill && buttonStates.medic
-        ? 'Disable Home Buttons'
-        : 'Enable Home Buttons',
+        ? 'Disable Request Buttons'
+        : 'Enable Request Buttons',
       icon: <MaterialIcons name="touch-app" size={52} color="#FFFFFF" />,
       onPress: () => {
         toggleButtonState('requestCart');
@@ -54,8 +60,8 @@ const AdminScreen = () => {
         toggleButtonState('medic');
       },
       disabled: false
-    },
-  ];
+    });
+  }
 
   return (
     <SafeAreaView style={styles.container}>

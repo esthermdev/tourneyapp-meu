@@ -21,8 +21,7 @@ const buttonWidth = (width - 70) / 2;
 
 
 const MedicButton = ({ disabled }) => {
-  const [isRequesting, setIsRequesting] = useState(false);
-  const [selected, setSelected] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedField, setSelectedField] = useState(null);
   const [priorityLevel, setPriorityLevel] = useState('Medium');
   const [fields, setFields] = useState([]);
@@ -46,10 +45,9 @@ const MedicButton = ({ disabled }) => {
   const hidePicker = () => setIsPickerVisible(false);
 
   const requestTrainer = async () => {
-    if (isRequesting || !selectedField) return;
-    setIsRequesting(true);
 
     try {
+      setIsButtonDisabled(true);
       // Create a single medical request
       const { error: insertError } = await supabase
         .from('medical_requests')
@@ -76,11 +74,14 @@ const MedicButton = ({ disabled }) => {
 
       Alert.alert('Medical assistance requested', 'Help is on the way. Please allow some time for a trainer to make their way to your location. If no trainer has arrived please try again later as trainers may be unavailable at the moment.');
 
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 30000);
+
     } catch (error) {
       console.error('Error requesting medical assistance:', error);
       Alert.alert('Error', 'Failed to request medical assistance');
     } finally {
-      setIsRequesting(false);
       hidePicker();
     }
   };
@@ -104,9 +105,9 @@ const MedicButton = ({ disabled }) => {
   return (
     <View>
       <TouchableOpacity
-        style={[styles.buttonStyle, isRequesting && styles.disabledButton]}
+        style={[styles.buttonStyle, isButtonDisabled && styles.disabledButton]}
         onPress={showPicker}
-        disabled={isRequesting || disabled}
+        disabled={isButtonDisabled || disabled}
       >
         <Image
           source={icons.medic}
@@ -114,7 +115,7 @@ const MedicButton = ({ disabled }) => {
           style={{ width: 25, height: 25 }}
         />
         <Text maxFontSizeMultiplier={1} style={styles.text}>
-          {isRequesting ? 'Medic Requested' : 'Medic'}
+          {isButtonDisabled ? 'Medic Requested' : 'Medic'}
         </Text>
       </TouchableOpacity>
 

@@ -31,19 +31,22 @@ export const divisionScheduleConfig = {
         color: '#0AB359',
         icon: 'people-group',
         scheduleOptions: [
-            { title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
-            { title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
-            { title: 'Placement Games', route: 'placement-games', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
+            { code: 'MM', title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
+            { code: 'MM', title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'MM', title: 'Placement Games', route: 'placement-games', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
+            { code: 'MM', title: '9th Place', route: 'ninth-place', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
+            { code: 'MM', title: '11th to 15th Place', route: '11-15-place', icon: 'award', iconColor: '#B0A00F', bgColor: '#B0A00F1A' },
         ],
-        disabled: true
+        disabled: false
     },
     women_lower: {
         title: 'Women - Lower',
         color: '#BD41F2',
         icon: 'people-group',
         scheduleOptions: [
-            { title: 'Round Robin', route: 'round-robin', icon: 'sync', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
-            { title: 'Finals', route: 'finals', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'WL', title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
+            { code: 'WL', title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'WL', title: 'Round Robin', route: 'round-robin', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
         ],
         disabled: false
     },
@@ -52,20 +55,23 @@ export const divisionScheduleConfig = {
         color: '#F2A541',
         icon: 'people-group',
         scheduleOptions: [
-            { title: 'Round Robin', route: 'round-robin', icon: 'sync', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
-            { title: 'Finals', route: 'finals', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'ML', title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
+            { code: 'ML', title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'ML', title: 'Placement Games', route: 'placement-games', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
+            { code: 'ML', title: '9th Place', route: 'ninth-place', icon: 'award', iconColor: '#DC580E', bgColor: '#DC580E1A' },
+            { code: 'ML', title: '11th to 15th Place', route: '11-15-place', icon: 'award', iconColor: '#B0A00F', bgColor: '#B0A00F1A' },
         ],
-        disabled: true
+        disabled: false
     },
     mixed: {
         title: 'Mixed',
         color: '#FF7429',
         icon: 'people-group',
         scheduleOptions: [
-            { title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
-            { title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
-            { title: 'Placement Games', route: 'placement-games', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
+            { code: 'X', title: 'Pool Play', route: 'pool-play', icon: 'sun', iconColor: '#2A9D8F', bgColor: '#2A9D8F1A' },
+            { code: 'X', title: 'Championship Bracket', route: 'championship-bracket', icon: 'trophy', iconColor: '#CF3A3A', bgColor: '#CF3A3A1A' },
+            { code: 'X', title: '9th Place Pool', route: 'ninth-place-pool', icon: 'medal', iconColor: '#FB8B24', bgColor: '#FB8B241A' },
         ],
-        disabled: true
+        disabled: false
     },
 };

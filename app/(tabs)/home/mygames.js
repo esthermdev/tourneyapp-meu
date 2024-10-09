@@ -7,6 +7,7 @@ import { useAuth } from '../../../context/AuthProvider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import { formatDateToLocalString } from '../../../utils/formatDateToLocalString';
 
 const Placeholder = () => (
   <View style={styles.placeholderContainer}>
@@ -23,6 +24,7 @@ const Placeholder = () => (
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
+  console.log(profile)
 
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -66,16 +68,22 @@ const MyGamesScreen = () => {
         )
       `)
       .or(`team1_id.eq.${teamId},team2_id.eq.${teamId}`)
-      .order('round_id')
+      .order('datetime_id')
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
       // Group games by date
       const groupedGames = data.reduce((acc, game) => {
-        const date = new Date(game.datetime.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(game);
+
+        const utcDate = new Date(game.datetime.date);
+
+        // Format the date string
+        const dateString = formatDateToLocalString(utcDate);
+        console.log(dateString)
+
+        if (!acc[dateString]) acc[dateString] = [];
+        acc[dateString].push(game);
         return acc;
       }, {});
 
@@ -123,11 +131,11 @@ const MyGamesScreen = () => {
         <Text style={styles.timeText} maxFontSizeMultiplier={1.2}>{formatTime(game.datetime.time)}</Text>
         <View style={styles.fieldContainer}>
           <Icon name="location" type="ionicon" size={12} color="#8F8DAA" />
-          <Text style={styles.fieldText}>{game.field?.name}</Text>
+          <Text style={styles.fieldText}>Field {game.field?.name}</Text>
         </View>
       </View>
       <View style={styles.teamContainer}>
-        <Avatar rounded size={40} source={{ uri: game.team1.avatar_uri }} />
+        <Avatar rounded size={40} avatarStyle={{ borderWidth: 1, borderColor: '#000' }} source={{ uri: game.team1.avatar_uri }} />
         <Text style={styles.teamName} maxFontSizeMultiplier={1.2}>{game.team1?.name}</Text>
         <Text style={styles.scoreText} maxFontSizeMultiplier={1.2}>{game.scores[0].team1_score}</Text>
       </View>
@@ -136,7 +144,7 @@ const MyGamesScreen = () => {
         <View style={styles.vsLine} />
       </View>
       <View style={styles.teamContainer}>
-        <Avatar rounded size={40} source={{ uri: game.team2.avatar_uri }} />
+        <Avatar rounded size={40} avatarStyle={{ borderWidth: 1, borderColor: '#000' }} source={{ uri: game.team2.avatar_uri }} />
         <Text style={styles.teamName} maxFontSizeMultiplier={1.2}>{game.team2?.name}</Text>
         <Text style={styles.scoreText} maxFontSizeMultiplier={1.2}>{game.scores[0].team2_score}</Text>
       </View>
@@ -252,7 +260,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     marginHorizontal: 20,
     marginBottom: 12,
     marginTop: 12,

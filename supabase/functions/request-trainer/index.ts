@@ -40,7 +40,10 @@ Deno.serve(async (req) => {
     const notification = {
       title: "Requesting Trainer",
       body: `Assistance is required at Field ${payload.record.field_number}`,
-      data: { requestId: payload.record.id },
+      data: {
+        requestId: payload.record.id,
+        type: "new_medic_request",
+      },
     };
 
     const messages = medicalStaff.map((staff) => ({

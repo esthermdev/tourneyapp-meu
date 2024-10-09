@@ -2,22 +2,39 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native';
 import { Card } from '@rneui/base';
 import { supabase } from '../utils/supabase';
-import { s, ms } from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 
 const divisionPoolMapping = {
     men_upper: {
         poolIds: [1, 2, 3, 4],
         poolNames: ['A', 'B', 'C', 'D']
     },
+    men_middle: {
+        poolIds: [5, 6, 7, 8],
+        poolNames: ['E', 'F', 'G', 'H']
+    },
+    men_lower: {
+        poolIds: [11, 12, 13, 14],
+        poolNames: ['I', 'J', 'K', 'L']
+    },
     women_upper: {
         poolIds: [15, 16, 17, 18],
         poolNames: ['M', 'N', 'O', 'P']
+    },
+    women_lower: {
+        poolIds: [19, 20, 21, 22],
+        poolNames: ['Q', 'R', 'S', 'T']
+    },
+    mixed: {
+        poolIds: [23, 24, 25, 26],
+        poolNames: ['A', 'B', 'C', 'D']
     },
 };
 
 const StandingsComponent = ({ division }) => {
     const [standings, setStandings] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         fetchStandings();
@@ -29,6 +46,7 @@ const StandingsComponent = ({ division }) => {
     }, [division]);
 
     const fetchStandings = async () => {
+        setIsLoading(true);
         const { poolIds } = divisionPoolMapping[division];
 
         const { data, error } = await supabase
@@ -49,6 +67,7 @@ const StandingsComponent = ({ division }) => {
             const groupedStandings = groupStandingsByPool(data);
             setStandings(groupedStandings);
         }
+        setIsLoading(false);
     };
 
     const groupStandingsByPool = (data) => {
@@ -86,6 +105,20 @@ const StandingsComponent = ({ division }) => {
         );
     };
 
+
+    const renderPlaceholder = () => (
+        <View style={styles.placeholderContainer}>
+            <Text style={styles.placeholderTitle}>Standings Coming Soon!</Text>
+            <Text style={styles.placeholderText}>
+                Standings will be available here once games have been played and results are recorded.
+            </Text>
+            <Text style={styles.placeholderText}>
+                Stay tuned for exciting updates!
+            </Text>
+        </View>
+    );
+
+
     return (
         <ScrollView
             contentContainerStyle={styles.standingsContainer}
@@ -97,8 +130,14 @@ const StandingsComponent = ({ division }) => {
                 />
             }
         >
-            {Object.entries(standings).map(([poolId, poolStandings]) =>
-                renderStandings(poolStandings, poolId)
+            {isLoading ? (
+                <Text style={styles.loadingText}>Loading...</Text>
+            ) : Object.keys(standings).length > 0 ? (
+                Object.entries(standings).map(([poolId, poolStandings]) =>
+                    renderStandings(poolStandings, poolId)
+                )
+            ) : (
+                renderPlaceholder()
             )}
         </ScrollView>
     );
@@ -166,6 +205,35 @@ const styles = StyleSheet.create({
     },
     backButton: {
         marginRight: 15,
+    },
+    placeholderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        marginTop: 50,
+    },
+    placeholderTitle: {
+        fontFamily: 'Outfit-Bold',
+        fontSize: ms(24),
+        color: '#EA1D25',
+        marginTop: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    placeholderText: {
+        fontFamily: 'Outfit-Regular',
+        fontSize: ms(16),
+        color: '#8F8DAA',
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    loadingText: {
+        fontFamily: 'Outfit-Regular',
+        fontSize: ms(18),
+        color: '#8F8DAA',
+        textAlign: 'center',
+        marginTop: 50,
     },
 });
 
