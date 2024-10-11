@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Link } from 'expo-router';
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
 
@@ -11,37 +12,31 @@ const TournamentInfo = () => {
 				style={styles.scrollview}
 				contentContainerStyle={styles.contentContainer}
 			>
-				<Text style={styles.content}><Text className='font-outfitbold text-primary'>Maine Ultimate</Text> in conjunction with the City of South Portland and Tyler Technologies is looking to host the 	Lobster Pot on October 18/19 at the Wainwright Fields in South Portland, Maine.
-					{'\n\n'}
-					The Lobster Pot hopes to have  3 college men's divisions this year.  Upper, Lower and Developmental, 2 college women's divisions, upper and lower and a college mixed division. Each division will be playing for $1000, with $1000 being paid out to the first place winner. Cost per team is $600 If your program has a second team, the cost for that team is $400.
-					{'\n\n'}
-					Think your team is traveling the farthest? Let us know and if it’s true, you’ll get in for free!
-				</Text>
-				<Text style={styles.contentHeader}>{'\n'}Here is what you get:{'\n'}</Text>
 				<Text style={styles.content}>
-					<Text style={styles.contentSubHeader}>2 days of some really good ultimate!</Text>
-					{'\n\n'}
-					<Text style={styles.contentSubHeader}>Trainers{'\n\n'}</Text>
-					<Text style={styles.contentSubHeader}>Food{'\n'}</Text>
-					Tourney Food. The Ghost Energy team will be there all weekend long with samples.  We will also have bananas, apples and granola bars.
-					{'\n\n'}
-					Multiple Food Trucks: PB&Me, El Rodeo, Eighty8 Donuts
-					{'\n\n'}
-					<Text style={styles.contentSubHeader}>Accomodation{'\n'}</Text>
-					The Alouette Beach and Resort located in Old Orchard and about 20 minutes from the field, is the official hotel of the Lobster Pot.  Right on the Atlantic Ocean.
-					{'\n\n'}
-					Merchandise tents filled with product from ultimate companies, Lobster Pot branded merchandise, Maine Ultimate branded merchandise, BreakMark, BE Ultimate, Portland Rising and Boston Glory merchandise.
-					{'\n\n'}
-					The LL Bean Boot is scheduled to make an appearance.
-					{'\n\n'}
-					Shield Health and Fitness will be there to answer questions, hand out products and swag
-					{'\n\n'}
-					The Maine Ultimate Livestream crew is back and this year we plan on livestreaming 2 games per round!  Thanks to Revision Energy for supplying all of the power for the weekend.  All Solar!!!
-					{'\n\n'}
-					We know It's such a long walk!! This year, we are going to have more golf carts to get you to and from the parking lots, to the fields and all over the facility.
-					{'\n\n'}
-					Did you miss getting your picture taken with Clawdious?  He’s back this year and don’t forget to take a picture in our photo booth.
+					On Behalf of <Text className='text-primary font-outfitbold'>Maine Ultimate</Text> in conjunction with the City of South Portland, Tyler Technologies, Revision Energy and a host of other groups and organizations we are pleased to welcome you and your team to the Lobster Pot.  We genuinely hope that you find this to be one of the more well run events that you participate in. We have been working hard behind the scenes to ensure this happens.
+					{'\n'}
+					{'\n'}
+					So...
+					This is the 13th year of the Lobster Pot and will be hosting 88 college teams from all over the northeast and beyond. Congratulations goes to The University of Buffalo men's team, Green Eggs and Ham, for traveling the farthest! And the shortest drive goes to Bowdoin College, the men's team, Clown and the women's team, Chaos Theory.  Is anyone at UVM right now? They have 6 teams at the Lobster Pot!  3 mens teams and 3 women's teams.
+					{'\n'}
+					{'\n'}
+					Make sure you swing by Tourney Central and head over to the Players Lounge sponsored by Tyler Technologies and make sure to grab a disc from them and check out their job listings.  Portland has a great ultimate community and we’d love to have you join us!!  Swing by the merchandise tent, where you’ll find Lobster Pot specific merchandise from BreakMark Ultimate, BE Ultimate, products from Maine Ultimate, Portland Rising and Boston Glory.  Hungry?  Grab an apple from Sweesters Apple Barrel or a banana or a granola bar, candy or a bag of popcorn.  All of this is free in the player lounge.  Looking for something more?  Grab something to eat from PB&Me or El Rodeo.  Got a sweet tooth?  Grab a box of donuts from Eighty8 Donuts and wash it all down with a cup of coffee from Vagabond Coffee.  How fast can you make it through the 140’ Obstacle course?  What’s your vertical?  Lots of things to do and try at tourney central.
+					{'\n'}
+					{'\n'}
+					Want to share the livestream with your friends and family?  Check out the Maine Ultimate page on YouTube.
+					{'\n'}
+					{'\n'}
+					Good luck to you and your team this weekend and "Thank You for Hoppin' in the Pot"!
+					{'\n'}
+					{'\n'}
+					Rich and the Lobster Pot crew
+					{'\n'}
+					{'\n'}
 				</Text>
+				<Text style={styles.contentSubHeader}>Richard Young</Text>
+				<Text style={styles.content}>Cell: (207) 807-8727</Text>
+				<Text style={styles.content}>Pronouns: he, him, his <Link style={{ color: 'blue', textDecorationLine: 'underline' }} href='https://pronouns.org/'>What's this?</Link></Text>
+				<Link className='text-primary text-lg font-outfitbold underline' href='https://www.maineultimate.org/'>Maine Ultimate</Link>
 			</ScrollView>
 		</View>
 	);

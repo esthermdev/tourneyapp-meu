@@ -6,7 +6,8 @@ import {
   Alert,
   TouchableOpacity,
   TextInput,
-  AppState
+  AppState,
+  RefreshControl
 } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { useAuth } from '../context/AuthProvider';
@@ -17,41 +18,34 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchModal from '../components/SearchModal';
 
-async function sendPushNotification(expoPushToken) {
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
-    data: { someData: 'goes here' },
-  };
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
-}
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh()
+  } else {
+    supabase.auth.stopAutoRefresh()
+  }
+});
 
 export default function Account({ session }) {
   const { profile, getProfile } = useAuth()
 
+  const [refreshing, setRefreshing] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState(null);
   const [fullName, setFullName] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTeams, setFilteredTeams] = useState([]);
 
   const navigation = useNavigation();
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getProfile(session?.user?.id).then(() => setRefreshing(false));
+  }, [session?.user?.id]);
 
   useEffect(() => {
     if (session?.user) {
@@ -65,7 +59,6 @@ export default function Account({ session }) {
     if (profile) {
       setFullName(profile.full_name || '');
       setTeamId(profile.team_id || null);
-      setIsAdmin(profile.is_admin || false);
       setAvatarUrl(profile.avatar_url || '');
       setExpoPushToken(profile?.expo_push_token)
     }
@@ -182,7 +175,12 @@ export default function Account({ session }) {
       >
         <Ionicons name="menu" size={30} color="#EA1D25" />
       </TouchableOpacity>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Text style={styles.header}>My Account</Text>
         <Text style={styles.inputLabel}>Your Email</Text>
         <TextInput
@@ -220,13 +218,6 @@ export default function Account({ session }) {
           buttonStyle={styles.secondaryButton}
           titleStyle={[styles.buttonText, styles.secondaryButtonText]}
         />
-        <Button
-          style={{ marginTop: 20 }}
-          title="Press to Test Notification"
-          onPress={async () => {
-            await sendPushNotification(expoPushToken);
-          }}
-        />
       </ScrollView>
       <SearchModal
         isVisible={isModalVisible}
@@ -244,7 +235,8 @@ export default function Account({ session }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    flex: 1
   },
   menuButton: {
     marginTop: 20,

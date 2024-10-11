@@ -17,7 +17,8 @@ const Volunteers = () => {
 			.from('volunteers')
 			.select(`
 				badge,
-				role
+				role,
+				avatar_uri
 			`)
 			.order('badge');
 
@@ -35,7 +36,7 @@ const Volunteers = () => {
 				size={ms(50)}
 				rounded
 				title={item.badge[0]}
-				source={{ uri: "data:image/png" }}
+				source={{ uri: item.avatar_uri }}
 				placeholderStyle={{ backgroundColor: 'transparent' }}
 			/>
 			<Text style={styles.badgeText}>{item.badge}</Text>

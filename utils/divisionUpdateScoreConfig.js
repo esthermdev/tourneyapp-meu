@@ -18,7 +18,6 @@ export const divisionUpdateScoreConfig = {
 			title: 'Championship Bracket',
 			type: 'bracket',
 			rounds: [
-				{ id: 2, name: 'C', title: 'Crossovers' },
 				{ id: 3, name: 'Q', title: 'Quarters' },
 				{ id: 4, name: 'SF', title: 'Semi Finals' },
 				{ id: 5, name: 'F', title: 'Finals' }
@@ -84,7 +83,6 @@ export const divisionUpdateScoreConfig = {
 			title: 'Championship Bracket',
 			type: 'bracket',
 			rounds: [
-				{ id: 2, name: 'C', title: 'Crossovers' },
 				{ id: 3, name: 'Q', title: 'Quarters' },
 				{ id: 4, name: 'SF', title: 'Semi Finals' },
 				{ id: 5, name: 'F', title: 'Finals' }
@@ -129,6 +127,44 @@ export const divisionUpdateScoreConfig = {
 			],
 			bgColor: '#3830A1',
 			icon: 'award'
+		},
+	],
+	mixed: [
+		{
+			code: 'X',
+			title: 'Pool Play',
+			type: 'pool',
+			pools: [
+				{ id: 23, name: 'A' },
+				{ id: 24, name: 'B' },
+				{ id: 25, name: 'C' },
+				{ id: 26, name: 'D' }
+			],
+			bgColor: '#2A9D8F',
+			icon: 'sun'
+		},
+		{
+			code: 'X',
+			title: 'Championship Bracket',
+			type: 'bracket',
+			rounds: [
+				{ id: 2, name: 'CP', title: 'Crossover' },
+				{ id: 3, name: 'Q', title: 'Quarters' },
+				{ id: 4, name: 'SF', title: 'Semi Finals' },
+				{ id: 5, name: 'F', title: 'Finals' }
+			],
+			bgColor: '#C04343',
+			icon: 'trophy'
+		},
+		{
+			code: 'X',
+			title: '9th Place Pool',
+			type: 'placement-notab',
+			rounds: [
+				{ id: 20, name: '9th', title: '9th Place Pool' },
+			],
+			bgColor: '#B78F22',
+			icon: 'medal'
 		},
 	],
 	// ... Add configurations for other divisions

@@ -1,4 +1,4 @@
-// app/schedule/[division]/11-15-place.js
+// app/schedule/[division]/championship-bracket.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
@@ -9,12 +9,12 @@ import GameComponentByRound from '../../../../components/GameComponentByRound';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function EleventhToFifteenthPlace() {
+export default function ChampionshipBracketWithoutCrossover() {
     const { division, code } = useLocalSearchParams();
 
     return (
         <View style={styles.container}>
-            <CustomHeader title="11th to 15th Place" route={`/schedule/${division}`} />
+            <CustomHeader title="Championship Bracket" route={`/schedule/${division}`} />
             <Tab.Navigator
                 screenOptions={{
                     tabBarActiveTintColor: '#EA1D25',
@@ -23,17 +23,14 @@ export default function EleventhToFifteenthPlace() {
                     tabBarIndicatorStyle: { backgroundColor: '#EA1D25' },
                 }}
             >
-                <Tab.Screen name="EleventhPlace" options={{ title: '11th' }}>
-                    {() => <GameComponentByRound roundId={13} division={code} title="11th Place" />}
+                <Tab.Screen name="Quarters" options={{ title: 'Q' }}>
+                    {() => <GameComponentByRound roundId={3} division={code} title="Quarter Finals" />}
                 </Tab.Screen>
-                <Tab.Screen name="ThirteenthSemis" options={{ title: '13 SF' }}>
-                    {() => <GameComponentByRound roundId={14} division={code} title="13th Place Semis" />}
+                <Tab.Screen name="Semis" options={{ title: 'SF' }}>
+                    {() => <GameComponentByRound roundId={4} division={code} title="Semi Finals" />}
                 </Tab.Screen>
-                <Tab.Screen name="ThirteenthFinal" options={{ title: '13th' }}>
-                    {() => <GameComponentByRound roundId={15} division={code} title="13th Place Final" />}
-                </Tab.Screen>
-                <Tab.Screen name="FifteenthPlace" options={{ title: '15th' }}>
-                    {() => <GameComponentByRound roundId={16} division={code} title="15th Place" />}
+                <Tab.Screen name="Finals" options={{ title: 'F' }}>
+                    {() => <GameComponentByRound roundId={5} division={code} title="Finals" />}
                 </Tab.Screen>
             </Tab.Navigator>
         </View>

@@ -7,6 +7,7 @@ export default function DivisionLayout() {
 			<Stack.Screen name="pool" options={{ headerShown: false }} />
 			<Stack.Screen name="bracket" options={{ headerShown: false }} />
 			<Stack.Screen name="placement" options={{ headerShown: false }} />
+			<Stack.Screen name="placement-notab" options={{ headerShown: false }} />
 		</Stack>
 	);
 }

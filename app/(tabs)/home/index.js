@@ -10,12 +10,10 @@ import TrainerNotification from '../../../components/TrainerNotification';
 import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
-import { useButtonState } from '../../../context/ButtonStateContext';
 import CustomHomeButton from '../../../buttons/CustomHomeButton';
 
 const Home = () => {
   const { user } = useAuth();
-  const { buttonStates } = useButtonState();
 
   const handlePress = (screen) => {
     if (!user) {
@@ -57,9 +55,9 @@ const Home = () => {
           buttonStyle={{ backgroundColor: '#B6C846' }}
           handlePress={() => router.push('/home/fieldmap')}
         />
-        <RequestCartButton disabled={!buttonStates.requestCart} />
-        <MedicButton disabled={!buttonStates.medic} />
-        <WaterRefillButton disabled={!buttonStates.waterRefill} />
+        <RequestCartButton />
+        <MedicButton />
+        <WaterRefillButton />
         <CustomHomeButton
           title='Meet our Volunteers!'
           icon='people-carry'

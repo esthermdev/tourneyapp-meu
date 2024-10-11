@@ -1,9 +1,18 @@
 import React from 'react';
-import { Text, View, Image, SafeAreaView, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, AppState } from 'react-native';
 import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
 import { ScaledSheet } from 'react-native-size-matters';
+import { supabase } from '../utils/supabase';
+
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh()
+  } else {
+    supabase.auth.stopAutoRefresh()
+  }
+});
 
 export default function App() {
   return (
@@ -29,7 +38,7 @@ export default function App() {
         <View style={styles.bottomContainer}>
           <Image
             source={images.bgWelcome}
-            resizeMode='cover'
+            resizeMode='stretch'
             style={styles.backgroundImage}
           />
           <CustomButtonWithIcon

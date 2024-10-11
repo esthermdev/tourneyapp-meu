@@ -59,7 +59,7 @@ const StandingsComponent = ({ division }) => {
       `)
             .in('teams.pool_id', poolIds)
             .order('teams(pool_id)', { ascending: true })
-            .order('pool_rank', { ascending: true });
+            .order('teams(seed)', { ascending: true });
 
         if (error) {
             console.error('Error fetching teams:', error);

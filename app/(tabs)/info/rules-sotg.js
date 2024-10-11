@@ -14,16 +14,16 @@ const RulesAndSOTG = () => {
 			>
 				<Text style={styles.content}>
 					<Text style={styles.contentHeader}>Game Rules{'\n'}</Text>
-					All pools play 75-minute games to 15; 2 TO/half. 10min half-time unless otherwise discussed between captains.{'\n\n'}
-					All games are hard capped. Hard cap means the team leading at the end of the current point when time is up, wins the game.{'\n\n'}
-					If the teams are tied at the end of the point, play one more (universe) point.  A point begins as soon as a goal is scored.{'\n\n'}
-					The hard cap does NOT affect timeouts.
+					All games are 80-minute games to 15; 2 TO/half.
+					All games are soft capped (highest score plus 1) at 80 minutes and hard capped at 90 minutes.
+					A point begins as soon as a goal is scored.
+					The caps do NOT affect timeouts.
 					{'\n\n'}
 					<Text style={styles.contentHeader}>Spirit of the Game</Text>
 					{'\n'}
 					Here is the spirit info for Lobster Pot. Please assign a spirit captain to complete score reporting.
 					{'\n\n'}
-					<Link className='text-blue-600 font-outfitmedium' href='https://docs.google.com/forms/d/16wUJRxu9JUVHVqNXIyrWex935ywue45AmLqrrgNjgtE/edit'>Please report your spirit score using this link!</Link>
+					<Link className='text-blue-600 font-outfitmedium' href='https://docs.google.com/forms/d/15NrrAtvd2mt_RGdpkTYDTYHGXHP0RTiIJEI0GXFwfp4/viewform?edit_requested=true'>Please report your spirit score using this link!</Link>
 					{'\n\n'}
 					Here are some fun spirited activities for the weekend:
 					{'\n'}

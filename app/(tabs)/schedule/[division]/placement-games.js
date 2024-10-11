@@ -3,9 +3,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import GameComponent from '../../../../components/GameComponent';
 import CustomHeader from '../../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import GameComponentByRound from '../../../../components/GameComponentByRound';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -24,16 +24,16 @@ export default function PlacementGames() {
                 }}
             >
                 <Tab.Screen name="3rd Place" options={{ title: '3rd' }}>
-                    {() => <GameComponent roundId={6} datetimeId={1} division={code} title="3rd Place" />}
+                    {() => <GameComponentByRound roundId={6} division={code} title="3rd Place" />}
                 </Tab.Screen>
                 <Tab.Screen name="5th Place Semi" options={{ title: '5 SF' }}>
-                    {() => <GameComponent roundId={7} datetimeId={1} division={code} title="5th Semi Finals" />}
+                    {() => <GameComponentByRound roundId={7} division={code} title="5th Semi Finals" />}
                 </Tab.Screen>
                 <Tab.Screen name="5th Place" options={{ title: '5th' }}>
-                    {() => <GameComponent roundId={8} datetimeId={1} division={code} title="5th Place" />}
+                    {() => <GameComponentByRound roundId={8} division={code} title="5th Place" />}
                 </Tab.Screen>
                 <Tab.Screen name="7th Place" options={{ title: '7th' }}>
-                    {() => <GameComponent roundId={9} datetimeId={1} division={code} title="7th Place" />}
+                    {() => <GameComponentByRound roundId={9} division={code} title="7th Place" />}
                 </Tab.Screen>
             </Tab.Navigator>
         </View>

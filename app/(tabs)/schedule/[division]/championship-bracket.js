@@ -6,6 +6,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import GameComponent from '../../../../components/GameComponent';
 import CustomHeader from '../../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import GameComponentByRound from '../../../../components/GameComponentByRound';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -24,16 +25,16 @@ export default function ChampionshipBracket() {
                 }}
             >
                 <Tab.Screen name="Crossover" options={{ title: 'CP' }}>
-                    {() => <GameComponent roundId={2} division={code} datetimeId={1} title="Crossover" />}
+                    {() => <GameComponentByRound roundId={2} division={code} title="Crossover" />}
                 </Tab.Screen>
                 <Tab.Screen name="Quarters" options={{ title: 'Q' }}>
-                    {() => <GameComponent roundId={3} division={code} datetimeId={1} title="Quarter Finals" />}
+                    {() => <GameComponentByRound roundId={3} division={code} title="Quarter Finals" />}
                 </Tab.Screen>
                 <Tab.Screen name="Semis" options={{ title: 'SF' }}>
-                    {() => <GameComponent roundId={4} division={code} datetimeId={1} title="Semi Finals" />}
+                    {() => <GameComponentByRound roundId={4} division={code} title="Semi Finals" />}
                 </Tab.Screen>
                 <Tab.Screen name="Finals" options={{ title: 'F' }}>
-                    {() => <GameComponent roundId={5} division={code} datetimeId={1} title="Finals" />}
+                    {() => <GameComponentByRound roundId={5} division={code} title="Finals" />}
                 </Tab.Screen>
             </Tab.Navigator>
         </View>

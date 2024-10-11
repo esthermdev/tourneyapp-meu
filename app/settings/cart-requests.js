@@ -350,6 +350,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
+    backgroundColor: '#333243',
     justifyContent: 'center',
     alignItems: 'center',
   },

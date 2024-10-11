@@ -16,10 +16,7 @@ const AdminOption = ({ title, icon, onPress, disabled }) => (
 );
 
 const AdminScreen = () => {
-  const { user } = useAuth();
-  const { buttonStates, toggleButtonState } = useButtonState();
   const navigation = useNavigation();
-  const AUTHORIZED_USER_ID = '6bc8adb7-94df-4867-8a58-28482249ae81';
 
   const adminOptions = [
     {
@@ -47,21 +44,6 @@ const AdminScreen = () => {
       disabled: false
     },
   ];
-
-  if (user && user.id === AUTHORIZED_USER_ID) {
-    adminOptions.push({
-      title: buttonStates.requestCart && buttonStates.waterRefill && buttonStates.medic
-        ? 'Disable Request Buttons'
-        : 'Enable Request Buttons',
-      icon: <MaterialIcons name="touch-app" size={52} color="#FFFFFF" />,
-      onPress: () => {
-        toggleButtonState('requestCart');
-        toggleButtonState('waterRefill');
-        toggleButtonState('medic');
-      },
-      disabled: false
-    });
-  }
 
   return (
     <SafeAreaView style={styles.container}>

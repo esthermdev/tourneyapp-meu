@@ -180,13 +180,13 @@ const TrainersList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#292D3E',
+    backgroundColor: '#333243',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#292D3E',
+    backgroundColor: '#333243',
   },
   loadingText: {
     marginTop: 10,

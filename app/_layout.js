@@ -6,7 +6,6 @@ import { SplashScreen } from 'expo-router';
 import { AuthProvider } from '../context/AuthProvider';
 import 'expo-dev-client';
 import 'react-native-gesture-handler';
-import { ButtonStateProvider } from '../context/ButtonStateContext';
 
 // Call this function when your app starts
 SplashScreen.preventAutoHideAsync();
@@ -37,11 +36,9 @@ const RootLayout = () => {
 
 	return (
 		<AuthProvider>
-			<ButtonStateProvider>
-				<GestureHandlerRootView style={{ flex: 1 }}>
-					<DrawerLayout />
-				</GestureHandlerRootView>
-			</ButtonStateProvider>
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<DrawerLayout />
+			</GestureHandlerRootView>
 		</AuthProvider>
 	)
 };

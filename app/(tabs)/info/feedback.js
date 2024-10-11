@@ -15,6 +15,7 @@ import {
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
 import { supabase } from '../../../utils/supabase'; // Make sure this path is correct
+import { router } from 'expo-router';
 
 const FeedbackScreen = () => {
   const [subject, setSubject] = useState('');
@@ -47,6 +48,10 @@ const FeedbackScreen = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleDeleteAccount = () => {
+    router.push('https://pacific-meadow-01448-9eb480b71962.herokuapp.com')
   };
 
   return (
@@ -87,6 +92,10 @@ const FeedbackScreen = () => {
             <Text style={styles.noteText}>
               If you'd like to create a new account, please include "Reset account" in your subject line and provide the reason and your email in the message body.
             </Text>
+
+            <TouchableOpacity style={styles.deleteAccountLink} onPress={handleDeleteAccount}>
+              <Text style={styles.deleteAccountText}>Delete Your Account</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -149,6 +158,16 @@ const styles = StyleSheet.create({
     fontSize: ms(14),
     lineHeight: ms(20),
     color: 'gray'
+  },
+  deleteAccountLink: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  deleteAccountText: {
+    color: '#EA1D25',
+    fontFamily: 'Outfit-Bold',
+    fontSize: ms(16),
+    textDecorationLine: 'underline',
   },
 });
 

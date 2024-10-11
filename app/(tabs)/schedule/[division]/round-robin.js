@@ -3,9 +3,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import GameComponent from '../../../../components/GameComponent';
 import CustomHeader from '../../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import GameComponentByRound from '../../../../components/GameComponentByRound';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,24 +15,7 @@ export default function RoundRobin() {
     return (
         <View style={styles.container}>
             <CustomHeader title="Consolation Round Robin" route={`/schedule/${division}`} />
-            <Tab.Navigator
-                screenOptions={{
-                    tabBarActiveTintColor: '#EA1D25',
-                    tabBarInactiveTintColor: '#8F8DAA',
-                    tabBarLabelStyle: { fontFamily: 'Outfit-Semibold', fontSize: ms(12) },
-                    tabBarIndicatorStyle: { backgroundColor: '#EA1D25' },
-                }}
-            >
-                <Tab.Screen name="Round1" options={{ title: 'R1' }}>
-                    {() => <GameComponent roundId={21} datetimeId={1} division={code} title="Round 1" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round2" options={{ title: 'R2' }}>
-                    {() => <GameComponent roundId={21} datetimeId={2} division={code} title="Round 2" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round3" options={{ title: 'R3' }}>
-                    {() => <GameComponent roundId={21} datetimeId={3} division={code} title="Round 3" />}
-                </Tab.Screen>
-            </Tab.Navigator>
+            <GameComponentByRound roundId={21} division={code} title="Round Robin" />
         </View>
     );
 }
