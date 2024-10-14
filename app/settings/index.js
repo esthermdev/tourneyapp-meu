@@ -5,7 +5,6 @@ import { router, useNavigation } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerActions } from '@react-navigation/native';
-import { useButtonState } from '../../context/ButtonStateContext';
 import { useAuth } from '../../context/AuthProvider';
 
 const AdminOption = ({ title, icon, onPress, disabled }) => (
@@ -35,6 +34,12 @@ const AdminScreen = () => {
       title: 'Cart Requests',
       icon: <MaterialIcons name="directions-car" size={52} color="#FFFFFF" />,
       route: 'settings/cart-requests',
+      disabled: false
+    },
+    {
+      title: 'Water Refill Requests',
+      icon: <MaterialIcons name="water-drop" size={52} color="#FFFFFF" />,
+      route: 'settings/water-refill-requests',
       disabled: false
     },
     {

@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, SectionList, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  SectionList,
+  RefreshControl,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
 import { supabase } from '../../../utils/supabase';
 import { Card, Avatar, Icon } from '@rneui/base';
 import { formatTime } from '../../../utils/formatTime';
@@ -24,7 +37,6 @@ const Placeholder = () => (
 
 const MyGamesScreen = () => {
   const { profile } = useAuth();
-  console.log(profile)
 
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -80,7 +92,6 @@ const MyGamesScreen = () => {
 
         // Format the date string
         const dateString = formatDateToLocalString(utcDate);
-        console.log(dateString)
 
         if (!acc[dateString]) acc[dateString] = [];
         acc[dateString].push(game);
@@ -208,36 +219,42 @@ const MyGamesScreen = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle} maxFontSizeMultiplier={1.1}>Update Score</Text>
-            <Text style={styles.modalSubtitle} maxFontSizeMultiplier={1.1}>If needed, please check with the other team if there are any score discrepancies before submitting.</Text>
-            <View style={styles.scoreInputContainer}>
-              <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team1.name}</Text>
-              <TextInput
-                style={styles.scoreInput}
-                value={team1Score}
-                onChangeText={setTeam1Score}
-                keyboardType="numeric"
-                maxLength={2}
-              />
-            </View>
-            <View style={styles.scoreInputContainer}>
-              <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team2.name}</Text>
-              <TextInput
-                style={styles.scoreInput}
-                value={team2Score}
-                onChangeText={setTeam2Score}
-                keyboardType="numeric"
-                maxLength={2}
-              />
-            </View>
-            <TouchableOpacity style={styles.updateScoreButton} onPress={handleUpdateScore}>
-              <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Save</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Close</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle} maxFontSizeMultiplier={1.1}>Update Score</Text>
+                <Text style={styles.modalSubtitle} maxFontSizeMultiplier={1.1}>If needed, please check with the other team if there are any score discrepancies before submitting.</Text>
+                <View style={styles.scoreInputContainer}>
+                  <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team1.name}</Text>
+                  <TextInput
+                    style={styles.scoreInput}
+                    value={team1Score}
+                    onChangeText={setTeam1Score}
+                    keyboardType="numeric"
+                    maxLength={2}
+                  />
+                </View>
+                <View style={styles.scoreInputContainer}>
+                  <Text style={styles.teamNameScoreInput} maxFontSizeMultiplier={1.1}>{currentGame?.team2.name}</Text>
+                  <TextInput
+                    style={styles.scoreInput}
+                    value={team2Score}
+                    onChangeText={setTeam2Score}
+                    keyboardType="numeric"
+                    maxLength={2}
+                  />
+                </View>
+                <TouchableOpacity style={styles.updateScoreButton} onPress={handleUpdateScore}>
+                  <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Save</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                  <Text style={styles.buttonText} maxFontSizeMultiplier={1.1}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
         </View>
       </Modal>
     </View>

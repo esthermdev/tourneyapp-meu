@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { StyleSheet, Text, View, RefreshControl, Keyboard, TouchableWithoutFeedback, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, RefreshControl, Keyboard, TouchableWithoutFeedback, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { ListItem, Avatar } from '@rneui/base';
 import { supabase } from '../../../utils/supabase';
 import { router } from 'expo-router';
@@ -11,16 +11,24 @@ const Teams = () => {
   const [selectedDivision, setSelectedDivision] = useState('All');
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const fetchTeams = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('teams')
-      .select(`id, name, pool:pool_id (division), avatar_uri, color`);
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('teams')
+        .select(`id, name, pool:pool_id (division), avatar_uri, color`);
 
-    if (error) {
+      if (error) {
+        console.error('Error fetching teams:', error);
+      } else {
+        setTeams(data.sort((a, b) => a.name.localeCompare(b.name)));
+      }
+    } catch (error) {
       console.error('Error fetching teams:', error);
-    } else {
-      setTeams(data.sort((a, b) => a.name.localeCompare(b.name)));
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -117,19 +125,25 @@ const Teams = () => {
           <FilterButton title="Women - Lower" color="#BD41F2" division="WL" />
           <FilterButton title="Mixed" color="#f77732" division="X" />
         </View>
-        <FlatList
-          data={filteredTeams}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={['#EA1D25']}
-            />
-          }
-          contentContainerStyle={styles.listContent}
-        />
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#EA1D25" />
+          </View>
+        ) : (
+          <FlatList
+            data={filteredTeams}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#EA1D25']}
+              />
+            }
+            contentContainerStyle={styles.listContent}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -141,6 +155,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white'
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerContainer: {
     borderBottomColor: '#D9D9D9',

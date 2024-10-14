@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native';
 import { Avatar } from '@rneui/base';
 import CustomHeader from '../../../components/CustomHeader';
 import { supabase } from '../../../utils/supabase';
@@ -7,25 +7,34 @@ import { ms } from 'react-native-size-matters';
 
 const Volunteers = () => {
 	const [volunteers, setVolunteers] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		fetchVolunteers();
 	}, []);
 
 	const fetchVolunteers = async () => {
-		const { data, error } = await supabase
-			.from('volunteers')
-			.select(`
-				badge,
-				role,
-				avatar_uri
-			`)
-			.order('badge');
+		setIsLoading(true);
+		try {
+			const { data, error } = await supabase
+				.from('volunteers')
+				.select(`
+					id,
+					badge,
+					role,
+					avatar_uri
+				`)
+				.order('badge');
 
-		if (error) {
+			if (error) {
+				console.error('Error fetching volunteers:', error);
+			} else {
+				setVolunteers(data);
+			}
+		} catch (error) {
 			console.error('Error fetching volunteers:', error);
-		} else {
-			setVolunteers(data);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -33,11 +42,11 @@ const Volunteers = () => {
 		<View style={styles.itemContainer}>
 			<Avatar
 				containerStyle={styles.avatar}
-				size={ms(50)}
+				size={ms(60)}
 				rounded
-				title={item.badge[0]}
-				source={{ uri: item.avatar_uri }}
+				source={item.avatar_uri ? { uri: item.avatar_uri } : require('../../../assets/icons/placeholder_user.png')}
 				placeholderStyle={{ backgroundColor: 'transparent' }}
+				onError={() => console.log(`Failed to load image for ${item.badge}`)}
 			/>
 			<Text style={styles.badgeText}>{item.badge}</Text>
 			<Text style={styles.roleText}>{item.role}</Text>
@@ -47,12 +56,19 @@ const Volunteers = () => {
 	return (
 		<View style={styles.container}>
 			<CustomHeader title='Volunteers' route='home' />
-			<FlatList
-				data={volunteers}
-				renderItem={renderItem}
-				keyExtractor={(item, index) => index.toString()}
-				numColumns={3}
-			/>
+			{isLoading ? (
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" color="#EA1D25" />
+					<Text style={styles.loadingText}>Loading volunteers...</Text>
+				</View>
+			) : (
+				<FlatList
+					data={volunteers}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id.toString()}
+					numColumns={3}
+				/>
+			)}
 		</View>
 	);
 };
@@ -88,6 +104,17 @@ const styles = StyleSheet.create({
 		fontSize: ms(13),
 		textAlign: 'center',
 		color: '#666',
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	loadingText: {
+		fontFamily: 'Outfit-Regular',
+		fontSize: ms(16),
+		marginTop: ms(10),
+		color: '#333',
 	},
 });
 

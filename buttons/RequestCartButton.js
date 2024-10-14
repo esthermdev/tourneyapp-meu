@@ -138,7 +138,7 @@ const RequestCartButton = ({ disabled }) => {
       >
         <Ionicons name="car" size={30} color="#FFF" />
         <Text maxFontSizeMultiplier={1} style={styles.text}>
-          {isButtonDisabled ? 'Request Pending...' : 'Request Cart'}
+          {isButtonDisabled ? 'Request Pending...' : 'Cart'}
         </Text>
       </TouchableOpacity>
 

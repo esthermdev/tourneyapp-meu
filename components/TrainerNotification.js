@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Alert } from 'react-native';
-import { supabase } from '../utils/supabase';
+import React, { useEffect } from 'react';
+import { Text, View } from 'react-native';
 import { usePushNotifications } from '../hooks/usePushNotifications';
-import { useAuth } from '../context/AuthProvider';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 

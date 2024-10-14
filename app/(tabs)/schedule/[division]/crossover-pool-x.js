@@ -1,20 +1,20 @@
-// app/schedule/[division]/pool-play.js
+// app/schedule/[division]/ninth-place.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import GameComponent from '../../../../components/GameComponent';
 import CustomHeader from '../../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
+import GameComponentByRound from '../../../../components/GameComponentByRound';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function ThreeRoundPoolPlay() {
+export default function MixedCrossovers() {
     const { division, code } = useLocalSearchParams();
 
     return (
         <View style={styles.container}>
-            <CustomHeader title="Pool Play" route={`/schedule/${division}`} />
+            <CustomHeader title="Crossovers" route={`/schedule/${division}`} />
             <Tab.Navigator
                 screenOptions={{
                     tabBarActiveTintColor: '#EA1D25',
@@ -23,14 +23,11 @@ export default function ThreeRoundPoolPlay() {
                     tabBarIndicatorStyle: { backgroundColor: '#EA1D25' },
                 }}
             >
-                <Tab.Screen name="Round1" options={{ title: 'R1' }}>
-                    {() => <GameComponent roundId={1} datetimeId={1} division={code} title="Round 1" />}
+                <Tab.Screen name="Crossover" options={{ title: 'CP' }}>
+                    {() => <GameComponentByRound roundId={2} division={code} title="Crossovers" />}
                 </Tab.Screen>
-                <Tab.Screen name="Round2" options={{ title: 'R2' }}>
-                    {() => <GameComponent roundId={1} datetimeId={2} division={code} title="Round 2" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round3" options={{ title: 'R3' }}>
-                    {() => <GameComponent roundId={1} datetimeId={3} division={code} title="Round 3" />}
+                <Tab.Screen name="Crossover Pool BC" options={{ title: 'CP Pools B&C' }}>
+                    {() => <GameComponentByRound roundId={26} division={code} title="Crossover Pool B&C" />}
                 </Tab.Screen>
             </Tab.Navigator>
         </View>

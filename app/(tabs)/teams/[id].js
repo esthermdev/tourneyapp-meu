@@ -4,7 +4,9 @@ import { useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../../utils/supabase';
 import { formatTime } from '../../../utils/formatTime';
 import { Card } from '@rneui/base';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { s, ms } from 'react-native-size-matters';
+import { formatDate } from '../../../utils/formatDate';
 
 const TeamGames = () => {
     const { id, teamName } = useLocalSearchParams();
@@ -57,7 +59,11 @@ const TeamGames = () => {
         <Card containerStyle={styles.cardContainer}>
             <View style={styles.gameInfoContainer}>
                 <Text style={styles.timeText}>{formatTime(item?.datetime?.time)}</Text>
-                <Text style={styles.fieldText}>Field {item?.field?.name}</Text>
+                <Text style={styles.timeText}>{formatDate(item?.datetime?.date)}</Text>
+                <View style={styles.fieldInfoContainer}>
+                    <FontAwesome6 name="location-dot" size={12} color="#8F8DAA" />
+                    <Text style={styles.fieldText}>{item?.field?.name}</Text>
+                </View>
             </View>
             <View style={styles.teamsContainer}>
                 <Text style={[styles.teamTextLeft, item?.team1?.id == id && styles.highlightedTeam]}>{item.team1.name}</Text>
@@ -104,17 +110,22 @@ const styles = StyleSheet.create({
     gameInfoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 10,
+        marginBottom: 20,
     },
     timeText: {
         fontFamily: 'Outfit-Bold',
-        fontSize: ms(16),
+        fontSize: ms(15),
         color: '#333243',
+    },
+    fieldInfoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     fieldText: {
         fontFamily: 'Outfit-Regular',
-        fontSize: ms(14),
+        fontSize: ms(15),
         color: '#8F8DAA',
+        marginLeft: 3
     },
     teamsContainer: {
         flexDirection: 'row',

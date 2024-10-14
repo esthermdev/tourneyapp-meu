@@ -11,6 +11,7 @@ import CartNotification from '../../../components/CartNotification';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ms } from 'react-native-size-matters';
 import CustomHomeButton from '../../../buttons/CustomHomeButton';
+import WaterRefillNotification from '../../../components/WaterRefillNotification';
 
 const Home = () => {
   const { user } = useAuth();
@@ -67,7 +68,7 @@ const Home = () => {
       </ScrollView>
       <View style={styles.donationButtonContainer}>
         <TouchableOpacity
-          onPress={() => router.push('https://maineultimate.org/s/171999/MU+General+Donation')}
+          onPress={() => router.push('https://www.paypal.com/donate/?hosted_button_id=3HCQBB97LCV34')}
           style={styles.donationButton}
         >
           <Text maxFontSizeMultiplier={1} className='font-outfitsemibold text-center items-center' style={styles.donationText}>Donation</Text>
@@ -75,6 +76,7 @@ const Home = () => {
       </View>
       <TrainerNotification />
       <CartNotification />
+      <WaterRefillNotification />
     </View>
   )
 }

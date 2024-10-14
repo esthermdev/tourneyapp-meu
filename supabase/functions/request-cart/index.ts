@@ -24,8 +24,6 @@ const supabase = createClient(
   Deno.env.get("EXPO_PUBLIC_SUPABASE_ANON_KEY")!,
 );
 
-const NOTIFICATION_TTL = 30;
-
 Deno.serve(async (req) => {
   const payload: WebhookPayload = await req.json();
   const cartRequest = payload.record;

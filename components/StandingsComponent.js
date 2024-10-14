@@ -11,7 +11,7 @@ const divisionPoolMapping = {
     },
     men_middle: {
         poolIds: [5, 6, 7, 8],
-        poolNames: ['E', 'F', 'G', 'H']
+        poolNames: ['A', 'B', 'C', 'D']
     },
     men_lower: {
         poolIds: [11, 12, 13, 14],
@@ -26,8 +26,8 @@ const divisionPoolMapping = {
         poolNames: ['Q', 'R', 'S', 'T']
     },
     mixed: {
-        poolIds: [23, 24, 25, 26],
-        poolNames: ['A', 'B', 'C', 'D']
+        poolIds: [23, 24, 25],
+        poolNames: ['A', 'B', 'C']
     },
 };
 

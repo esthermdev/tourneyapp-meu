@@ -3,26 +3,26 @@ import { View, Text, StyleSheet, RefreshControl } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { FlashList } from '@shopify/flash-list';
 import { Card, Avatar, Icon } from '@rneui/base';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { formatDate } from '../utils/formatDate';
 import { formatTime } from '../utils/formatTime';
-import { ms, s } from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 
-const GameComponent = ({ datetimeId, division, roundId, title }) => {
+const GameComponent = ({ poolId, division, title }) => {
   const [games, setGames] = useState([]);
-  const [roundInfo, setRoundInfo] = useState({ date: '', time: '' });
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    getGames(datetimeId, division, roundId);
-  }, [datetimeId, division, roundId]);
+    getGames(poolId, division);
+  }, [poolId, division]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getGames(datetimeId, division, roundId).then(() => setRefreshing(false));
-  }, [datetimeId, division, roundId]);
+    getGames(poolId, division).then(() => setRefreshing(false));
+  }, [poolId, division]);
 
-  const getGames = async (datetimeId, division, roundId) => {
+  const getGames = async (poolId, division) => {
     let query = supabase
       .from('games')
       .select(`
@@ -51,35 +51,25 @@ const GameComponent = ({ datetimeId, division, roundId, title }) => {
         )
       `)
       .eq('division', division)
-      .eq('round_id', roundId)
-      .eq('datetime_id', datetimeId)
-      .order('pool_id')
-      .order('id')
+      .eq('pool_id', poolId)
+      .order('datetime_id')
 
     const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching games:', error);
     } else {
-      const filteredGames = data.filter(game => game.team1 !== null || game.team2 !== null);
+      const filteredGames = data.filter(game => game.team1 !== null && game.team2 !== null);
       setGames(filteredGames);
-
-      if (filteredGames.length > 0) {
-        setRoundInfo({
-          date: formatDate(filteredGames[0].datetime.date),
-          time: formatTime(filteredGames[0].datetime.time)
-        });
-      }
     }
     setIsLoading(false);
   };
 
   const renderItem = ({ item }) => (
     <Card containerStyle={styles.card}>
-      <View style={styles.fieldInfoContainer}>
-        <Icon type='ionicon' name='location-sharp' size={14} color='#8F8DAA' style={styles.locationIcon} />
-        <Text style={styles.fieldTitle} maxFontSizeMultiplier={1.2}>{ }
-          Field {item.field?.name || 'Number'}
+      <View style={styles.dateTimeContainer}>
+        <Text style={styles.dateTime}>
+          {formatDate(item.datetime.date)} - {formatTime(item.datetime.time)}
         </Text>
       </View>
       <View style={styles.content}>
@@ -107,11 +97,12 @@ const GameComponent = ({ datetimeId, division, roundId, title }) => {
           <Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team2?.name}</Text>
         </View>
       </View>
-      {item.pool && item.pool.name && (
-        <Text style={styles.poolName} maxFontSizeMultiplier={1.2}>
-          Pool {item.pool.name}
+      <View style={styles.fieldInfoContainer}>
+        <FontAwesome6 name="location-dot" size={12} color="#8F8DAA" style={styles.locationIcon} />
+        <Text style={styles.fieldTitle} maxFontSizeMultiplier={1.2}>
+          Field {item.field?.name || 'Number'}
         </Text>
-      )}
+      </View>
     </Card>
   );
 
@@ -138,26 +129,19 @@ const GameComponent = ({ datetimeId, division, roundId, title }) => {
   return (
     <View style={styles.container}>
       {games.length > 0 ? (
-        <>
-          <View style={styles.timeContainer}>
-            <Text style={styles.time} maxFontSizeMultiplier={1.1}>{roundInfo.date}</Text>
-            <Icon type='ionicon' name='time-outline' size={20} color='#EA1D25' />
-            <Text style={styles.time} maxFontSizeMultiplier={1.1}>{roundInfo.time}</Text>
-          </View>
-          <FlashList
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={['#EA1D25']} // This sets the color of the refresh spinner
-              />
-            }
-            data={games}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            estimatedItemSize={10}
-          />
-        </>
+        <FlashList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#EA1D25']}
+            />
+          }
+          data={games}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          estimatedItemSize={10}
+        />
       ) : renderPlaceholder()}
     </View>
   );
@@ -171,7 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#D9D9D9',
-    paddingVertical: 15
+    paddingTop: 10
   },
   title: {
     fontFamily: 'Outfit-Bold',
@@ -179,22 +163,6 @@ const styles = StyleSheet.create({
     color: '#EA1D25',
     textAlign: 'center',
     marginVertical: 10,
-  },
-  timeContainer: {
-    backgroundColor: '#EA1D25',
-    padding: 12,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 12,
-    marginBottom: 12
-  },
-  time: {
-    textAlign: 'center',
-    fontFamily: 'Outfit-Bold',
-    fontSize: ms(20),
-    color: 'white'
   },
   card: {
     borderRadius: 12,
@@ -207,60 +175,70 @@ const styles = StyleSheet.create({
     borderColor: '#CBCAD8',
     marginTop: 0,
     marginBottom: 12,
+    padding: 12,
+  },
+  dateTimeContainer: {
+    backgroundColor: '#EA1D25',
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  dateTime: {
+    fontFamily: 'Outfit-Bold',
+    fontSize: ms(14),
+    color: 'white',
+    textAlign: 'center',
   },
   fieldInfoContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-  locationIcon: {
-    marginRight: 3,
+    justifyContent: 'center',
+    marginTop: 10,
   },
   fieldTitle: {
     fontFamily: 'Outfit-Regular',
     fontSize: ms(14),
     color: '#8F8DAA'
   },
-  poolName: {
-    fontFamily: 'Outfit-SemiBold',
-    fontSize: ms(12),
-    color: '#EA1D25',
-    textAlign: 'center'
+  locationIcon: {
+    marginRight: 3
   },
   content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  teamContainer: {
     flex: 1,
     marginTop: 5,
-    flexDirection: 'row'
+    alignItems: 'center',
   },
   avatarContainer: {
     borderColor: '#EA1D25',
     borderWidth: 1,
-  },
-  teamContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  score: {
-    fontSize: ms(28),
-    fontFamily: 'Outfit-SemiBold',
-  },
-  colon: {
-    fontSize: ms(28),
-    marginHorizontal: 5,
     marginBottom: 5,
-    fontFamily: 'Outfit-Medium',
   },
   teamName: {
     textAlign: 'center',
     fontFamily: 'Outfit-Bold',
-    fontSize: ms(16),
-    marginTop: 5
+    fontSize: ms(14),
+    paddingHorizontal: 2,
+  },
+  scoreContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  score: {
+    fontSize: ms(30),
+    fontFamily: 'Outfit-SemiBold',
+  },
+  colon: {
+    fontSize: ms(30),
+    marginHorizontal: 5,
+    marginBottom: 7,
+    fontFamily: 'Outfit-Medium',
   },
   placeholderContainer: {
     flex: 1,

@@ -9,6 +9,7 @@ const InfoScreen = () => {
 
 	const infoItems = [
 		{ title: 'Tournament Info', route: 'tournament-info' },
+		{ title: 'Restaurants & Hotels', route: 'restaurants-hotels' },
 		{ title: 'Rules', route: 'rules-sotg' },
 		{ title: 'Vendors', route: 'vendors' },
 		{ title: 'Emergency', route: 'emergency' },

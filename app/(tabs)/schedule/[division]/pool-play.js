@@ -1,6 +1,6 @@
 // app/schedule/[division]/pool-play.js
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import GameComponent from '../../../../components/GameComponent';
@@ -11,6 +11,18 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function PoolPlay() {
     const { division, code } = useLocalSearchParams();
+
+    // Define pool IDs for each division
+    const poolIds = {
+        MU: [1, 2, 3, 4],  // Men's Upper
+        MM: [5, 6, 7, 8],  // Men's Middle
+        ML: [11, 12, 13, 14],  // Men's Lower
+        WU: [15, 16, 17, 18],  // Women's Upper
+        WL: [19, 20, 21, 22],  // Women's Lower
+        X: [23, 24, 25]  // Mixed
+    };
+
+    const divisionPools = poolIds[code] || [];
 
     return (
         <View style={styles.container}>
@@ -23,18 +35,15 @@ export default function PoolPlay() {
                     tabBarIndicatorStyle: { backgroundColor: '#EA1D25' },
                 }}
             >
-                <Tab.Screen name="Round1" options={{ title: 'R1' }}>
-                    {() => <GameComponent roundId={1} datetimeId={1} division={code} title="Round 1" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round2" options={{ title: 'R2' }}>
-                    {() => <GameComponent roundId={1} datetimeId={2} division={code} title="Round 2" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round3" options={{ title: 'R3' }}>
-                    {() => <GameComponent roundId={1} datetimeId={3} division={code} title="Round 3" />}
-                </Tab.Screen>
-                <Tab.Screen name="Round4" options={{ title: 'R4' }}>
-                    {() => <GameComponent roundId={1} datetimeId={4} division={code} title="Round 4" />}
-                </Tab.Screen>
+                {divisionPools.map((poolId, index) => (
+                    <Tab.Screen
+                        key={poolId}
+                        name={`Pool${index + 1}`}
+                        options={{ title: `P${index + 1}` }}
+                    >
+                        {() => <GameComponent poolId={poolId} division={code} title={`Pool ${index + 1}`} />}
+                    </Tab.Screen>
+                ))}
             </Tab.Navigator>
         </View>
     );

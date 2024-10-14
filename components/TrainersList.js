@@ -222,14 +222,14 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    paddingHorizontal: 12,
+    paddingLeft: 12,
     justifyContent: 'space-between',
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 5
+    marginVertical: 7
   },
   labelText: {
     fontSize: 16,

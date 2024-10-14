@@ -115,7 +115,7 @@ const MedicButton = ({ disabled }) => {
           style={{ width: 25, height: 25 }}
         />
         <Text maxFontSizeMultiplier={1} style={styles.text}>
-          {isButtonDisabled ? 'Medic Requested' : 'Medic'}
+          {isButtonDisabled ? 'Trainer Requested' : 'Trainer'}
         </Text>
       </TouchableOpacity>
 
