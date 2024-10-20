@@ -53,6 +53,7 @@ const GameComponent = ({ poolId, division, title }) => {
       .eq('division', division)
       .eq('pool_id', poolId)
       .order('datetime_id')
+      .order('id')
 
     const { data, error } = await query;
 

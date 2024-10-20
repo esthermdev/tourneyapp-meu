@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
   AppState,
-  RefreshControl
+  RefreshControl,
+  StatusBar
 } from 'react-native';
 import { supabase } from '../utils/supabase';
 import { useAuth } from '../context/AuthProvider';
@@ -17,6 +18,7 @@ import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchModal from '../components/SearchModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
@@ -27,7 +29,7 @@ AppState.addEventListener('change', (state) => {
 });
 
 export default function Account({ session }) {
-  const { profile, getProfile } = useAuth()
+  const { profile, getProfile, setProfile } = useAuth()
 
   const [refreshing, setRefreshing] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -54,15 +56,6 @@ export default function Account({ session }) {
     fetchTeams()
     setLoading(false)
   }, [session]);
-
-  useEffect(() => {
-    if (profile) {
-      setFullName(profile.full_name || '');
-      setTeamId(profile.team_id || null);
-      setAvatarUrl(profile.avatar_url || '');
-      setExpoPushToken(profile?.expo_push_token)
-    }
-  }, [profile]);
 
 
   const fetchTeams = async () => {
@@ -169,12 +162,19 @@ export default function Account({ session }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-      >
-        <Ionicons name="menu" size={30} color="#EA1D25" />
-      </TouchableOpacity>
+      <StatusBar />
+      <View style={styles.navHeader}>
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        >
+          <Ionicons name="menu" size={30} color="#EA1D25" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('(tabs)')}
+        >
+          <Ionicons name="home" size={30} color="#EA1D25" />
+        </TouchableOpacity>
+      </View>
       <ScrollView
         contentContainerStyle={styles.content}
         refreshControl={
@@ -236,11 +236,11 @@ export default function Account({ session }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    flex: 1
   },
-  menuButton: {
-    marginTop: 20,
-    marginLeft: 20
+  navHeader: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 20
   },
   content: {
     padding: 20

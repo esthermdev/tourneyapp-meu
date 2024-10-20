@@ -9,23 +9,6 @@ export const AuthProvider = ({ children }) => {
 	const [profile, setProfile] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-	// const loginWithToken = async ({ access_token, refresh_token }) => {
-	// 	const signIn = async () => {
-	// 		await supabase.auth.setSession({
-	// 			access_token,
-	// 			refresh_token,
-	// 		});
-
-	// 		return await supabase.auth.refreshSession();
-	// 	};
-
-	// 	const {
-	// 		data: { user: supabaseUser },
-	// 	} = await signIn();
-
-	// 	setUser(supabaseUser);
-	// };
-
 	const getProfile = async (userId) => {
 		try {
 			const { data, error } = await supabase

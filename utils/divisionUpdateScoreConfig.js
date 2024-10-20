@@ -135,10 +135,8 @@ export const divisionUpdateScoreConfig = {
 			title: 'Pool Play',
 			type: 'pool',
 			pools: [
-				{ id: 23, name: 'A' },
-				{ id: 24, name: 'B' },
-				{ id: 25, name: 'C' },
-				{ id: 26, name: 'D' }
+				{ id: 23, name: 'U' },
+				{ id: 24, name: 'V' },
 			],
 			bgColor: '#2A9D8F',
 			icon: 'sun'
@@ -158,12 +156,25 @@ export const divisionUpdateScoreConfig = {
 		},
 		{
 			code: 'X',
+			title: '3rd to 7th Place',
+			type: 'placement',
+			rounds: [
+				{ id: 6, name: '3rd', title: '3rd Place' },
+				{ id: 7, name: '5 SF', title: '5th Semis' },
+				{ id: 8, name: '5th', title: '5th Place' },
+				{ id: 9, name: '7th', title: '7th Place' }
+			],
+			bgColor: '#B78F22',
+			icon: 'medal'
+		},
+		{
+			code: 'X',
 			title: '9th Place Pool',
 			type: 'placement-notab',
 			rounds: [
 				{ id: 20, name: '9th', title: '9th Place Pool' },
 			],
-			bgColor: '#B78F22',
+			bgColor: '#820F5B',
 			icon: 'medal'
 		},
 	],
@@ -173,10 +184,10 @@ export const divisionUpdateScoreConfig = {
 			title: 'Pool Play',
 			type: 'pool',
 			pools: [
-				{ id: 5, name: 'A' },
-				{ id: 6, name: 'B' },
-				{ id: 7, name: 'C' },
-				{ id: 8, name: 'D' }
+				{ id: 5, name: 'E' },
+				{ id: 6, name: 'F' },
+				{ id: 7, name: 'G' },
+				{ id: 8, name: 'H' }
 			],
 			bgColor: '#2A9D8F',
 			icon: 'sun'
@@ -325,12 +336,25 @@ export const divisionUpdateScoreConfig = {
 		},
 		{
 			code: 'WL',
+			title: '3rd to 7th Place',
+			type: 'placement',
+			rounds: [
+				{ id: 6, name: '3rd', title: '3rd Place' },
+				{ id: 7, name: '5 SF', title: '5th Semis' },
+				{ id: 8, name: '5th', title: '5th Place' },
+				{ id: 9, name: '7th', title: '7th Place' }
+			],
+			bgColor: '#B78F22',
+			icon: 'medal'
+		},
+		{
+			code: 'WL',
 			title: 'Round Robin',
 			type: 'placement-notab',
 			rounds: [
 				{ id: 21, name: '9th', title: '9th Place' },
 			],
-			bgColor: '#B78F22',
+			bgColor: '#820F5B',
 			icon: 'medal'
 		},
 	],

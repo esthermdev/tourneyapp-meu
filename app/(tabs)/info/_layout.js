@@ -12,6 +12,7 @@ const InfoLayout = () => {
 			<Stack.Screen name="credits" options={{ headerShown: false }} />
 			<Stack.Screen name="refund-policy" options={{ headerShown: false }} />
 			<Stack.Screen name="feedback" options={{ headerShown: false }} />
+			<Stack.Screen name="faq" options={{ headerShown: false }} />
 		</Stack>
 	);
 };

@@ -11,7 +11,7 @@ const divisionPoolMapping = {
     },
     men_middle: {
         poolIds: [5, 6, 7, 8],
-        poolNames: ['A', 'B', 'C', 'D']
+        poolNames: ['E', 'F', 'G', 'H']
     },
     men_lower: {
         poolIds: [11, 12, 13, 14],
@@ -26,8 +26,8 @@ const divisionPoolMapping = {
         poolNames: ['Q', 'R', 'S', 'T']
     },
     mixed: {
-        poolIds: [23, 24, 25],
-        poolNames: ['A', 'B', 'C']
+        poolIds: [23, 24],
+        poolNames: ['U', 'V']
     },
 };
 
@@ -59,7 +59,7 @@ const StandingsComponent = ({ division }) => {
       `)
             .in('teams.pool_id', poolIds)
             .order('teams(pool_id)', { ascending: true })
-            .order('teams(seed)', { ascending: true });
+            .order('pool_rank', { ascending: true });
 
         if (error) {
             console.error('Error fetching teams:', error);

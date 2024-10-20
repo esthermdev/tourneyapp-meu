@@ -24,7 +24,7 @@ const { width, height } = Dimensions.get('window');
 const buttonWidth = (width - 70) / 2;
 const modalHeight = height * 0.8; // 80% of screen height
 
-const locations = ['Field', 'Tourney Central', 'Lot 1', 'Lot 2'];
+const locations = ['Field', 'Tourney Central', 'Lot 1 (Grass)', 'Lot 2 (Pavement)'];
 
 const RequestCartButton = ({ disabled }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);

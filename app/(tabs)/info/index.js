@@ -16,6 +16,7 @@ const InfoScreen = () => {
 		{ title: 'Refund Policy', route: 'refund-policy' },
 		{ title: 'Credits', route: 'credits' },
 		{ title: 'Report Feedback', route: 'feedback' },
+		{ title: 'FAQ', route: 'faq' },
 	];
 
 	const renderInfoItem = (item, index) => (

@@ -64,7 +64,7 @@ export default function LoginComponent() {
     }
 
     if (error) {
-      Alert.alert('Insert email and password to sign in.', 'Please ensure you have confirmed your email before this.');
+      Alert.alert('Invalid email or password.', 'Please try again.');
     } else {
       await getProfile(data.user.id);
       router.push('(tabs)/home');
@@ -75,12 +75,18 @@ export default function LoginComponent() {
 
   return (
     <SafeAreaView className='h-full'>
-      <TouchableOpacity
-        style={styles.menuButton}
-        onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-      >
-        <Ionicons name="menu" size={30} color="#EA1D25" />
-      </TouchableOpacity>
+      <View style={styles.navHeader}>
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        >
+          <Ionicons name="menu" size={30} color="#EA1D25" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('(tabs)')}
+        >
+          <Ionicons name="home" size={30} color="#EA1D25" />
+        </TouchableOpacity>
+      </View>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -143,6 +149,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  navHeader: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 20
   },
   resetContainer: {
     flex: 1,

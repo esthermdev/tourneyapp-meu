@@ -108,11 +108,6 @@ const GameComponentByRound = ({ division, roundId, title }) => {
           <Text style={styles.teamName} maxFontSizeMultiplier={1.1}>{item.team2?.name}</Text>
         </View>
       </View>
-      {item.pool && item.pool.name && (
-        <Text style={styles.poolName} maxFontSizeMultiplier={1.2}>
-          Pool {item.pool.name}
-        </Text>
-      )}
     </Card>
   );
 

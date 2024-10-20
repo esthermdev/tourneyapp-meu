@@ -19,7 +19,7 @@ export default function PoolPlay() {
         ML: [11, 12, 13, 14],  // Men's Lower
         WU: [15, 16, 17, 18],  // Women's Upper
         WL: [19, 20, 21, 22],  // Women's Lower
-        X: [23, 24, 25]  // Mixed
+        X: [23, 24]  // Mixed
     };
 
     const divisionPools = poolIds[code] || [];
