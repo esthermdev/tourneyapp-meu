@@ -35,7 +35,7 @@ AppState.addEventListener('change', (state) => {
 });
 
 export default function LoginComponent() {
-  const { getProfile } = useAuth();
+  const { getProfile, profile } = useAuth();
   const { expoPushToken } = usePushNotifications();
   const navigation = useNavigation();
 
@@ -55,6 +55,8 @@ export default function LoginComponent() {
         .from('profiles')
         .update({
           is_logged_in: true,
+          full_name: profile?.full_name,
+          team_id: profile?.team_id,
           expo_push_token: expoPushToken ? expoPushToken.data : null,
         })
         .eq('id', data.user.id);
@@ -128,7 +130,7 @@ export default function LoginComponent() {
                 <Text style={styles.linkText}>Forgot Password?</Text>
               </TouchableOpacity> */}
             </View>
-            <View>
+            {/* <View>
               <Text style={styles.signupText}>Not an existing user?</Text>
               <Button
                 title='Sign up'
@@ -137,7 +139,7 @@ export default function LoginComponent() {
                 buttonStyle={styles.secondaryButton}
                 titleStyle={[styles.buttonText, styles.secondaryButtonText]}
               />
-            </View>
+            </View> */}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

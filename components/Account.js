@@ -18,7 +18,6 @@ import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 import SearchModal from '../components/SearchModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
@@ -29,15 +28,13 @@ AppState.addEventListener('change', (state) => {
 });
 
 export default function Account({ session }) {
-  const { profile, getProfile, setProfile } = useAuth()
+  const { profile } = useAuth()
 
   const [refreshing, setRefreshing] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(true);
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState(null);
   const [fullName, setFullName] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTeams, setFilteredTeams] = useState([]);
@@ -49,14 +46,37 @@ export default function Account({ session }) {
     getProfile(session?.user?.id).then(() => setRefreshing(false));
   }, [session?.user?.id]);
 
-  useEffect(() => {
-    if (session?.user) {
-      getProfile(session?.user?.id)
+  async function getProfile() {
+    try {
+      setLoading(true)
+      if (!session?.user) throw new Error('No user on the session!')
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session?.user.id)
+        .single()
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setFullName(data.full_name ?? '')
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message)
+      }
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
+    if (session) getProfile()
     fetchTeams()
     setLoading(false)
   }, [session]);
-
 
   const fetchTeams = async () => {
     const { data, error } = await supabase

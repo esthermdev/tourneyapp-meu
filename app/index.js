@@ -4,15 +4,6 @@ import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';
 import { ScaledSheet } from 'react-native-size-matters';
-import { supabase } from '../utils/supabase';
-
-AppState.addEventListener('change', (state) => {
-  if (state === 'active') {
-    supabase.auth.startAutoRefresh()
-  } else {
-    supabase.auth.stopAutoRefresh()
-  }
-});
 
 export default function App() {
   return (

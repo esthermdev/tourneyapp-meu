@@ -112,7 +112,7 @@ export default function SignupScreen() {
                 autoCapitalize='none'
               />
             </View>
-            <View>
+            {/* <View>
               <Button
                 title="Sign up"
                 disabled={loading}
@@ -120,7 +120,7 @@ export default function SignupScreen() {
                 buttonStyle={styles.primaryButton}
                 titleStyle={styles.buttonText}
               />
-            </View>
+            </View> */}
             <View>
               <Text style={styles.loginText}>Already have an account?</Text>
               <Button
