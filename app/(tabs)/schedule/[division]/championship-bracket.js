@@ -1,4 +1,3 @@
-// app/schedule/[division]/championship-bracket.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';

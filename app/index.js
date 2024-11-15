@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, ScrollView, AppState } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import CustomButtonWithIcon from '../buttons/CustomButtonWithIcon';
 import images from '../constants/images';
 import { router } from 'expo-router';

@@ -1,5 +1,3 @@
-// app/info/faq.js
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import CustomHeader from '../../../components/CustomHeader';

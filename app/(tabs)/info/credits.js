@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import CustomHeader from '../../../components/CustomHeader';
 import { Link } from 'expo-router';
 import { ms } from 'react-native-size-matters';

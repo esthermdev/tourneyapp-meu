@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import CustomHeader from '../../../components/CustomHeader';
 import { ms } from 'react-native-size-matters';
-import { supabase } from '../../../utils/supabase'; // Make sure this path is correct
+import { supabase } from '../../../utils/supabase';
 import { router } from 'expo-router';
 
 const FeedbackScreen = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StatusBar, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { supabase } from '../../utils/supabase';
 import CustomAdminHeader from '../../components/CustomAdminHeader';
 import { SafeAreaView } from 'react-native-safe-area-context';

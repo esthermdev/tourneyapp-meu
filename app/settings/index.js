@@ -5,7 +5,7 @@ import { router, useNavigation } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { DrawerActions } from '@react-navigation/native';
-import { useAuth } from '../../context/AuthProvider';
+
 
 const AdminOption = ({ title, icon, onPress, disabled }) => (
   <TouchableOpacity style={styles.optionButton} disabled={disabled} onPress={onPress}>

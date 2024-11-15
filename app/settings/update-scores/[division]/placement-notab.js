@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomAdminHeader from '../../../../components/CustomAdminHeader';
 import UpdateScoresComponent from '../../../../components/UpdateScoresComponent';
 import { StyleSheet } from 'react-native';
-import { ms } from 'react-native-size-matters';
 
 const Tab = createMaterialTopTabNavigator();
 

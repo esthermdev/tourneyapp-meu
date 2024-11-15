@@ -1,4 +1,3 @@
-// app/schedule/[division]/11-15-place.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';

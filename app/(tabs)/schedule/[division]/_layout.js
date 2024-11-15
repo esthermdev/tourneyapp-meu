@@ -1,4 +1,3 @@
-// app/schedule/[division]/_layout.js
 import React from 'react';
 import { Stack } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router';
@@ -9,7 +8,7 @@ export default function DivisionLayout() {
 	const config = divisionScheduleConfig[division];
 
 	if (!config) {
-		return null; // or some error component
+		return null;
 	}
 
 	return (

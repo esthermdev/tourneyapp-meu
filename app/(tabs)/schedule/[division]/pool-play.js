@@ -1,6 +1,5 @@
-// app/schedule/[division]/pool-play.js
 import React from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import GameComponent from '../../../../components/GameComponent';
