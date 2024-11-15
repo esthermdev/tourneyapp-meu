@@ -1,5 +1,5 @@
 # Maine Ultimate - Mobile App
-A comprehensive tournament app built using React Native, Expo and Supabase. This app contains tournament information, schedule views allowing real-time score updates, and on-field services for ultimate frisbee players, volunteers and spectators.
+The Maine Ultimate Tournament App is a comprehensive mobile platform built with modern technologies (React Native, Expo, and Supabase) that revolutionizes the tournament experience for ultimate frisbee players, volunteers, and spectators. The app provides real-time tournament information, live game schedule updates, instant scoring capabilities, and on-field services—all designed to strengthen the ultimate frisbee community and elevate each individual's tournament experience.
 
 🏆 **Key Features:**
 - Live game scoring system with schedule updates, tournament news/announcements feed with push notifications
