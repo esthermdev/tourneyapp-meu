@@ -62,6 +62,7 @@ export default function Account({ session }) {
 
       if (data) {
         setFullName(data.full_name ?? '')
+        setTeamId(data.team_id ?? '')
       }
     } catch (error) {
       if (error instanceof Error) {

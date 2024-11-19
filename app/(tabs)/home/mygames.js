@@ -36,7 +36,9 @@ const Placeholder = () => (
 );
 
 const MyGamesScreen = () => {
-  const { profile } = useAuth();
+  const { session, profile, getProfile } = useAuth();
+  console.log(session)
+  console.log(profile?.team_id)
 
   const [games, setGames] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -46,14 +48,15 @@ const MyGamesScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    if (profile && profile.team_id) {
-      fetchGames(profile.team_id);
+    if (session) {
+      getProfile()
     }
-  }, [profile]);
+    fetchGames(profile?.team_id);
+  }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchGames(profile.team_id).then(() => setRefreshing(false));
+    fetchGames(profile?.team_id).then(() => setRefreshing(false));
   }, [profile]);
 
   const fetchGames = async (teamId) => {
@@ -131,7 +134,7 @@ const MyGamesScreen = () => {
         console.error('Error updating score:', error);
       } else {
         setModalVisible(false);
-        fetchGames(profile.team_id);
+        fetchGames(profile?.team_id);
       }
     }
   };

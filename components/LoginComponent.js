@@ -18,9 +18,7 @@ import { router, useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { supabase } from '../utils/supabase';
-import { usePushNotifications } from '../hooks/usePushNotifications';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useAuth } from '../context/AuthProvider';
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -35,8 +33,6 @@ AppState.addEventListener('change', (state) => {
 });
 
 export default function LoginComponent() {
-  const { getProfile, profile } = useAuth();
-  const { expoPushToken } = usePushNotifications();
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
@@ -50,25 +46,9 @@ export default function LoginComponent() {
       password: password,
     });
 
-    if (!error && data.user) {
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          is_logged_in: true,
-          full_name: profile?.full_name,
-          team_id: profile?.team_id,
-          expo_push_token: expoPushToken ? expoPushToken.data : null,
-        })
-        .eq('id', data.user.id);
-      if (updateError) {
-        console.error('Error updating push token: ', updateError)
-      }
-    }
-
     if (error) {
       Alert.alert('Invalid email or password.', 'Please try again.');
     } else {
-      await getProfile(data.user.id);
       router.push('(tabs)/home');
     };
 
@@ -120,7 +100,7 @@ export default function LoginComponent() {
             </View>
             <View>
               <Button
-                title="Login"
+                title="Sign In"
                 disabled={loading}
                 onPress={() => signInWithEmail()}
                 buttonStyle={styles.primaryButton}

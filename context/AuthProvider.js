@@ -9,12 +9,12 @@ export const AuthProvider = ({ children }) => {
 	const [profile, setProfile] = useState(null);
 	const [loading, setLoading] = useState(true);
 
-	const getProfile = async (userId) => {
+	const getProfile = async () => {
 		try {
 			const { data, error } = await supabase
 				.from('profiles')
 				.select('*')
-				.eq('id', userId)
+				.eq('id', session?.user.id)
 				.single();
 
 			if (error) throw error;
@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
 		const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
 			console.log(`Supabase auth event: ${event}`);
 			setSession(session);
+			console.log('New session: ', session)
 			setUser(session?.user)
 			if (session?.user) {
 				await getProfile(session.user.id);
